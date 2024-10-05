@@ -25,6 +25,7 @@
       lazygit
       nerdfonts
       nodejs_22
+      gnupg1
       pass
       rustup
       tmux
@@ -84,6 +85,11 @@
     fzf = {
       enable = true;
       enableZshIntegration = true;
+    };
+    oh-my-posh = {
+      enable = true;
+      enableZshIntegration = true;
+      useTheme = "json";
     };
     zsh = {
       enable = true;
