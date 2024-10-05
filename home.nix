@@ -19,17 +19,20 @@
     # The home.packages option allows you to install Nix packages into your
     # environment.
     packages = with pkgs; [
+      bat
+      btop
       dig
-      neovim
+      git
+      gnupg1
       go
+      htop-vim
       lazygit
+      neovim
       nerdfonts
       nodejs_22
-      gnupg1
       pass
       rustup
       tmux
-      git
       w3m
     ];
 
@@ -89,7 +92,7 @@
     oh-my-posh = {
       enable = true;
       enableZshIntegration = true;
-      useTheme = "json";
+      useTheme = "the-unnamed";
     };
     zsh = {
       enable = true;
