@@ -22,6 +22,7 @@
       bat
       btop
       dig
+      gimp
       git
       gnupg1
       go
@@ -124,6 +125,15 @@
           edging = "antialias";
         };
       };
+    };
+  };
+  services = {
+    gpg-agent = {
+      enable = true;
+      defaultCacheTtl = 34560000;
+      maxCacheTtl = 34560000;
+      pinentryPackage = pkgs.pinentry-curses;
+      enableScDaemon = false;
     };
   };
 }
