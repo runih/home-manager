@@ -84,7 +84,7 @@
       enable = true;
       enableZshIntegration = true;
       git = true;
-      icons = true;
+      icons = "auto";
     };
     fzf = {
       enable = true;
