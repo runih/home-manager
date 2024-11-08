@@ -31,8 +31,10 @@
       go
       htop-vim
       lazygit
+      libtool
       neovim
       nerdfonts
+      ninja
       nodejs_22
       pass
       rustup
