@@ -38,6 +38,7 @@
       ninja
       nodejs_22
       pass
+      pstree
       rustup
       tmux
       tree
