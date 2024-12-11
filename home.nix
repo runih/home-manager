@@ -17,7 +17,7 @@
     # You should not change this value, even if you update Home Manager. If you do
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
-    stateVersion = "24.05"; # Please read the comment before changing.
+    stateVersion = "24.11"; # Please read the comment before changing.
 
     # The home.packages option allows you to install Nix packages into your
     # environment.
@@ -34,7 +34,6 @@
       lazygit
       libjpeg
       neovim
-      nerdfonts
       ninja
       nodejs_22
       pass
@@ -43,6 +42,10 @@
       tmux
       tree
       w3m
+      nerd-fonts.iosevka
+      nerd-fonts.iosevka-term
+      nerd-fonts.iosevka-term-slab
+      nerd-fonts.hack
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -110,30 +113,30 @@
         cdi = "zi";
       };
     };
-    #neovide = {
-    #  enable = true;
-    #  settings = {
-    #    fork = true;
-    #    frame = "full";
-    #    idle = true;
-    #    minimized = false;
-    #    neovim-bin = "/Users/runih/.nix-profile/bin/nvim";
-    #    no-multigrid = false;
-    #    srgb = false;
-    #    tabs = true;
-    #    theme = "auto";
-    #    title-hidden = true;
-    #    vsync = true;
-    #    wsl = false;
+    neovide = {
+      enable = true;
+      settings = {
+        fork = true;
+        frame = "full";
+        idle = true;
+        minimized = false;
+        neovim-bin = "/Users/runih/.nix-profile/bin/nvim";
+        no-multigrid = false;
+        srgb = false;
+        tabs = true;
+        theme = "auto";
+        title-hidden = true;
+        vsync = true;
+        wsl = false;
 
-    #    font = {
-    #      normal = [ "Terminess Nerd Font Propo"];
-    #      size = 10.0;
-    #      hinting = "full";
-    #      edging = "antialias";
-    #    };
-    #  };
-    #};
+        font = {
+          normal = [ "Iosevka Nerd Font"];
+          size = 16.0;
+          hinting = "full";
+          edging = "antialias";
+        };
+      };
+    };
   };
   services = {
     gpg-agent = {
