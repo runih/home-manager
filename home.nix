@@ -34,6 +34,10 @@
       lazygit
       libjpeg
       neovim
+      nerd-fonts.hack
+      nerd-fonts.iosevka
+      nerd-fonts.iosevka-term
+      nerd-fonts.iosevka-term-slab
       ninja
       nodejs_22
       pass
@@ -41,11 +45,8 @@
       rustup
       tmux
       tree
+      vim
       w3m
-      nerd-fonts.iosevka
-      nerd-fonts.iosevka-term
-      nerd-fonts.iosevka-term-slab
-      nerd-fonts.hack
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -116,7 +117,7 @@
     wezterm = {
       enable = true;
       colorSchemes = {
-        myCoolTheme = {
+        myTheme = {
             ansi = [
                 "#222222" "#D14949" "#48874F" "#AFA75A"
               "#599797" "#8F6089" "#5C9FA8" "#8C8C8C"
@@ -141,7 +142,7 @@
         window_decorations = "RESIZE",
         enable_tab_bar = false,
         -- color_scheme = "3024 Night",
-        color_scheme = "myCoolTheme",
+        -- color_scheme = "myTheme",
         send_composed_key_when_left_alt_is_pressed = true,
         cursor_blink_rate = 700,
         cursor_blink_ease_in = 'EaseIn',
