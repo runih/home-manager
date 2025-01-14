@@ -27,32 +27,6 @@
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
         };
-        "macos" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-
-          # modules = [
-          #   {
-          #     home = {
-          #       username = "runih";
-          #       homeDirectory = "/Users/runih";
-          #       sessionPath = [
-          #         "/Users/runih/.nix-profile/bin"
-          #       ];
-
-          #       stateVersion = "24.11"; # Please read the comment before changing.
-
-          #       packages = with pkgs; [ 
-          #         execpermfix.packages.${system}.default
-          #       ];
-
-          #       sessionVariables = {
-          #         EDITOR = "nvim";
-          #       };
-
-          #     };
-          #   }
-          # ];
-        };
       };
     };
 }
