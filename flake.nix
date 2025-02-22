@@ -26,6 +26,15 @@
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
         };
+        "runih@nixos2" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+          ];
+
+        };
       };
     };
 }
