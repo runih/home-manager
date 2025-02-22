@@ -8,16 +8,15 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    execpermfix.url = "github:lpenz/execpermfix";
   };
 
-  outputs = { nixpkgs, execpermfix, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }:
     let
-      system = "aarch64-darwin";
+      system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       homeConfigurations = {
-        "runih" = home-manager.lib.homeManagerConfiguration {
+        "runih@nixos" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
 
           # Specify your home configuration modules here, for example,

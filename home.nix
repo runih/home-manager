@@ -1,13 +1,13 @@
 {  pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home = {
+    # Home Manager needs a bit of information about you and the paths it should
+    # manage.
     username = "runih";
-    homeDirectory = "/Users/runih";
+    homeDirectory = "/home/runih";
     sessionPath = [
-      "/Users/runih/.nix-profile/bin"
+      "/home/runih/.nix-profile/bin"
     ];
 
     # This value determines the Home Manager release that your configuration is
@@ -23,10 +23,10 @@
     # environment.
     packages = with pkgs; [
       bat
+      bc
       binutils
       btop
       dig
-      gimp
       git
       gnupg1
       go
@@ -34,10 +34,6 @@
       lazygit
       libjpeg
       neovim
-      nerd-fonts.hack
-      nerd-fonts.iosevka
-      nerd-fonts.iosevka-term
-      nerd-fonts.iosevka-term-slab
       ninja
       nodejs_22
       pass
@@ -45,7 +41,7 @@
       rustup
       tmux
       tree
-      utm
+      unzip
       vim
       w3m
     ];
@@ -83,6 +79,7 @@
     #
     sessionVariables = {
       EDITOR = "nvim";
+      TERM = "xterm-256color";
     };
 
   };
@@ -121,7 +118,7 @@
     oh-my-posh = {
       enable = true;
       enableZshIntegration = true;
-      useTheme = "the-unnamed";
+      useTheme = "sorin";
     };
     zsh = {
       enable = true;
@@ -131,7 +128,7 @@
       };
     };
     wezterm = {
-      enable = true;
+      enable = false;
       colorSchemes = {
         myTheme = {
             ansi = [
@@ -175,13 +172,13 @@
       '';
     };
     neovide = {
-      enable = true;
+      enable = false;
       settings = {
         fork = true;
         frame = "full";
         idle = true;
         minimized = false;
-        neovim-bin = "/Users/runih/.nix-profile/bin/nvim";
+        neovim-bin = "/homeUsers/runih/.nix-profile/bin/nvim";
         no-multigrid = false;
         srgb = false;
         tabs = true;
