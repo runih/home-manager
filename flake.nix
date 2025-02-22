@@ -32,6 +32,7 @@
           modules = [
             ./basic.nix
             ./tmux.nix
+            ./vim.nix
           ];
 
         };
