@@ -10,7 +10,7 @@
       };
       extraConfig = ''
       set t_Co=256
-      colorscheme lucius
+      colorscheme apprentice
       
       let g:session_autosave = 'no'
       
@@ -142,7 +142,6 @@
         vim-fugitive
         vim-gitgutter
         nerdtree-git-plugin
-        #gv
 
         # Markdown plugins
         tabular
@@ -152,7 +151,6 @@
         vim-surround
         tcomment_vim
         vim-misc
-        #vim-session
 
         # Search helpers
         ctrlp
@@ -162,21 +160,15 @@
         vim-airline-themes
 
         # Colorschemes
-        #vim-railscasts-theme
         oceanic-next
         awesome-vim-colorschemes
-        #vim
-        #vimspectr
         base16-vim
-        #vim-themes
-        #colorsbox
-        #vim-colorscheme-switcher
 
-        #vim-json-format
 
         # Css coloring
         vim-css-color
 
+        vim-tmux-navigator
       ];
     };
   };
