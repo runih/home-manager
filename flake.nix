@@ -36,7 +36,7 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
-            ./basic.nix
+            ./minecraft.nix
             ./tmux.nix
             ./vim.nix
           ];
