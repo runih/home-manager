@@ -13,7 +13,6 @@
       bc
       htop-vim
       git
-      lazygit
       pstree
       tmux
       tree
