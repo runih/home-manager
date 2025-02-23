@@ -1,9 +1,9 @@
 {  pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home = {
+    # Home Manager needs a bit of information about you and the paths it should
+    # manage.
     username = "runih";
     homeDirectory = "/Users/runih";
     sessionPath = [
@@ -23,10 +23,10 @@
     # environment.
     packages = with pkgs; [
       bat
+      bc
       binutils
       btop
       dig
-      gimp
       git
       gnupg1
       go
@@ -34,10 +34,6 @@
       lazygit
       libjpeg
       neovim
-      nerd-fonts.hack
-      nerd-fonts.iosevka
-      nerd-fonts.iosevka-term
-      nerd-fonts.iosevka-term-slab
       ninja
       nodejs_22
       pass
@@ -45,7 +41,7 @@
       rustup
       tmux
       tree
-      utm
+      unzip
       vim
       w3m
     ];
@@ -83,6 +79,7 @@
     #
     sessionVariables = {
       EDITOR = "nvim";
+      TERM = "xterm-256color";
     };
 
   };
@@ -121,7 +118,7 @@
     oh-my-posh = {
       enable = true;
       enableZshIntegration = true;
-      useTheme = "the-unnamed";
+      useTheme = "sorin";
     };
     zsh = {
       enable = true;
@@ -131,24 +128,24 @@
       };
     };
     wezterm = {
-      enable = true;
+      enable = false;
       colorSchemes = {
         myTheme = {
-            ansi = [
-                "#222222" "#D14949" "#48874F" "#AFA75A"
-              "#599797" "#8F6089" "#5C9FA8" "#8C8C8C"
-            ];
-            brights = [
-                "#444444" "#FF6D6D" "#89FF95" "#FFF484"
-              "#97DDFF" "#FDAAF2" "#85F5DA" "#E9E9E9"
-            ];
-            background = "#1B1B1B";
-            cursor_bg = "#BEAF8A";
-            cursor_border = "#BEAF8A";
-            cursor_fg = "#1B1B1B";
-            foreground = "#BEAF8A";
-            selection_bg = "#444444";
-            selection_fg = "#E9E9E9";
+          ansi = [
+            "#222222" "#D14949" "#48874F" "#AFA75A"
+            "#599797" "#8F6089" "#5C9FA8" "#8C8C8C"
+          ];
+          brights = [
+            "#444444" "#FF6D6D" "#89FF95" "#FFF484"
+            "#97DDFF" "#FDAAF2" "#85F5DA" "#E9E9E9"
+          ];
+          background = "#1B1B1B";
+          cursor_bg = "#BEAF8A";
+          cursor_border = "#BEAF8A";
+          cursor_fg = "#1B1B1B";
+          foreground = "#BEAF8A";
+          selection_bg = "#444444";
+          selection_fg = "#E9E9E9";
         };
       };
       enableZshIntegration = true;
@@ -175,13 +172,13 @@
       '';
     };
     neovide = {
-      enable = true;
+      enable = false;
       settings = {
         fork = true;
         frame = "full";
         idle = true;
         minimized = false;
-        neovim-bin = "/Users/runih/.nix-profile/bin/nvim";
+        neovim-bin = "/homeUsers/runih/.nix-profile/bin/nvim";
         no-multigrid = false;
         srgb = false;
         tabs = true;

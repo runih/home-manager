@@ -8,24 +8,40 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    execpermfix.url = "github:lpenz/execpermfix";
   };
 
-  outputs = { nixpkgs, execpermfix, home-manager, ... }:
-    let
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
+  outputs = inputs:
+    {
       homeConfigurations = {
-        "runih" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+        "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
 
-          # Specify your home configuration modules here, for example,
-          # the path to your home.nix.
-          modules = [ ./home.nix ];
+          modules = [
+            ./home.nix
+          ];
 
-          # Optionally use extraSpecialArgs
-          # to pass through arguments to home.nix
+        };
+        "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+            ./vim.nix
+            ./neovim.nix
+          ];
+
+        };
+        "runih@nixos2" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+            ./vim.nix
+            ./neovim.nix
+          ];
+
         };
       };
     };
