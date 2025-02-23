@@ -21,6 +21,27 @@
           ];
 
         };
+        "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+            ./vim.nix
+            ./neovim.nix
+          ];
+
+        };
+        "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+            ./vim.nix
+          ];
+
+        };
         "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
