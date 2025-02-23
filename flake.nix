@@ -33,6 +33,7 @@
             ./basic.nix
             ./tmux.nix
             ./vim.nix
+            ./neovim.nix
           ];
 
         };
