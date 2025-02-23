@@ -5,9 +5,9 @@
     # Home Manager needs a bit of information about you and the paths it should
     # manage.
     username = "runih";
-    homeDirectory = "/home/runih";
+    homeDirectory = "/Users/runih";
     sessionPath = [
-      "/home/runih/.nix-profile/bin"
+      "/Users/runih/.nix-profile/bin"
     ];
 
     # This value determines the Home Manager release that your configuration is
