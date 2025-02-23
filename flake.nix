@@ -19,12 +19,13 @@
         "runih@nixos" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
 
-          # Specify your home configuration modules here, for example,
-          # the path to your home.nix.
-          modules = [ ./home.nix ];
+          modules = [
+            ./basic.nix
+            ./tmux.nix
+            ./vim.nix
+            ./neovim.nix
+          ];
 
-          # Optionally use extraSpecialArgs
-          # to pass through arguments to home.nix
         };
         "runih@nixos2" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
