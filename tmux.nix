@@ -8,6 +8,7 @@
     mouse = true;
     #shell = "${pkgs.zsh}/bin/zsh";
     keyMode = "vi";
+    baseIndex = 1;
     escapeTime = 10;
 
     plugins = with pkgs.tmuxPlugins; [
