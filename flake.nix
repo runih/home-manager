@@ -10,14 +10,19 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
-    let
-      system = "aarch64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
+  outputs = inputs:
+    {
       homeConfigurations = {
-        "runih@nixos" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+        "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+
+          modules = [
+            ./home.nix
+          ];
+
+        };
+        "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
             ./basic.nix
@@ -27,8 +32,8 @@
           ];
 
         };
-        "runih@nixos2" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+        "runih@nixos2" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
             ./basic.nix
