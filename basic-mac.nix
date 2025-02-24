@@ -39,7 +39,6 @@
       nodejs_23
       pstree
       rustup
-      tmux
       tree
       unzip
       w3m

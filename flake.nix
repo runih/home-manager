@@ -21,6 +21,7 @@
             ./nerd-fonts.nix
             ./ghostty.nix
             ./zsh.nix
+            ./my-tmux.nix
             ./vim.nix
             ./wezterm.nix
             ./neovide.nix
