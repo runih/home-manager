@@ -17,7 +17,14 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
 
           modules = [
-            ./home.nix
+            ./basic-mac.nix
+            ./nerd-fonts.nix
+            ./ghostty.nix
+            ./zsh.nix
+            ./vim.nix
+            ./wezterm.nix
+            ./neovide.nix
+            ./pass.nix
           ];
 
         };
@@ -25,10 +32,11 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
-            ./basic.nix
+            ./basic-linux.nix
             ./tmux.nix
             ./vim.nix
             ./neovim.nix
+            ./zsh.nix
           ];
 
         };
@@ -39,6 +47,7 @@
             ./minecraft.nix
             ./tmux.nix
             ./vim.nix
+            ./zsh.nix
           ];
 
         };
@@ -46,10 +55,11 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
-            ./basic.nix
+            ./basic-linux.nix
             ./tmux.nix
             ./vim.nix
             ./neovim.nix
+            ./zsh.nix
           ];
 
         };
@@ -57,7 +67,7 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
 
           modules = [
-            ./basic.nix
+            ./basic-linux.nix
             ./tmux.nix
             ./vim.nix
             ./neovim.nix
