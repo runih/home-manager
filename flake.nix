@@ -27,7 +27,6 @@
             ./neovide.nix
             ./pass.nix
           ];
-
         };
         "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
@@ -39,7 +38,6 @@
             ./neovim.nix
             ./zsh.nix
           ];
-
         };
         "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
@@ -50,7 +48,6 @@
             ./vim.nix
             ./zsh.nix
           ];
-
         };
         "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
@@ -62,7 +59,6 @@
             ./neovim.nix
             ./zsh.nix
           ];
-
         };
         "runih@nixos2" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
@@ -72,8 +68,8 @@
             ./tmux.nix
             ./vim.nix
             ./neovim.nix
+            ./zsh.nix
           ];
-
         };
       };
     };
