@@ -57,6 +57,20 @@
       #   org.gradle.console=verbose
       #   org.gradle.daemon.idletimeout=3600000
       # '';
+      ".inputrc".text = ''
+      set editing-mode vi
+      '';
+      ".psqlrc".text = ''
+        \set QUIET 1
+        \pset linestyle unicode
+        \pset border 2
+        \set COMP_KEYWORD_CASE upper
+        \set PSQL_EDITOR "/usr/bin/vim"
+        \pset pager off
+        \timing
+        \pset format wrapped
+        \pset null '<null>'
+      '';
     };
 
     # Home Manager can also manage your environment variables through
