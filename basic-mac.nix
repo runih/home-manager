@@ -36,7 +36,7 @@
       libjpeg
       neovim
       ninja
-      nodejs_23
+      nodejs_22
       pstree
       rustup
       tree
