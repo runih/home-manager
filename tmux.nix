@@ -6,7 +6,7 @@
     historyLimit = 100000;
     #prefix = "C-Space";
     mouse = true;
-    #shell = "${pkgs.zsh}/bin/zsh";
+    shell = "${pkgs.zsh}/bin/zsh";
     keyMode = "vi";
     baseIndex = 1;
     escapeTime = 10;
