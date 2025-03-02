@@ -71,6 +71,17 @@
             ./zsh.nix
           ];
         };
+        "runih@madakara-nixos" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+
+          modules = [
+            ./basic-linux.nix
+            ./tmux.nix
+            ./vim.nix
+            ./neovim.nix
+            ./zsh.nix
+          ];
+        };
       };
     };
 }
