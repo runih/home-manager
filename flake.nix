@@ -76,6 +76,7 @@
 
           modules = [
             ./basic-linux.nix
+            ./esh-minecraft.nix
             ./tmux.nix
             ./vim.nix
             ./neovim.nix
