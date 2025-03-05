@@ -10,8 +10,8 @@
     timers."minecraft-backup" = {
       Install.WantedBy = [ "default.target" ];
       Timer = {
-        OnBootSec = "5m";
-        OnUnitActiveSec = "5m";
+        OnBootSec = "15m";
+        OnUnitActiveSec = "15m";
         Unit = "minecraft-backup.service";
       };
     };
