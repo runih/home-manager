@@ -39,6 +39,7 @@
       nodejs_22
       pstree
       rustup
+      superfile
       tree
       unzip
       w3m

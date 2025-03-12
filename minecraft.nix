@@ -17,6 +17,7 @@
       jq
       nmon
       pstree
+      superfile
       tmux
       tree
       unzip

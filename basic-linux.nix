@@ -11,9 +11,10 @@
     packages = with pkgs; [
       bat
       bc
-      htop-vim
       git
+      htop-vim
       pstree
+      superfile
       tmux
       tree
       unzip
