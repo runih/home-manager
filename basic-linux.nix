@@ -11,6 +11,7 @@
     packages = with pkgs; [
       bat
       bc
+      file
       git
       htop-vim
       pstree
