@@ -1,66 +1,55 @@
 {  pkgs, ... }:
 
 {
+  # Configuration for the home environment
   home = {
-    # Home Manager needs a bit of information about you and the paths it should
-    # manage.
+    # Username of the user
     username = "runih";
+
+    # Path to the user's home directory
     homeDirectory = "/Users/runih";
+
+    # Paths to include in the session's PATH environment variable
     sessionPath = [
       "/Users/runih/.nix-profile/bin"
     ];
 
-    # This value determines the Home Manager release that your configuration is
-    # compatible with. This helps avoid breakage when a new Home Manager release
-    # introduces backwards incompatible changes.
-    #
-    # You should not change this value, even if you update Home Manager. If you do
-    # want to update the value, then make sure to first check the Home Manager
-    # release notes.
-    stateVersion = "25.05"; # Please read the comment before changing.
+    # State version for compatibility with Home Manager
+    stateVersion = "25.05";
 
-    # The home.packages option allows you to install Nix packages into your
-    # environment.
+    # List of packages to install in the user's environment
     packages = with pkgs; [
-      bat
-      bc
-      binutils
-      btop
-      dig
-      gimp
-      git
-      gnupg1
-      go
-      htop-vim
-      lazygit
-      libjpeg
-      neovim
-      ninja
-      nodejs_22
-      pstree
-      rustup
-      superfile
-      tree
-      unzip
-      w3m
+      bat          # A cat clone with syntax highlighting
+      bc           # An arbitrary precision calculator language
+      binutils     # GNU binary utilities
+      btop         # A resource monitor
+      dig          # DNS lookup utility
+      gimp         # GNU Image Manipulation Program
+      git          # Version control system
+      gnupg1       # GNU Privacy Guard (version 1)
+      go           # Go programming language
+      htop-vim     # Interactive process viewer with vim keybindings
+      lazygit      # Simple terminal UI for git commands
+      libjpeg      # JPEG image library
+      neovim       # Modern Vim-based text editor
+      ninja        # Build system
+      nodejs_22    # Node.js runtime (version 22)
+      pstree       # Display a tree of processes
+      rustup       # Rust toolchain installer
+      superfile    # File type identification tool
+      tree         # Display directories as trees
+      unzip        # Extract ZIP archives
+      w3m          # Text-based web browser
     ];
 
-    # Home Manager is pretty good at managing dotfiles. The primary way to manage
-    # plain files is through 'home.file'.
+    # Configuration for user-specific files
     file = {
-      # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-      # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-      # # symlink to the Nix store copy.
-      # ".screenrc".source = dotfiles/screenrc;
-
-      # # You can also set the file content immediately.
-      # ".gradle/gradle.properties".text = ''
-      #   org.gradle.console=verbose
-      #   org.gradle.daemon.idletimeout=3600000
-      # '';
+      # Input configuration for readline
       ".inputrc".text = ''
-      set editing-mode vi
+        set editing-mode vi
       '';
+
+      # Configuration for PostgreSQL client
       ".psqlrc".text = ''
         \set QUIET 1
         \pset linestyle unicode
@@ -74,49 +63,42 @@
       '';
     };
 
-    # Home Manager can also manage your environment variables through
-    # 'home.sessionVariables'. These will be explicitly sourced when using a
-    # shell provided by Home Manager. If you don't want to manage your shell
-    # through Home Manager then you have to manually source 'hm-session-vars.sh'
-    # located at either
-    #
-    #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  /etc/profiles/per-user/runih/etc/profile.d/hm-session-vars.sh
-    #
+    # Environment variables for the session
     sessionVariables = {
-      EDITOR = "nvim";
-      TERM = "xterm-256color";
+      EDITOR = "nvim";            # Set Neovim as the default editor
+      TERM = "xterm-256color";    # Set terminal type for color support
     };
-
   };
-  # Let Home Manager install and manage itself.
+
+  # Configuration for additional programs
   programs = {
-    home-manager.enable = true;
+    home-manager.enable = true;  # Enable Home Manager
+
+    # Configuration for zoxide, a smarter cd command
     zoxide = {
       enable = true;
       enableZshIntegration = true;
     };
+
+    # Configuration for eza, a modern ls replacement
     eza = {
       enable = true;
       enableZshIntegration = true;
-      git = true;
-      icons = "auto";
+      git = true;                # Enable git integration
+      icons = "auto";            # Automatically enable icons
     };
+
+    # Configuration for fzf, a fuzzy finder
     fzf = {
       enable = true;
       enableZshIntegration = true;
     };
+
+    # Configuration for oh-my-posh, a prompt theme engine
     oh-my-posh = {
       enable = true;
       enableZshIntegration = true;
-      useTheme = "the-unnamed";
+      useTheme = "the-unnamed";  # Set the theme to "the-unnamed"
     };
   };
 }
