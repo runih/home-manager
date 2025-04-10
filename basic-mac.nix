@@ -34,6 +34,7 @@
       neovim       # Modern Vim-based text editor
       ninja        # Build system
       nodejs_22    # Node.js runtime (version 22)
+      nurl         # URL manipulation library
       pstree       # Display a tree of processes
       rustup       # Rust toolchain installer
       superfile    # File type identification tool
