@@ -23,15 +23,18 @@
     packages = with pkgs; [
       bat          # A cat clone with syntax highlighting
       bc           # An arbitrary precision calculator language
+      fd           # A simple, fast and user-friendly alternative to find
       file         # Determine file types
       git          # Version control system
       htop-vim     # Interactive process viewer with vim keybindings
       lynx         # Text-based web browser
       pstree       # Display a tree of processes
+      ripgrep      # A fast search tool
       superfile    # (Assumed custom package, no description available)
       tmux         # Terminal multiplexer
       tree         # Display directories as trees
       unzip        # Extract ZIP archives
+      wget         # Command-line utility for downloading files
     ];
   };
 

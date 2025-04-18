@@ -46,7 +46,7 @@
         # Configuration for the user "runih" on the system "BlackMac" (macOS).
         "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
-          modules = sharedModulesMac;
+          modules = sharedModulesMac ++ [ ./java.nix ];
         };
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).

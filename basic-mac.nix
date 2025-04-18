@@ -24,6 +24,7 @@
       binutils     # GNU binary utilities
       btop         # A resource monitor
       dig          # DNS lookup utility
+      fd           # A simple, fast and user-friendly alternative to find
       gimp         # GNU Image Manipulation Program
       git          # Version control system
       gnupg1       # GNU Privacy Guard (version 1)
@@ -36,11 +37,13 @@
       nodejs_22    # Node.js runtime (version 22)
       nurl         # URL manipulation library
       pstree       # Display a tree of processes
+      ripgrep      # A fast search tool
       rustup       # Rust toolchain installer
       superfile    # File type identification tool
       tree         # Display directories as trees
       unzip        # Extract ZIP archives
       w3m          # Text-based web browser
+      wget         # Command-line utility for downloading files
     ];
 
     # Configuration for user-specific files
