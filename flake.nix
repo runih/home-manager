@@ -23,7 +23,7 @@
         sharedModulesMac = [
           ./basic-mac.nix       # Basic macOS-specific configurations.
           ./nerd-fonts.nix      # Configuration for Nerd Fonts.
-          #./ghostty.nix         # Ghostty terminal settings. (it is still broken)
+          ./ghostty.nix         # Ghostty configuration for macOS.
           ./zsh.nix             # Zsh shell configuration.
           ./my-tmux.nix         # Custom tmux configuration.
           ./vim.nix             # Vim editor configuration.
