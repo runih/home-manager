@@ -49,6 +49,12 @@
           modules = sharedModulesMac ++ [ ./java.nix ];
         };
 
+        # Configuration for the user "runih" on the system "BlackMac" (macOS).
+        "runih@iMac.home.okkara.net" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+          modules = sharedModulesMac ++ [ ./imac.nix ./java.nix ];
+        };
+
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
         "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
