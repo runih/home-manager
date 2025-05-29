@@ -1,11 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, username, homeDirectory, ... }:
 
 {
   home = {
-    username = "minecraft";
-    homeDirectory = "/home/minecraft";
+    username = "${username}";
+    homeDirectory = "${homeDirectory}";
     sessionPath = [
-      "/home/minecraft/.nix-profile/bin"
+      "${homeDirectory}/.nix-profile/bin"
     ];
     stateVersion = "25.05";
     packages = with pkgs; [

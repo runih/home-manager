@@ -1,17 +1,17 @@
-{  pkgs, ... }:
+{  pkgs, username, homeDirectory, ... }:
 
 {
   # Configuration for the home environment
   home = {
     # Username of the user
-    username = "runih";
+    username = "${username}";
 
     # Path to the user's home directory
-    homeDirectory = "/Users/runih";
+    homeDirectory = "${homeDirectory}";
 
     # Paths to include in the session's PATH environment variable
     sessionPath = [
-      "/Users/runih/.nix-profile/bin"
+      "${homeDirectory}/.nix-profile/bin"
     ];
 
     # State version for compatibility with Home Manager
@@ -19,31 +19,32 @@
 
     # List of packages to install in the user's environment
     packages = with pkgs; [
-      bat          # A cat clone with syntax highlighting
-      bc           # An arbitrary precision calculator language
-      binutils     # GNU binary utilities
-      btop         # A resource monitor
-      dig          # DNS lookup utility
-      fd           # A simple, fast and user-friendly alternative to find
-      gimp         # GNU Image Manipulation Program
-      git          # Version control system
-      gnupg1       # GNU Privacy Guard (version 1)
-      go           # Go programming language
-      htop-vim     # Interactive process viewer with vim keybindings
-      lazygit      # Simple terminal UI for git commands
-      libjpeg      # JPEG image library
-      neovim       # Modern Vim-based text editor
-      ninja        # Build system
-      nodejs_22    # Node.js runtime (version 22)
-      nurl         # URL manipulation library
-      pstree       # Display a tree of processes
-      ripgrep      # A fast search tool
-      rustup       # Rust toolchain installer
-      superfile    # File type identification tool
-      tree         # Display directories as trees
-      unzip        # Extract ZIP archives
-      w3m          # Text-based web browser
-      wget         # Command-line utility for downloading files
+			bat          	# A cat clone with syntax highlighting
+			bc           	# An arbitrary precision calculator language
+			binutils     	# GNU binary utilities
+			btop         	# A resource monitor
+			dig          	# DNS lookup utility
+			fd           	# A simple, fast and user-friendly alternative to find
+			gimp         	# GNU Image Manipulation Program
+			git          	# Version control system
+			gnupg1       	# GNU Privacy Guard (version 1)
+			go           	# Go programming language
+			htop-vim     	# Interactive process viewer with vim keybindings
+			lazygit      	# Simple terminal UI for git commands
+			libjpeg      	# JPEG image library
+			neovim       	# Modern Vim-based text editor
+			ninja        	# Build system
+			nodejs_22    	# Node.js runtime (version 22)
+			nurl         	# URL manipulation library
+			pstree       	# Display a tree of processes
+			ripgrep      	# A fast search tool
+			rustup       	# Rust toolchain installer
+			superfile    	# File type identification tool
+			tree         	# Display directories as trees
+			unzip        	# Extract ZIP archives
+			utm		  		  # Virtual machine manager for macOS
+			w3m          	# Text-based web browser
+			wget         	# Command-line utility for downloading files
     ];
 
     # Configuration for user-specific files

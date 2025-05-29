@@ -1,19 +1,19 @@
-{ pkgs, ... }:
+{ pkgs, username, homeDirectory, ... }:
 
 {
   home = {
     # Define the username for the home configuration
-    username = "runih";
+    username = "${username}";
 
     # Specify the home directory path
-    homeDirectory = "/home/runih";
+    homeDirectory = "${homeDirectory}";
 
     # Set the default editor for the session
     sessionVariables.EDITOR = "nvim";
 
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
-      "/home/runih/.nix-profile/bin"
+      "${homeDirectory}/.nix-profile/bin"
     ];
 
     # Specify the state version for compatibility

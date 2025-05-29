@@ -17,6 +17,8 @@
     {
       homeConfigurations = let
 
+        username = "runih";  # Define the username for the configurations.
+
         # Define shared modules for macOS systems.
         # These modules include configurations specific to macOS, such as
         # macOS-specific tools, fonts, and terminal settings.
@@ -47,12 +49,20 @@
         "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./java.nix ];
+          extraSpecialArgs = {
+            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the user "runih" on the system "BlackMac" (macOS).
         "runih@iMac.home.okkara.net" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./imac.nix ./java.nix ];
+          extraSpecialArgs = {
+            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
@@ -60,30 +70,50 @@
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           # List of Nix modules to include in this configuration.
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
+          extraSpecialArgs = {
+            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the "minecraft" user on the system "nixos-pi5" (Linux).
         "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           modules = [ ./minecraft.nix ] ++ sharedModulesLinux;
+          extraSpecialArgs = {
+            homeDirectory = "/home/minecraft";  # Pass the home directory to the configuration.
+            username = "minecraft";            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the user "runih" on the system "nixos" (Linux).
         "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
+          extraSpecialArgs = {
+            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the user "runih" on the system "nixos2" (Linux).
         "runih@nixos2" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
+          extraSpecialArgs = {
+            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
 
         # Configuration for the user "runih" on the system "madakara-nixos" (Linux).
         "runih@madakara-nixos" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux ++ [ ../esh-minecraft.nix ];
+          extraSpecialArgs = {
+            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
         };
       };
     };

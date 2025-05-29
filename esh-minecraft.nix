@@ -1,4 +1,4 @@
-{ pkgs, ...  }:
+{ pkgs, homeDirectory, ...  }:
 {
   home = {
     packages = with pkgs; [
@@ -23,11 +23,11 @@
       };
       Service = {
         Type = "oneshot";
-        WorkingDirectory = "/home/runih";
+        WorkingDirectory = "{homeDirectory}";
         ExecStart = toString(
           pkgs.writeShellScript "minecraft-backup-script" ''
           #!/usr/bin/env bash
-          /home/runih/.nix-profile/bin/rdiff-backup --new backup $HOME/minecraft/world $HOME/backup/minecraft
+          ${homeDirectory}/.nix-profile/bin/rdiff-backup --new backup ${homeDirectory}/minecraft/world ${homeDirectory}/backup/minecraft
           ''
         );
       };
