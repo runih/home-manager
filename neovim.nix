@@ -10,7 +10,7 @@ in
   {
   home = {
     packages = with pkgs; [
-      nodejs_23
+      nodejs_22
       gnumake
       gcc
       lazygit
