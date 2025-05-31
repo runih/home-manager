@@ -12,6 +12,7 @@
     # Paths to include in the session's PATH environment variable
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"
+      "${homeDirectory}/bin"
     ];
 
     # State version for compatibility with Home Manager

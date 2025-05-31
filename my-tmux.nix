@@ -18,6 +18,20 @@ in
     packages = with pkgs; [
       bc
     ];
+    file."bin/tmux-session-name" = {
+      text = ''
+        #!/usr/bin/env bash
+        tmux display-message -p '#S'
+      '';
+      executable = true;
+    };
+    file."bin/tmux-window-name" = {
+      text = ''
+        #!/usr/bin/env bash
+        tmux display-message -p '#W'
+      '';
+      executable = true;
+    };
   };
   programs.tmux = {
     enable = true;
