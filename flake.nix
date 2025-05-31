@@ -23,15 +23,16 @@
         # These modules include configurations specific to macOS, such as
         # macOS-specific tools, fonts, and terminal settings.
         sharedModulesMac = [
-          ./basic-mac.nix       # Basic macOS-specific configurations.
-          ./nerd-fonts.nix      # Configuration for Nerd Fonts.
-          ./ghostty.nix         # Ghostty configuration for macOS.
-          ./zsh.nix             # Zsh shell configuration.
-          ./my-tmux.nix         # Custom tmux configuration.
-          ./vim.nix             # Vim editor configuration.
-          ./wezterm.nix         # WezTerm terminal emulator configuration.
-          ./neovide.nix         # Neovide GUI for Neovim.
-          ./pass.nix            # Password manager configuration.
+          ./basic-mac.nix           # Basic macOS-specific configurations.
+          ./nerd-fonts.nix          # Configuration for Nerd Fonts.
+          ./ghostty.nix             # Ghostty configuration for macOS.
+          ./zsh.nix                 # Zsh shell configuration.
+          ./my-tmux.nix             # Custom tmux configuration.
+          ./vim.nix                 # Vim editor configuration.
+          ./wezterm.nix             # WezTerm terminal emulator configuration.
+          ./neovide.nix             # Neovide GUI for Neovim.
+          ./pass.nix                # Password manager configuration.
+          ./postgresql-client.nix   # PostgreSQL client configuration.
         ];
 
         # Define shared modules for Linux systems.
