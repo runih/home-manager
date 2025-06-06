@@ -17,7 +17,8 @@
     {
       homeConfigurations = let
 
-        username = "runih";  # Define the username for the configurations.
+        username = builtins.getEnv "USER";  # Get the current user's username.
+
 
         # Define shared modules for macOS systems.
         # These modules include configurations specific to macOS, such as

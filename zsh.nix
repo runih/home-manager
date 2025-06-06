@@ -10,6 +10,7 @@
     shellAliases = {
       cd = "z";
       cdi = "zi";
+      hm = "home-manager switch --impure";
     };
     initContent = ''
     unset __HM_SESS_VARS_SOURCED
