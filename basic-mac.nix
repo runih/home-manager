@@ -71,8 +71,9 @@
 
     # Environment variables for the session
     sessionVariables = {
-      EDITOR = "nvim";            # Set Neovim as the default editor
-      TERM = "xterm-256color";    # Set terminal type for color support
+      EDITOR = "nvim";                            # Set Neovim as the default editor
+      TERM = "xterm-256color";                    # Set terminal type for color support
+      PG_PASS = "${homeDirectory}/.pgpass";       # Path to PostgreSQL password file
     };
   };
 
