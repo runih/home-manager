@@ -40,7 +40,6 @@
 			pstree       	# Display a tree of processes
 			ripgrep      	# A fast search tool
 			rustup       	# Rust toolchain installer
-			superfile    	# File type identification tool
 			tree         	# Display directories as trees
 			unzip        	# Extract ZIP archives
 			utm		  		  # Virtual machine manager for macOS
