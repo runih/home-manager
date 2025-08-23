@@ -11,6 +11,7 @@
       cd = "z";
       cdi = "zi";
       hm = "home-manager switch --impure";
+      apps = "home-manager generations | awk '$0 ~ /(current)/ {print \"open \"$7\"/home-path/Applications\"}' | sh";
     };
     initContent = ''
     unset __HM_SESS_VARS_SOURCED
