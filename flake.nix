@@ -28,6 +28,7 @@
           ./nerd-fonts.nix          # Configuration for Nerd Fonts.
           ./ghostty.nix             # Ghostty configuration for macOS.
           ./zsh.nix                 # Zsh shell configuration.
+          ./zoxide.nix              # Zoxide configuration for macOS.
           ./my-tmux.nix             # Custom tmux configuration.
           ./vim.nix                 # Vim editor configuration.
           ./wezterm.nix             # WezTerm terminal emulator configuration.
@@ -44,6 +45,7 @@
           ./vim.nix             # Vim editor configuration.
           ./neovim.nix          # Neovim editor configuration.
           ./zsh.nix             # Zsh shell configuration.
+          ./zoxide.nix          # Zoxide configuration for Linux.
         ];
 
       in {
@@ -51,6 +53,15 @@
         "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./java.nix ];
+          extraSpecialArgs = {
+            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
+        };
+
+        "maiken@MaikensMacbook.local" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+          modules = sharedModulesMac ++ [ ./java.nix ./neovim.nix ];
           extraSpecialArgs = {
             homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
             username = username;            # Pass the username to the configuration.

@@ -80,12 +80,6 @@
   programs = {
     home-manager.enable = true;  # Enable Home Manager
 
-    # Configuration for zoxide, a smarter cd command
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     # Configuration for eza, a modern ls replacement
     eza = {
       enable = true;

@@ -63,12 +63,6 @@
       useTheme = "sorin";             # Set the theme to "sorin"
     };
 
-    # Configuration for the zoxide program (smart directory jumper)
-    zoxide = {
-      enable = true;                  # Enable zoxide
-      enableZshIntegration = true;    # Enable Zsh integration
-    };
-
     # Configuration for the vim program (text editor)
     vim = {
       enable = true;                  # Enable vim
