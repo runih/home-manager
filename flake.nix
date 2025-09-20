@@ -79,6 +79,24 @@
         };
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
+        "runih@macnix" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+          # List of Nix modules to include in this configuration.
+          modules = [
+            ./basic-linux.nix
+            ./wezterm.nix
+            ./nerd-fonts.nix
+            ./neovide.nix
+            ./hyprland.nix
+            ./ghostty.nix
+          ] ++ sharedModulesLinux;
+          extraSpecialArgs = {
+            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
+            username = username;            # Pass the username to the configuration.
+          };
+        };
+
+        # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
         "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           # List of Nix modules to include in this configuration.

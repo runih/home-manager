@@ -9,7 +9,7 @@
     cursor-style-blink = true
     adjust-cursor-height = 30%
     font-family = "Iosevka Nerd Font Mono"
-    font-size = 18
+    font-size = 14
     keybind = global:shift+cmd+space=toggle_quick_terminal
     '';
 }
