@@ -12,6 +12,7 @@
       graphite-gtk-theme
       nwg-look
       gimp
+      swaylock-effects
     ];
     file.".config/waybar/scripts/launch.sh" = {
       text = ''
@@ -28,7 +29,6 @@
 
   programs = {
     hyprshot = { enable = true; };
-    hyprlock = { enable = true; };
     waybar = {
       enable = true;
       settings = {
@@ -466,7 +466,202 @@
         }
       '';
     };
+    hyprlock = {
+      enable = true;
+      settings = {
+        general = {
+          disable_loading_bar = false;
+          grace = 300;
+          hide_cursor = true;
+          no_fade_in = false;
+        };
+
+        background = [{ path = "$HOME/Pictures/wallpapers/key7.png"; }];
+
+        input-field = [{
+          size = "400, 50";
+          outline_thickness = 3;
+          dots_size = 0.33; # Scale of input-field height, 0.2 - 0.8
+          dots_spacing = 0.15; # Scale of dots' absolute size, 0.0 - 1.0
+          dots_center = true;
+          dots_rounding = -1; # -1 default, -2 follow input-field rounding
+          outer_color = "rbg(151515)";
+          inner_color = "rbg(FFFFFF)";
+          font_color = "rbg(10, 10, 10)";
+          fade_on_empty = true;
+          fade_timeout = 1000; # Milliseconds before fade_on_empty is triggered.
+          placeholder_text =
+            "'<i>Enter Password...</i>'"; # Text rendered in the input box when it's empty
+          hide_input = false;
+          rounding = -1; # -1 means complete rounding (circle/oval)
+          check_color = "rbg(204, 136, 34)";
+          fail_color =
+            "rbg(204, 34, 34)"; # if authentication failed, changes outer_color and fail message color
+          fail_text = "'<i>$FAIL <b>($ATTEMPTS)</b></i>'"; # can be set to empty
+          fail_transition =
+            300; # transition time in ms between normal outer_color and fail_color
+          capslock_color = -1;
+          numlock_color = -1;
+          bothlock_color =
+            -1; # when both locks are active. -1 means don't change outer color (same for above)
+          invert_numlock = false; # change color if numlock is off
+          swap_font_color = false; # see below
+          position = "0, -20";
+          halign = "center";
+          valign = "center";
+        }];
+
+        label = [
+          {
+            text = ''cmd[update:1000] echo "$(date +'%V')"'';
+            color = "rgba(200, 200, 200, 0.1)";
+            font_size = 250;
+            font_family = "Fira Semibold";
+            position = "-10, 20";
+            halign = "right";
+            valign = "top";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
+            text = ''cmd[update:1000] echo "$(date +'%d %B %Y')"'';
+            color = "rgba(200, 200, 200, 0.1)";
+            font_size = 120;
+            font_family = "Fira Semibold";
+            position = "50, 20";
+            halign = "left";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
+            text = ''cmd[update:1000] echo "$TIME"'';
+            color = "rgba(200, 200, 200, 1.0)";
+            font_size = 55;
+            font_family = "Fira Semibold";
+            position = "-50, 50";
+            halign = "right";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
+            text = "$USER";
+            color = "rgba(200, 200, 200, 1.0)";
+            font_size = 20;
+            font_family = "Fira Semibold";
+            position = "-50, 150";
+            halign = "right";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+        ];
+
+      };
+    };
+    wlogout = {
+      enable = true;
+      layout = [
+        {
+          label = "lock";
+          action = "hyprlock";
+          text = "Lock";
+          keybind = "l";
+        }
+        {
+          label = "hibernate";
+          action = "systemctl hibernate";
+          text = "Hibernate";
+          keybind = "h";
+        }
+        {
+          label = "logout";
+          action = "loginctl terminate-user $USER";
+          text = "Logout";
+          keybind = "e";
+        }
+        {
+          label = "shutdown";
+          action = "systemctl poweroff";
+          text = "Shutdown";
+          keybind = "s";
+        }
+        {
+          label = "suspend";
+          action = "systemctl suspend";
+          text = "Suspend";
+          keybind = "u";
+        }
+        {
+          label = "reboot";
+          action = "systemctl reboot";
+          text = "Reboot";
+          keybind = "r";
+        }
+      ];
+      style = ''
+        * {
+          font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+        	background-image: none;
+        	box-shadow: none;
+          transition: 50ms;
+        }
+
+        window {
+        	background-color: rgba(12, 12, 12, 0.7);
+        }
+
+        button {
+          color: #FFFFFF;
+          border-radius: 20px;
+          
+        	background-color: rgba(12, 12, 12, 0.8);
+        	background-repeat: no-repeat;
+        	background-position: center;
+        	background-size: 25%;
+          
+        	border-style: solid;
+          border: 3px solid #15171B;
+          margin: 10px;
+
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        button:focus,
+        button:active,
+        button:hover {
+          color: #15171C;
+        	background-color: rgba(12, 12, 12, 0.9);
+          border: 3px solid #01F092;
+        }
+
+        #lock {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+        }
+
+        #logout {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+        }
+
+        #suspend {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+        }
+
+        #hibernate {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
+        }
+
+        #shutdown {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+        }
+
+        #reboot {
+            background-image: image(url("/nix/store/mcf8r67jp80nkxbkq9y460z6d4gyjbyn-wlogout-1.2.2/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+        }
+      '';
+    };
   };
 
-  services = { hyprshell = { enable = true; }; };
+  services.hyprshell.enable = true;
 }
