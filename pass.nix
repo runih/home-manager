@@ -3,6 +3,7 @@
   home = {
     packages = with pkgs; [
       pass
+			gnupg1       	# GNU Privacy Guard (version 1)
     ];
   };
 
