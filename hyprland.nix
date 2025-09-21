@@ -13,6 +13,7 @@
       nwg-look
       gimp
       swaylock-effects
+      jq
     ];
     file.".config/waybar/scripts/launch.sh" = {
       text = ''
@@ -234,6 +235,7 @@
           padding: 0 13px;
           color: #ffffff;
           margin: 0 5px;
+          background: rgba(14, 41, 70, 0.7);
         }
 
         #window,
@@ -251,14 +253,6 @@
           margin-right: 0;
         }
 
-        #clock {
-          background-color: #222647;
-        }
-
-        #battery {
-          background-color: #222647;
-          color: #ffffff;
-        }
 
         #battery.charging,
         #battery.plugged {
@@ -289,52 +283,23 @@
         }
 
         #power-profiles-daemon.performance {
-          background-color: #222647;
           color: #ffffff;
         }
 
         #power-profiles-daemon.balanced {
-          background-color: #222647;
           color: #ffffff;
         }
 
         #power-profiles-daemon.power-saver {
-          background-color: #222647;
-          color: #ffffff;
+          color: #01EF95;
         }
 
         label:focus {
           background-color: #000000;
         }
 
-        #cpu {
-          background-color: #2ecc71;
-          color: #000000;
-        }
-
-        #memory {
-          background-color: #9b59b6;
-        }
-
-        #disk {
-          background-color: #964B00;
-        }
-
-        #backlight {
-          background-color: #222647;
-        }
-
-        #network {
-          background-color: #222647;
-        }
-
         #network.disconnected {
           background-color: #f53c3c;
-        }
-
-        #pulseaudio {
-          background-color: #222647;
-          color: #ffffff;
         }
 
         #pulseaudio.muted {
