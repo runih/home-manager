@@ -524,6 +524,17 @@
             shadow_size = 10;
           }
           {
+            text = ''cmd[update:1000] echo "$(date +'%A')"'';
+            color = "rgba(200, 200, 200, 0.1)";
+            font_size = 120;
+            font_family = "Fira Semibold";
+            position = "50, 180";
+            halign = "left";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
             text = ''cmd[update:1000] echo "$(date +'%d %B %Y')"'';
             color = "rgba(200, 200, 200, 0.1)";
             font_size = 120;
