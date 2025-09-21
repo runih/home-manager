@@ -5,6 +5,7 @@
       hyprpicker
       ghostty
       wofi
+      walker
       wl-clipboard
       cliphist
       swaynotificationcenter
@@ -23,6 +24,21 @@
         kill $PID
 
         waybar &
+      '';
+      executable = true;
+    };
+    file."bin/change_wallpaper" = {
+      text = ''
+        #!/usr/bin/env bash
+        WALLPAPERS="$HOME/Pictures/wallpapers/"
+        if [ "$1" == "--random" ] || [ "$1" == "-r" ]; then
+          WALLPAPER=$(ls $WALLPAPERS | shuf -n 1)
+        else
+          WALLPAPER=$(ls $WALLPAPERS | walker -d)
+        fi
+        if [ "$WALLPAPER" != "" ]; then
+          swww img $WALLPAPERS$WALLPAPER --transition-fps=60 --transition-step=255 --transition-type=any
+        fi
       '';
       executable = true;
     };
@@ -441,7 +457,7 @@
           no_fade_in = false;
         };
 
-        background = [{ path = "$HOME/Pictures/wallpapers/key7.png"; }];
+        background = [{ path = "$HOME/Pictures/hyprlock/key7.png"; }];
 
         input-field = [{
           size = "400, 50";
