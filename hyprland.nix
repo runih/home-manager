@@ -74,7 +74,8 @@
             format = "{icon}";
              format-icons = {
              "1" = "";
-             "2" = "";
+             /* "2" = ""; */
+             "2" = "";
              "3" = "";
              "4" = "";
              "5" = "";
@@ -219,7 +220,7 @@
           color: #ffffff;
           transition: 0.2s ease-in-out;
           margin: 2px;
-          min-width: 50px;
+          min-width: 30px;
         }
 
         #workspaces button:hover {
