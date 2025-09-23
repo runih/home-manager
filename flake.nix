@@ -43,7 +43,6 @@
         sharedModulesLinux = [
           ./tmux.nix            # Tmux configuration for Linux.
           ./vim.nix             # Vim editor configuration.
-          ./neovim.nix          # Neovim editor configuration.
           ./zsh.nix             # Zsh shell configuration.
           ./zoxide.nix          # Zoxide configuration for Linux.
           ./pass.nix            # Password manager configuration.
@@ -84,7 +83,7 @@
           pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
           # List of Nix modules to include in this configuration.
           modules = [
-            ./basic-linux.nix
+            ./macnix.nix
             ./wezterm.nix
             ./nerd-fonts.nix
             ./neovide.nix
