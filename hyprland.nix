@@ -54,8 +54,8 @@
           position = "top";
           height = 32;
           margin-top = 5;
-          modules-left = [ "hyprland/workspaces" "hyprland/window" ];
-          modules-center = [ "custom/media" ];
+          modules-left = [ "hyprland/window" "custom/media" ];
+          modules-center = [ "hyprland/workspaces"  ];
           modules-right = [
             "pulseaudio"
             "network"
@@ -65,15 +65,24 @@
             "power-profiles-daemon"
           ];
           "hyprland/workspaces" = {
+            "persistent-workspaces" = {
+              "*" = 3;
+            };
             disable-scroll = true;
             all-outputs = true;
             warp-on-scroll = false;
             format = "{icon}";
-            format-icons = {
-              urgent = "";
-              active = "";
-              default = "";
-            };
+             format-icons = {
+             "1" = "";
+             "2" = "";
+             "3" = "";
+             "4" = "";
+             "5" = "";
+             "6" = "";
+            #   urgent = "";
+            #   active = "";
+            #   default = "";
+             };
           };
           "clock" = {
             tooltip-format = ''
@@ -194,20 +203,34 @@
           background-color: #a37800;
         }
 
+        /*
+        #workspaces {
+          background-color: rgba(0, 0, 0, 0.2);
+          padding: 6px;
+        }
+        */
+
         #workspaces button {
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          border-radius: 10px;
           padding: 0 5px;
-          background-color: transparent;
+          background-color: rgba(0, 0, 0, 0.2);
+          /* color: rgba(175, 175, 175, 0.7); */
           color: #ffffff;
           transition: 0.2s ease-in-out;
+          margin: 2px;
+          min-width: 50px;
         }
 
         #workspaces button:hover {
+          color: #05E8A3;
           background: rgba(0, 0, 0, 0.2);
+          min-width: 80px;
         }
 
         #workspaces button.focused {
           background-color: #64727D;
-          box-shadow: inset 0 -3px #ffffff;
+          /* box-shadow: inset 0 -3px #ffffff; */
         }
 
         #workspaces button.urgent {
@@ -216,14 +239,17 @@
 
         #workspaces button.active {
           color: #05E8A3;
+          min-width: 80px;
         }
 
         #workspaces button.empty {
-          color: #09182D;
+          /* color: #09182D; */
+          color: rgba(175, 175, 175, 0.7);
         }
 
         #workspaces button.empty.active {
-          color: #ffffff;
+          /* color: #ffffff; */
+          color: rgba(175, 175, 175, 0.7);
         }
 
         #mode {
@@ -251,7 +277,8 @@
           padding: 0 13px;
           color: #ffffff;
           margin: 0 5px;
-          background: rgba(14, 41, 70, 0.7);
+          /* background: rgba(14, 41, 70, 0.7); */
+          background-color: rgba(0, 0, 0, 0.2);
         }
 
         #window,
