@@ -3,7 +3,6 @@
     packages = with pkgs; [
       hyprpaper
       hyprpicker
-      ghostty
       wofi
       walker
       wl-clipboard
@@ -15,6 +14,7 @@
       gimp
       swaylock-effects
       jq
+      brave
     ];
     file.".config/waybar/scripts/launch.sh" = {
       text = ''
@@ -59,7 +59,7 @@
           modules-right = [
             "pulseaudio"
             "network"
-            "backlight"
+            "bluetooth"
             "battery"
             "clock"
             "power-profiles-daemon"
@@ -75,11 +75,12 @@
              format-icons = {
              "1" = "";
              /* "2" = ""; */
-             "2" = "";
+             "2" = "";
              "3" = "";
              "4" = "";
              "5" = "";
              "6" = "";
+             "7" = "";
              "10" = "";
             #   urgent = "";
             #   active = "";
@@ -91,6 +92,16 @@
               <big>{:%Y %B}</big>
               <tt><small>{calendar}</small></tt>'';
             format-alt = "{:%Y-%m-%d}";
+          };
+          bluetooth = {
+            /* "controller": "controller1",  specify the alias of the controller if there are more than 1 on the system */
+            format = " {status}";
+            "format-disabled" =  ""; /* an empty format will hide the module */
+            "format-connected" = " {num_connections} connected";
+            "tooltip-format" =  "{controller_alias}\t{controller_address}";
+            "tooltip-format-connected" = "{controller_alias}\t{controller_address}\n\n{device_enumerate}";
+            "tooltip-format-enumerate-connected" = "{device_alias}\t{device_address}";
+            on-click = "blueman-manager";
           };
           backlight = {
             format = "{percent}% {icon}";
@@ -260,6 +271,7 @@
         }
 
         #clock,
+        #bluetooth,
         #battery,
         #cpu,
         #memory,
@@ -689,6 +701,10 @@
         { id = "nhdogjmejiglipccpnnnanhbledajbpd"; }
       ];
     };
+    vscode = {
+      enable = true;
+    };
+    lazydocker.enable = true;
   };
 
   services = {
