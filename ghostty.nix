@@ -1,11 +1,18 @@
 { ... }:
 {
+  programs = {
+    ghostty = {
+      enable = true;
+      enableZshIntegration = true;
+      installVimSyntax = true;
+    };
+  };
   xdg.configFile."ghostty/config".text = ''
     window-padding-color = background
     theme = Dark Pastel
     background-opacity = 0.75
     macos-titlebar-style = hidden
-    cursor-color = #ffff00
+    cursor-color = #ff0000
     cursor-style-blink = true
     adjust-cursor-height = 30%
     font-family = "Iosevka Nerd Font Mono"
