@@ -10,6 +10,7 @@
     shellAliases = {
       hm = "home-manager switch --impure";
       apps = "home-manager generations | awk '$0 ~ /(current)/ {print \"open \"$7\"/home-path/Applications\"}' | sh";
+      nodestat = "node -pe 'JSON.stringify(fs.statSync(process.argv[1]))'";
     };
     initContent = ''
     unset __HM_SESS_VARS_SOURCED
