@@ -89,6 +89,9 @@
             ./neovide.nix
             ./hyprland.nix
             ./ghostty.nix
+            ({ config, ...}: {
+              nixpkgs.config.allowUnfree = true;  # Allow unfree packages in Nixpkgs.
+            })
           ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
