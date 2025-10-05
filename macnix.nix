@@ -9,8 +9,10 @@
     homeDirectory = "${homeDirectory}";
 
     # Set the default editor for the session
-    sessionVariables.EDITOR = "nvim";
-
+    sessionVariables = {
+      EDITOR = "nvim";
+      PG_NETWORK = "docker_my_network";
+    };
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"

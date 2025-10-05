@@ -87,6 +87,7 @@
             ./wezterm.nix
             ./nerd-fonts.nix
             ./neovide.nix
+            ./postgresql-client.nix
             ./hyprland.nix
             ./ghostty.nix
             ({ config, ...}: {
