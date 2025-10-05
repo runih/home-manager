@@ -968,7 +968,7 @@
   };
 
   services = {
-    hyprshell.enable = true;
+    hyprshell.enable = false;
 
     hypridle = {
       enable = true;
