@@ -73,7 +73,10 @@
             "swww-daemon"
           ];
 
-          monitor="eDP-1,preferred,auto,1.5";
+          monitor = [
+            "eDP-1,preferred,auto,1.5"
+            "DP-1,preferred,auto,auto"
+          ];
 
           general = {
               gaps_in = 3;
@@ -166,7 +169,7 @@
             "$mainMod, P, pseudo, # dwindle"
             "$mainMod, T, togglesplit, # dwindle"
             "$mainMod, R, exec, ~/.config/waybar/scripts/launch.sh"
-            "$mainMod, Q, exec, hyprlock"
+            "$mainMod CTRL, Q, exec, hyprlock"
             "$mainMod, F, fullscreen, 0"
             "$mainMod SHIFT, F, fullscreen, 1"
             "$mainMod, W, exec, ~/bin/change_wallpaper"
@@ -259,7 +262,12 @@
 
           # https://wiki.hyprland.org/Configuring/Variables/#gestures
           gestures =  {
-              gesture = "3, horizontal, workspace";
+            gesture = [
+              "3, horizontal, workspace"
+              "4, down, close"
+              "2, pinchin, scale: 1.5, fullscreen, 1"
+              "2, pinchout, scale: 1.5, float"
+            ];
           };
 
           # Example per-device config
@@ -759,6 +767,16 @@
         };
 
         background = [{ path = "$HOME/Pictures/hyprlock/key7.png"; }];
+
+        animations = {
+          enabled = true;
+          bezier = "linear, 1, 1, 0, 0";
+          animation = [
+            "fadeIn, 1, 15, linear"
+            "fadeOut, 1, 15, linear"
+            "inputFieldDots, 1, 2, linear"
+          ];
+        };
 
         input-field = [{
           size = "400, 50";
