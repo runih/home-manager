@@ -25,7 +25,7 @@
     extraConfig = ''
       local config = {
         font_size = 17.0,
-        window_decorations = "RESIZE",
+        window_decorations = "NONE",
         enable_tab_bar = false,
         -- color_scheme = "3024 Night",
         -- color_scheme = "myTheme",

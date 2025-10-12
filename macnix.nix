@@ -11,7 +11,9 @@
     # Set the default editor for the session
     sessionVariables = {
       EDITOR = "nvim";
+      PG_PASS = "${homeDirectory}/.pgpass";
       PG_NETWORK = "docker_my_network";
+      PG_HISTORY = "${homeDirectory}/.psql_history";
     };
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
@@ -25,6 +27,7 @@
     packages = with pkgs; [
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
+      fastfetch       # A fast system information tool
       fd              # A simple, fast and user-friendly alternative to find
       file            # Determine file types
       git             # Version control system
