@@ -42,6 +42,9 @@
       '';
       executable = true;
     };
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
   };
 
   wayland = {
@@ -245,10 +248,11 @@
           ];
 
           input = {
-            kb_layout = "se";
-            #kb_options = "lv3:ralt_switch,compose:rwin";
-            kb_model = "pc105";
-            # kb_variant = "nodeadkeys";
+                kb_layout = "se";
+            kb_options = "lv3:lalt_switch";
+            #kb_options = "lv3:lalt_switch,lv5:lsgt_switch";
+            kb_model = "apple:alupckeys";
+            #kb_variant = "mac";
 
             follow_mouse = 1;
 
@@ -314,6 +318,31 @@
   };
 
   programs = {
+    alacritty = { 
+      enable = true;
+      settings = {
+        font = {
+          normal = {
+            family = "Iosevka Nerd Font Mono";
+            style = "Medium";
+          };
+          size = 14.0;
+        };
+        window = {
+          padding = {
+            x = 10;
+            y = 10;
+          };
+          dynamic_padding = true;
+          #decorations = "RESIZE";
+        };
+        #scrollback = {
+        #history = 10000;
+        #multiplier = 3;
+        #};
+      };
+      theme = "solarized_dark";
+    };
     hyprshot = { enable = true; };
     waybar = {
       enable = true;
