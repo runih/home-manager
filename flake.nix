@@ -85,6 +85,7 @@
           modules = [
             ./macnix.nix
             ./wezterm.nix
+            ./foot.nix
             ./nerd-fonts.nix
             ./neovide.nix
             ./postgresql-client.nix

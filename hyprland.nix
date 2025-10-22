@@ -56,8 +56,8 @@
           "$editor" = "neovide";
           "$fileManager" = "nautilus";
           "$logout" = "wlogout";
-          "$menu" = "fuzzel";
-          #"$menu" = "walker";
+          "$menu" = "walker";
+          "$menu2" = "fuzzel";
           "$terminal" = "ghostty";
           "$terminal2" = "wezterm";
 
@@ -75,6 +75,7 @@
           exec-once = [
             "waybar"
             "swww-daemon"
+            "walker --gapplication-service"
           ];
 
           monitor = [
@@ -84,7 +85,7 @@
 
           general = {
               gaps_in = 3;
-              gaps_out = 5;
+              gaps_out = 10;
 
               border_size = 1;
 
@@ -170,6 +171,7 @@
             "$mainMod, E, exec, $fileManager"
             "$mainMod, V, togglefloating,"
             "$mainMod, space, exec, $menu"
+            "$mainMod SHIFT, space, exec, $menu2"
             "$mainMod, P, pseudo, # dwindle"
             "$mainMod, T, togglesplit, # dwindle"
             "$mainMod, R, exec, ~/.config/waybar/scripts/launch.sh"
@@ -179,6 +181,9 @@
             "$mainMod, W, exec, ~/bin/change_wallpaper"
             "$mainMod SHIFT, W, exec, ~/bin/change_wallpaper --random"
             "$mainMod, N, exec, $editor"
+            "$mainMod CTRL, 3, exec, hyprshot -m window"
+            "$mainMod CTRL, 4, exec, hyprshot -m region"
+            "$mainMod SHIFT CTRL, 4, exec, hyprshot -m output"
 
             # Move focus with mainMod + arrow keys
             "$mainMod, h, movefocus, l"
@@ -308,6 +313,7 @@
             #"workspace 3, class:com.mitchellh.ghostty"
             "opacity 0.3 0.3, title:^(walker)$"
             "workspace 5, class:teams-for-linux"
+            "workspace 6, class:thunderbird"
             "workspace 7, class:code # VSCode"
             "workspace 10, class:org.gnome.SystemMonitor"
           ] ;
@@ -1146,7 +1152,16 @@
       enable = true;
     };
     lazydocker.enable = true;
+    thunderbird = {
+      enable = true;
+      profiles = {
+        default = {
+          isDefault = true;
+        };
+      };
+    };
   };
+
 
   services = {
     hyprshell.enable = false;

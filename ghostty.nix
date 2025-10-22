@@ -15,7 +15,7 @@
     cursor-color = #ff0000
     cursor-style-blink = true
     adjust-cursor-height = 30%
-    font-family = "Iosevka Nerd Font Mono"
+    font-family = "Iosevka Nerd Font Propo"
     font-size = 14
     keybind = global:shift+cmd+space=toggle_quick_terminal
     '';

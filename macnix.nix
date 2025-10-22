@@ -54,6 +54,97 @@
     ];
   };
 
+  accounts.email.accounts = {
+    "Okkara.NET" = {
+      thunderbird = {
+        enable = true;
+        profiles = [ "default"  ];
+      };
+      primary = true;
+      realName = "Rúni H.Hansen";
+      address = "runi.hansen@okkara.net";
+      userName = "runi.hansen@okkara.net";
+      imap = {
+        host = "imap.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+      smtp = {
+        host = "smtp.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+    };
+    "Admin" = {
+      thunderbird = {
+        enable = true;
+        profiles = [ "default"  ];
+      };
+      primary = false;
+      realName = "Admin";
+      address = "admin@okkara.net";
+      userName = "admin@okkara.net";
+      imap = {
+        host = "imap.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+      smtp = {
+        host = "smtp.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+    };
+    "Tango" = {
+      thunderbird = {
+        enable = true;
+        profiles = [ "default"  ];
+      };
+      primary = false;
+      realName = "Tango";
+      address = "tango@okkara.net";
+      userName = "tango@okkara.net";
+      imap = {
+        host = "imap.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+      smtp = {
+        host = "smtp.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+    };
+    "wilix" = {
+      thunderbird = {
+        enable = true;
+        profiles = [ "default"  ];
+      };
+      primary = false;
+      realName = "Rúni H.Hansen";
+      address = "runi.hansen@wilix.com";
+      userName = "runi.hansen@wilix.com";
+      imap = {
+        host = "imap.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+      smtp = {
+        host = "smtp.websupport.se";
+        tls = {
+          useStartTls = true;
+        };
+      };
+    };
+  };
+
   programs = {
     # Enable home-manager for managing user configurations
     home-manager.enable = true;
@@ -79,7 +170,7 @@
     oh-my-posh = {
       enable = true;                  # Enable oh-my-posh
       enableZshIntegration = true;    # Enable Zsh integration
-      useTheme = "craver";             # Set the theme to "sorin"
+      useTheme = "blue-owl";             # Set the theme to "sorin"
     };
 
     # Configuration for the vim program (text editor)
