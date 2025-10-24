@@ -26,7 +26,6 @@
 			btop         	# A resource monitor
 			dig          	# DNS lookup utility
 			fd           	# A simple, fast and user-friendly alternative to find
-			gimp         	# GNU Image Manipulation Program
 			git          	# Version control system
 			gnupg1       	# GNU Privacy Guard (version 1)
 			go           	# Go programming language
@@ -65,6 +64,21 @@
         \timing
         \pset format wrapped
         \pset null '<null>'
+      '';
+
+      # Configuration for ghostty terminal emulator
+      # ghostty.nix can't be used for Mac :(
+      ".config/ghostty/config".text = ''
+      window-padding-color = background
+      theme = Dark Pastel
+      background-opacity = 0.75
+      macos-titlebar-style = hidden
+      cursor-color = #ff0000
+      cursor-style-blink = true
+      adjust-cursor-height = 30%
+      font-family = "Iosevka Nerd Font Propo"
+      font-size = 18
+      keybind = global:shift+cmd+space=toggle_quick_terminal
       '';
     };
 

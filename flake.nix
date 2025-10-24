@@ -26,7 +26,6 @@
         sharedModulesMac = [
           ./basic-mac.nix           # Basic macOS-specific configurations.
           ./nerd-fonts.nix          # Configuration for Nerd Fonts.
-          ./ghostty.nix             # Ghostty configuration for macOS.
           ./zsh.nix                 # Zsh shell configuration.
           ./zoxide.nix              # Zoxide configuration for macOS.
           ./my-tmux.nix             # Custom tmux configuration.
