@@ -104,7 +104,10 @@
         "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           # List of Nix modules to include in this configuration.
-          modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
+          modules = [
+            ./basic-linux.nix
+            ./neovim.nix
+          ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
             username = username;            # Pass the username to the configuration.
@@ -114,7 +117,10 @@
         # Configuration for the "minecraft" user on the system "nixos-pi5" (Linux).
         "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
-          modules = [ ./minecraft.nix ] ++ sharedModulesLinux;
+          modules = [
+            ./neovim.nix
+            ./minecraft.nix
+          ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/minecraft";  # Pass the home directory to the configuration.
             username = "minecraft";            # Pass the username to the configuration.
