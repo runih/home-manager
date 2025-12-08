@@ -40,11 +40,11 @@
         # These modules include configurations specific to Linux, such as
         # Linux-compatible tools and terminal settings.
         sharedModulesLinux = [
-          ./tmux.nix            # Tmux configuration for Linux.
+          ./simple-tmux.nix     # Tmux configuration for Linux.
           ./vim.nix             # Vim editor configuration.
           ./zsh.nix             # Zsh shell configuration.
           ./zoxide.nix          # Zoxide configuration for Linux.
-          ./yazi.nix           # Yazi configuration for Linux.
+          ./yazi.nix            # Yazi configuration for Linux.
           ./pass.nix            # Password manager configuration.
         ];
 
