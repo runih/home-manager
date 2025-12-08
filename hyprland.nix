@@ -15,6 +15,7 @@
       swaylock-effects
       jq
       brave
+      quickshell
     ];
     file.".config/waybar/scripts/launch.sh" = {
       text = ''
@@ -81,6 +82,12 @@
           monitor = [
             "eDP-1,preferred,auto,1.5"
             "DP-1,preferred,auto,auto"
+          ];
+
+          workspace = [
+            "1,monitor:DP-1"
+            "2,monitor:DP-1"
+            "4,monitor:eDP-1"
           ];
 
           general = {
@@ -261,13 +268,14 @@
 
             follow_mouse = 1;
 
-            sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
+            #sensitivity = -0.7; # -1.0 - 1.0, 0 means no modification.
 
             touchpad = {
                 disable_while_typing = true;
                 tap-to-click = false;
                 natural_scroll = true;
             };
+
           };
 
           # https://wiki.hyprland.org/Configuring/Variables/#gestures
@@ -309,7 +317,7 @@
             "workspace 1, class:neovide"
             "workspace 2, class:firefox"
             "workspace 2, class:vivaldi-stable"
-            "workspace 2, class:brave-browser"
+            "workspace 4, class:brave-browser"
             #"workspace 3, class:com.mitchellh.ghostty"
             "opacity 0.3 0.3, title:^(walker)$"
             "workspace 5, class:teams-for-linux"
