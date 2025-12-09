@@ -108,6 +108,7 @@
           modules = [
             ./basic-linux.nix
             ./neovim.nix
+            ./raspberry-pi5-leds.nix
           ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
