@@ -108,7 +108,6 @@
           modules = [
             ./basic-linux.nix
             ./neovim.nix
-            ./raspberry-pi5-leds.nix
           ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
@@ -120,6 +119,7 @@
         "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
           modules = [
+            ./simple-tmux.nix
             ./neovim.nix
             ./minecraft.nix
           ] ++ sharedModulesLinux;

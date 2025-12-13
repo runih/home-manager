@@ -4,6 +4,7 @@
   home = {
     username = "${username}";
     homeDirectory = "${homeDirectory}";
+    sessionVariables.EDITOR = "nvim";
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"
     ];
@@ -19,7 +20,6 @@
       nmon
       pstree
       superfile
-      tmux
       tree
       unzip
     ];
@@ -47,6 +47,27 @@
     };
     vim = {
       enable = true;
+    };
+  };
+  systemd.user = {
+    timers."minecraft-backup" = {
+      Install.WantedBy = [ "default.target" ];
+      Timer = {
+        OnBootSec = "5m";
+        OnUnitActiveSec = "5m";
+        Unit = "minecraft-backup.service";
+      };
+    };
+    services."minecraft-backup" = {
+      Install.WantedBy = [ "default.target" ];
+      Unit = {
+        Description = "Backup Minecraft";
+      };
+      Service = {
+        Type = "oneshot";
+        WorkingDirectory = "${homeDirectory}";
+        ExecStart = "/run/current-system/sw/bin/snapshot-world ${homeDirectory}/direwolf/1.21/1.14.2/world";
+      };
     };
   };
 }
