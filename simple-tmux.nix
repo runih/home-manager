@@ -3,8 +3,8 @@ let
   my-tmux-config = pkgs.fetchFromGitHub {
     owner = "runih";
     repo = "simple-tmux";
-    rev = "5a763575abbb9ef09a8fae92e6442718eec0180d";
-    hash = "sha256-I5YJUCauh6GZiIg9dUc2b++Eg/yYbv7dO9HOUIPTvR8=";
+    rev = "78c7c3b2bc154f5762c0e5192d93d946250da5a0";
+    hash = "sha256-CVzgxfBSNrz2pE4+YRvbt4jizrEwRUJIMjhQs23+/Ow=";
   };
 in
   {
