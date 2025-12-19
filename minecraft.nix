@@ -66,7 +66,7 @@
       Service = {
         Type = "oneshot";
         WorkingDirectory = "${homeDirectory}";
-        ExecStart = "/run/current-system/sw/bin/snapshot-world ${homeDirectory}/direwolf/1.21/1.14.2/world";
+        ExecStart = "/run/current-system/sw/bin/snapshot-world ${homeDirectory}/worlds/current-world";
       };
     };
   };
