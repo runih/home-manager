@@ -990,6 +990,17 @@
 
         label = [
           {
+            text = ''cmd[update:1000] cal -y'';
+            color = "rgba(200, 200, 200, 0.1)";
+            font_size = 20;
+            font_family = "IosevkaTerm Nerd Font Propo, Bold";
+            position = "40, 40";
+            halign = "left";
+            valign = "top";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
             text = ''cmd[update:1000] echo "$(date +'%V')"'';
             color = "rgba(200, 200, 200, 0.1)";
             font_size = 250;

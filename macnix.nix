@@ -27,6 +27,7 @@
     packages = with pkgs; [
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
+      dnsutils        # Utilities for querying DNS servers
       fastfetch       # A fast system information tool
       fd              # A simple, fast and user-friendly alternative to find
       file            # Determine file types
@@ -41,6 +42,7 @@
       tree            # Display directories as trees
       unzip           # Extract ZIP archives
       wget            # Command-line utility for downloading files
+      net-tools       # Network configuration tools
       nodejs_22       # JavaScript runtime built on Chrome's V8 engine
       gnumake         # Build automation tool
       gcc             # GNU Compiler Collection
