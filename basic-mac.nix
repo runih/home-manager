@@ -16,7 +16,7 @@
     ];
 
     # State version for compatibility with Home Manager
-    stateVersion = "25.05";
+    stateVersion = "25.11";
 
     # List of packages to install in the user's environment
     packages = with pkgs; [
@@ -113,6 +113,12 @@
       enable = true;
       enableZshIntegration = true;
       useTheme = "the-unnamed";  # Set the theme to "the-unnamed"
+    };
+  };
+
+  targets = {
+    darwin = {
+      copyApps.enable = false;  # Disable automatic copying of applications
     };
   };
 }
