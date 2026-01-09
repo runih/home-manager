@@ -21,7 +21,7 @@
     ];
 
     # Specify the state version for compatibility
-    stateVersion = "25.05";
+    stateVersion = "25.11";
 
     # List of packages to be installed for the user
     packages = with pkgs; [
@@ -32,6 +32,7 @@
       fd              # A simple, fast and user-friendly alternative to find
       file            # Determine file types
       git             # Version control system
+      go             # Go programming language
       htop-vim        # Interactive process viewer with vim keybindings
       btop            # Resource monitor
       lynx            # Text-based web browser

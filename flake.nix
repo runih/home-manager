@@ -52,7 +52,7 @@
         # Configuration for the user "runih" on the system "BlackMac" (macOS).
         "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
-          modules = sharedModulesMac ++ [ ./java.nix ];
+          modules = sharedModulesMac ++ [ ./java.nix ./testssl.nix ];
           extraSpecialArgs = {
             homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
             username = username;            # Pass the username to the configuration.
@@ -91,6 +91,7 @@
             ./postgresql-client.nix
             ./hyprland.nix
             ./ghostty.nix
+            ./testssl.nix
             ({ config, ...}: {
               nixpkgs.config.allowUnfree = true;  # Allow unfree packages in Nixpkgs.
             })
