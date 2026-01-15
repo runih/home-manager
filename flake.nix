@@ -92,6 +92,7 @@
             ./hyprland.nix
             ./ghostty.nix
             ./testssl.nix
+            ./java.nix
             ({ config, ...}: {
               nixpkgs.config.allowUnfree = true;  # Allow unfree packages in Nixpkgs.
             })

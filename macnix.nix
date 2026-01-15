@@ -25,6 +25,7 @@
 
     # List of packages to be installed for the user
     packages = with pkgs; [
+      atlauncher      # Minecraft launcher
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
       dnsutils        # Utilities for querying DNS servers
