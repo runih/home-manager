@@ -46,6 +46,7 @@
       wget            # Command-line utility for downloading files
       net-tools       # Network configuration tools
       nodejs_22       # JavaScript runtime built on Chrome's V8 engine
+      minio-client    # Client for MinIO and Amazon S3 compatible cloud storage
       gnumake         # Build automation tool
       gcc             # GNU Compiler Collection
       lazygit         # Simple terminal UI for git commands
@@ -56,6 +57,55 @@
       bluetuith       # Bluetooth TUI
       teams-for-linux # Unofficial Microsoft Teams client for Linux
     ];
+
+    file."bin/battery-status" = {
+      text = ''
+      #!/usr/bin/env bash
+      BAT='/sys/class/power_supply/BAT0'
+      status=$(cat $BAT/status)
+      if [ "$status" = "Full" ]; then
+        status="Charged"
+        capacity=100
+      else
+        charge_now=$(cat $BAT/charge_now)
+        charge_full=$(cat $BAT/charge_full)
+        capacity=$(($charge_now * 100 / $charge_full))
+        if [ $capacity -gt 100 ]; then
+          capacity=100
+        fi
+      fi
+      bar_length=30
+      filled=$((capacity * bar_length / 100))
+      empty=$((bar_length - filled))
+
+      printf "$status: ["
+      for ((i=0; i<filled; i++)); do printf "█"; done
+      for ((i=0; i<empty; i++)); do printf "▒"; done
+      printf "] %s%%\n" "$capacity"
+      '';
+      executable = true;
+    };
+    file."bin/current-load" = {
+      text = ''
+      #!/usr/bin/env bash
+      load=$(cut -f1 -d' ' /proc/loadavg)
+      cores=$(nproc)
+      percent=$(echo "$load $cores" | awk '{printf "%d", ($1 / $2) * 100}')
+
+      bar_length=60
+      if [ "$1" != "" ]; then
+          bar_length=$1
+      fi
+      filled=$((percent * bar_length / 100))
+      empty=$((bar_length - filled))
+
+      printf "["
+      for ((i=0; i<filled; i++)); do printf "█"; done
+      for ((i=0; i<empty; i++)); do printf "▒"; done
+      printf "]\n"
+      '';
+      executable = true;
+    };
   };
 
   accounts.email.accounts = {

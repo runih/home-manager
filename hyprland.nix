@@ -1055,6 +1055,28 @@
             shadow_passes = 5;
             shadow_size = 10;
           }
+          {
+            text = ''cmd[update:1000] ~/bin/battery-status'';
+            color = "rgba(77, 255, 255, 0.2)";
+            font_size = 20;
+            font_family = "Iosevka Nerd Font Propo";
+            position = "-10, 10";
+            halign = "right";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
+          {
+            text = ''cmd[update:1000] ~/bin/current-load 110'';
+            color = "rgba(77, 255, 255, 0.2)";
+            font_size = 20;
+            font_family = "Iosevka Nerd Font Propo";
+            position = "0, 0";
+            halign = "left";
+            valign = "bottom";
+            shadow_passes = 5;
+            shadow_size = 10;
+          }
         ];
 
       };
