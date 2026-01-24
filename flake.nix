@@ -11,9 +11,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Hosts
+    macnix.url = "path:./hosts/linux/macnix";
   };
 
-  outputs = inputs:
+  outputs = { self, nixpkgs, home-manager, macnix, ... }:
     {
       homeConfigurations = let
 
@@ -50,8 +53,8 @@
 
       in {
         # Configuration for the user "runih" on the system "BlackMac" (macOS).
-        "runih@BlackMac" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+        "runih@BlackMac" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./java.nix ./testssl.nix ];
           extraSpecialArgs = {
             homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
@@ -59,8 +62,8 @@
           };
         };
 
-        "maiken@MaikensMacbook.local" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+        "maiken@MaikensMacbook.local" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./java.nix ./neovim.nix ];
           extraSpecialArgs = {
             homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
@@ -69,8 +72,8 @@
         };
 
         # Configuration for the user "runih" on the system "BlackMac" (macOS).
-        "runih@iMac.home.okkara.net" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-darwin";
+        "runih@iMac.home.okkara.net" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
           modules = sharedModulesMac ++ [ ./imac.nix ./java.nix ];
           extraSpecialArgs = {
             homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
@@ -79,33 +82,11 @@
         };
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
-        "runih@macnix" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
-          # List of Nix modules to include in this configuration.
-          modules = [
-            ./macnix.nix
-            ./wezterm.nix
-            ./foot.nix
-            ./nerd-fonts.nix
-            ./neovide.nix
-            ./postgresql-client.nix
-            ./hyprland.nix
-            ./ghostty.nix
-            ./testssl.nix
-            ./java.nix
-            ({ config, ...}: {
-              nixpkgs.config.allowUnfree = true;  # Allow unfree packages in Nixpkgs.
-            })
-          ] ++ sharedModulesLinux;
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
+        "runih@macnix" = macnix.outputs.homeConfigurations."runih@macnix";
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
-        "runih@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+        "runih@nixos-pi5" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-linux";
           # List of Nix modules to include in this configuration.
           modules = [
             ./basic-linux.nix
@@ -118,8 +99,8 @@
         };
 
         # Configuration for the "minecraft" user on the system "nixos-pi5" (Linux).
-        "minecraft@nixos-pi5" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+        "minecraft@nixos-pi5" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-linux";
           modules = [
             ./simple-tmux.nix
             ./neovim.nix
@@ -132,8 +113,8 @@
         };
 
         # Configuration for the user "runih" on the system "nixos" (Linux).
-        "runih@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+        "runih@nixos" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
@@ -142,8 +123,8 @@
         };
 
         # Configuration for the user "runih" on the system "nixos2" (Linux).
-        "runih@nixos2" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
+        "runih@nixos2" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
@@ -152,8 +133,8 @@
         };
 
         # Configuration for the user "runih" on the system "madakara-nixos" (Linux).
-        "runih@madakara-nixos" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+        "runih@madakara-nixos" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
           modules = [ ./basic-linux.nix ] ++ sharedModulesLinux ++ [ ../esh-minecraft.nix ];
           extraSpecialArgs = {
             homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
