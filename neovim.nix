@@ -3,8 +3,8 @@ let
   my-neovim-config = pkgs.fetchFromGitHub {
     owner = "runih";
     repo = "neovim-lua-config";
-    rev = "595916b8dcd3804c7a663fe660223a44c2e22739";
-    hash = "sha256-4tRLrOVFce+UarPU46Z/wHCnTTEW7yhAfHAqSrmYhP4=";
+    rev = "2f196e29a2ccc2f146d506ea8c4fabbb826dc712";
+    hash = "sha256-Vtmriq/PZnxNJ1vZoT8fsim/nitS4de5Mev+GT7MwOk=";
   };
 in
   {
