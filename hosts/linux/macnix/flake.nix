@@ -3,25 +3,29 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }:
     let
-      username = "runih";
+      username = builtins.getEnv "USER";  # Get the current user's username.
     in {
       homeConfigurations = {
-        "runih@macnix" = home-manager.lib.homeManagerConfiguration {
+        "macnix" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           modules = [
             ./home.nix
+            ./hyprland.nix
+
             ../../../wezterm.nix
             ../../../foot.nix
             ../../../nerd-fonts.nix
             ../../../neovide.nix
             ../../../postgresql-client.nix
-            ../../../hyprland.nix
             ../../../ghostty.nix
             ../../../testssl.nix
             ../../../java.nix
@@ -29,7 +33,7 @@
             ../../../vim.nix
             ../../../zsh.nix
             ../../../zoxide.nix
-            ../../../yazi.nix
+            #../../../yazi.nix
             ../../../pass.nix
             ({ config, ... }: {
               nixpkgs.config.allowUnfree = true;

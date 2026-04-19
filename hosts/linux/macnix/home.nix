@@ -14,6 +14,7 @@
       PG_PASS = "${homeDirectory}/.pgpass";
       PG_NETWORK = "docker_my_network";
       PG_HISTORY = "${homeDirectory}/.psql_history";
+      FZF_DEFAULT_OPTS = "--bind=ctrl-j:down,ctrl-k:up";
     };
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
@@ -21,41 +22,44 @@
     ];
 
     # Specify the state version for compatibility
-    stateVersion = "25.11";
+    stateVersion = "26.05";
 
     # List of packages to be installed for the user
     packages = with pkgs; [
       atlauncher      # Minecraft launcher
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
+      blueman         # Bluetooth manager
+      bluetuith       # Bluetooth TUI
+      btop            # Resource monitor
       dnsutils        # Utilities for querying DNS servers
       fastfetch       # A fast system information tool
       fd              # A simple, fast and user-friendly alternative to find
       file            # Determine file types
+      gcc             # GNU Compiler Collection
       git             # Version control system
+      gnumake         # Build automation tool
+      neovim
       go             # Go programming language
       htop-vim        # Interactive process viewer with vim keybindings
-      btop            # Resource monitor
+      lazygit         # Simple terminal UI for git commands
       lynx            # Text-based web browser
+      minio-client    # Client for MinIO and Amazon S3 compatible cloud storage
+      net-tools       # Network configuration tools
+      nodejs_22       # JavaScript runtime built on Chrome's V8 engine
+      pciutils        # Utilities for listing PCI devices
       pstree          # Display a tree of processes
       ripgrep         # A fast search tool
+      rustup          # Rust toolchain installer
       superfile       # (Assumed custom package, no description available)
+      teams-for-linux # Unofficial Microsoft Teams client for Linux
       tmux            # Terminal multiplexer
       tree            # Display directories as trees
       unzip           # Extract ZIP archives
-      wget            # Command-line utility for downloading files
-      net-tools       # Network configuration tools
-      nodejs_22       # JavaScript runtime built on Chrome's V8 engine
-      minio-client    # Client for MinIO and Amazon S3 compatible cloud storage
-      gnumake         # Build automation tool
-      gcc             # GNU Compiler Collection
-      lazygit         # Simple terminal UI for git commands
-      rustup          # Rust toolchain installer
+      usbutils        # Utilities for USB devices
+      virtualenv      # Tool to create isolated Python environments
       w3m             # Text-based web browser
-      pciutils        # Utilities for listing PCI devices
-      blueman         # Bluetooth manager
-      bluetuith       # Bluetooth TUI
-      teams-for-linux # Unofficial Microsoft Teams client for Linux
+      wget            # Command-line utility for downloading files
     ];
 
     file."bin/battery-status" = {
@@ -203,7 +207,7 @@
     # Enable home-manager for managing user configurations
     home-manager.enable = true;
 
-    neovim.enable = true;
+    # caelestia.enable = true; # Enable Caelestia, a terminal-based system monitor
 
 
     # Configuration for the eza program (modern ls replacement)

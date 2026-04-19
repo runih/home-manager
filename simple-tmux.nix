@@ -1,11 +1,11 @@
 { pkgs, ... }:
 let
-  my-tmux-config = pkgs.fetchFromGitHub {
-    owner = "runih";
-    repo = "simple-tmux";
-    rev = "58d3747dde225fd3f24e4e24d99d9f770da561cd";
-    hash = "sha256-anKmWTl/wULO0IjJb0Pz4fceIiAEs6UsuSOw62qeUPk=";
-  };
+my-tmux-config = pkgs.fetchFromGitHub {
+  owner = "runih";
+  repo = "simple-tmux";
+  rev = "666cb10c8603ca157622c33da83bf670148319ff";
+  hash = "sha256-XUZQPe+TuB5MGq6LyefPERrdbyXWbbOwx6bem5lNvfE=";
+};
 in
   {
   home = {

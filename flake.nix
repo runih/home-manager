@@ -16,12 +16,20 @@
     macnix.url = "path:./hosts/linux/macnix";
   };
 
-  outputs = { self, nixpkgs, home-manager, macnix, ... }:
+  outputs = { nixpkgs, home-manager, macnix, ... }:
     {
       homeConfigurations = let
 
         username = builtins.getEnv "USER";  # Get the current user's username.
 
+        myModules = {
+          simple-tmux = ./simple-tmux.nix;     # Tmux configuration for Linux.
+          vim         = ./vim.nix;             # Vim editor configuration.
+          zsh         = ./zsh.nix;             # Zsh shell configuration.
+          zoxide      = ./zoxide.nix;          # Zoxide configuration for Linux.
+          yazi        = ./yazi.nix;            # Yazi configuration for Linux.
+          pass        = ./pass.nix;            # Password manager configuration.
+        };
 
         # Define shared modules for macOS systems.
         # These modules include configurations specific to macOS, such as
@@ -41,7 +49,7 @@
 
         # Define shared modules for Linux systems.
         # These modules include configurations specific to Linux, such as
-        # Linux-compatible tools and terminal settings.
+        # Linux-compatible tools ane terminaeesettings.
         sharedModulesLinux = [
           ./simple-tmux.nix     # Tmux configuration for Linux.
           ./vim.nix             # Vim editor configuration.
@@ -81,8 +89,8 @@
           };
         };
 
-        # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
-        "runih@macnix" = macnix.outputs.homeConfigurations."runih@macnix";
+        # Configuration for the user "runih" on the MacBook "macnix" (Linux).
+        "runih@macnix" = macnix.outputs.homeConfigurations.macnix;
 
         # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
         "runih@nixos-pi5" = home-manager.lib.homeManagerConfiguration {

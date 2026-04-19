@@ -153,7 +153,7 @@
         vim-misc
 
         # Search helpers
-        ctrlp
+        ctrlp-vim
 
         # airline
         vim-airline

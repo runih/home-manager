@@ -57,8 +57,8 @@
           "$editor" = "neovide";
           "$fileManager" = "nautilus";
           "$logout" = "wlogout";
-          "$menu" = "walker";
-          "$menu2" = "fuzzel";
+          "$menu" = "fuzzel";
+          "$menu2" = "walker";
           "$terminal" = "ghostty";
           "$terminal2" = "wezterm";
 
@@ -74,7 +74,7 @@
           ];
 
           exec-once = [
-            "waybar"
+            #"waybar"
             "swww-daemon"
             "walker --gapplication-service"
           ];
@@ -313,18 +313,18 @@
           # ];
 
           # Start some apps on specific workspaces
-          windowrulev2 = [
-            "workspace 1, class:neovide"
-            "workspace 2, class:firefox"
-            "workspace 2, class:vivaldi-stable"
-            "workspace 4, class:brave-browser"
-            #"workspace 3, class:com.mitchellh.ghostty"
-            "opacity 0.3 0.3, title:^(walker)$"
-            "workspace 5, class:teams-for-linux"
-            "workspace 6, class:thunderbird"
-            "workspace 7, class:code # VSCode"
-            "workspace 10, class:org.gnome.SystemMonitor"
-          ] ;
+          # windowrulev2 = [
+          #   "workspace 1, class:neovide"
+          #   "workspace 2, class:firefox"
+          #   "workspace 2, class:vivaldi-stable"
+          #   "workspace 4, class:brave-browser"
+          #   #"workspace 3, class:com.mitchellh.ghostty"
+          #   "opacity 0.3 0.3, title:^(walker)$"
+          #   "workspace 5, class:teams-for-linux"
+          #   "workspace 6, class:thunderbird"
+          #   "workspace 7, class:code # VSCode"
+          #   "workspace 10, class:org.gnome.SystemMonitor"
+          # ] ;
         };
         systemd.enable = true;
       };
