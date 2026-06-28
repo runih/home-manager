@@ -75,7 +75,7 @@
 
           exec-once = [
             #"waybar"
-            "swww-daemon"
+            "awww-daemon"
             "walker --gapplication-service"
           ];
 

@@ -3,8 +3,8 @@ let
   postgresClientRepo = pkgs.fetchFromGitHub {
     owner = "runih";
     repo = "postgresql-client";
-    rev = "954d60b031df7293de21761b9471ef22cbd800d2";
-    hash = "sha256-UVPfKxepvDuqS2cRMnfMYoSHo9V2hNdLv/Nrbn6ycXg=";
+    rev = "819a70e51178166d11586c79b0121d5ba6ce1974";
+    hash = "sha256-xE2vUKYIqU+vH6ztCNbp2TfKkEeKNalf6Ocgu/uSfd4=";
   };
   postgresWrapper = postgresClientRepo + "/scripts/command.sh";
   postgresClientMakeLink = postgresClientRepo + "/scripts/create_link.sh";

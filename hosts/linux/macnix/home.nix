@@ -32,6 +32,7 @@
       blueman         # Bluetooth manager
       bluetuith       # Bluetooth TUI
       btop            # Resource monitor
+      claude-code     # Claude AI command-line interface
       dnsutils        # Utilities for querying DNS servers
       fastfetch       # A fast system information tool
       fd              # A simple, fast and user-friendly alternative to find
