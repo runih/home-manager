@@ -161,7 +161,6 @@
 
         # Colorschemes
         oceanic-next
-        awesome-vim-colorschemes
         base16-vim
 
 

@@ -14,22 +14,14 @@
 
     # Hosts
     macnix.url = "path:./hosts/linux/macnix";
+    nixos-pi5.url = "path:./hosts/linux/nixos-pi5";
   };
 
-  outputs = { nixpkgs, home-manager, macnix, ... }:
+  outputs = { nixpkgs, home-manager, macnix, nixos-pi5, ... }:
     {
       homeConfigurations = let
 
         username = builtins.getEnv "USER";  # Get the current user's username.
-
-        myModules = {
-          simple-tmux = ./simple-tmux.nix;     # Tmux configuration for Linux.
-          vim         = ./vim.nix;             # Vim editor configuration.
-          zsh         = ./zsh.nix;             # Zsh shell configuration.
-          zoxide      = ./zoxide.nix;          # Zoxide configuration for Linux.
-          yazi        = ./yazi.nix;            # Yazi configuration for Linux.
-          pass        = ./pass.nix;            # Password manager configuration.
-        };
 
         # Define shared modules for macOS systems.
         # These modules include configurations specific to macOS, such as
@@ -91,34 +83,10 @@
 
         # Configuration for the user "runih" on the MacBook "macnix" (Linux).
         "runih@macnix" = macnix.outputs.homeConfigurations.macnix;
-
-        # Configuration for the user "runih" on the system "nixos-pi5" (Linux).
-        "runih@nixos-pi5" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          # List of Nix modules to include in this configuration.
-          modules = [
-            ./basic-linux.nix
-            ./neovim.nix
-          ] ++ sharedModulesLinux;
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
+        "runih@nixos-pi5" = nixos-pi5.outputs.homeConfigurations.nixos-pi5;
 
         # Configuration for the "minecraft" user on the system "nixos-pi5" (Linux).
-        "minecraft@nixos-pi5" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [
-            ./simple-tmux.nix
-            ./neovim.nix
-            ./minecraft.nix
-          ] ++ sharedModulesLinux;
-          extraSpecialArgs = {
-            homeDirectory = "/home/minecraft";  # Pass the home directory to the configuration.
-            username = "minecraft";            # Pass the username to the configuration.
-          };
-        };
+        "minecraft@nixos-pi5" = nixos-pi5.outputs.homeConfigurations.minecraft;
 
         # Configuration for the user "runih" on the system "nixos" (Linux).
         "runih@nixos" = home-manager.lib.homeManagerConfiguration {
