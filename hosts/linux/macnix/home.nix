@@ -39,6 +39,7 @@
       file            # Determine file types
       gcc             # GNU Compiler Collection
       git             # Version control system
+      jq              # Command-line JSON processor
       gnumake         # Build automation tool
       neovim
       go             # Go programming language
@@ -61,6 +62,7 @@
       virtualenv      # Tool to create isolated Python environments
       w3m             # Text-based web browser
       wget            # Command-line utility for downloading files
+      wofi            # Application launcher for Wayland
     ];
 
     file."bin/battery-status" = {
