@@ -20,6 +20,7 @@
           modules = [
             ./home.nix
             ./hyprland.nix
+            ./waybar.nix
 
             ../../../niri.nix
             ../../../wezterm.nix

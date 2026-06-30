@@ -29,8 +29,13 @@
             general = {
               gaps_in    = 3,
               gaps_out   = 10,
-              border_size = 1,
+              border_size = 2,
+              ["col.active_border"]   = "rgb(7aa2f7)",
+              ["col.inactive_border"] = "rgb(414868)",
               layout     = "dwindle",
+            },
+            decoration = {
+              rounding = 4,
             },
             input = {
               kb_layout  = "se",
@@ -44,8 +49,8 @@
               },
             },
             misc = {
-              force_default_wallpaper = 0,
-              disable_hyprland_logo   = true,
+              force_default_wallpaper = -1,
+              disable_hyprland_logo   = false,
             },
           })
 

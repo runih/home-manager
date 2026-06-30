@@ -22,6 +22,7 @@ in
     #custom-shader = shaders/cubes.glsl
     background-opacity = 0.75
     macos-titlebar-style = hidden
+    gtk-titlebar = false
     cursor-color = #ffff00
     cursor-style-blink = true
     cursor-style = block

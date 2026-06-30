@@ -62,8 +62,26 @@
       virtualenv      # Tool to create isolated Python environments
       w3m             # Text-based web browser
       wget            # Command-line utility for downloading files
+      awww            # Wallpaper daemon for Wayland (swww)
+      wlogout         # Wayland logout screen
       wofi            # Application launcher for Wayland
     ];
+
+    file."bin/change_wallpaper" = {
+      text = ''
+        #!/usr/bin/env bash
+        WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+        if [ "$1" = "--random" ]; then
+          wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
+        elif [ -n "$1" ]; then
+          wall="$1"
+        else
+          wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
+        fi
+        swww img "$wall" --transition-type wipe --transition-duration 1
+      '';
+      executable = true;
+    };
 
     file."bin/battery-status" = {
       text = ''

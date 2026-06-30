@@ -1,4 +1,9 @@
 { config, ... }: {
+  home.file.".config/systemd/user/dms.service.d/niri-only.conf".text = ''
+    [Unit]
+    ConditionEnvironment=NIRI_SOCKET
+  '';
+
   home.file."config/niri/config.kdl".text = ''
     // This config is in the KDL format: https://kdl.dev
     // "/-" comments out the following node.
