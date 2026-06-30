@@ -21,6 +21,7 @@
             ./home.nix
             ./hyprland.nix
 
+            ../../../niri.nix
             ../../../wezterm.nix
             ../../../foot.nix
             ../../../nerd-fonts.nix
