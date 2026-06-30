@@ -1,122 +1,41 @@
 {
-  # Description of the flake, providing a brief summary of its purpose.
   description = "Home Manager configuration of runih";
 
   inputs = {
-    # Specify the source of Nixpkgs, using the nixos-unstable branch.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-
-    # Specify the source of Home Manager, following the nixpkgs input for compatibility.
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hosts
+    # Hosts - Linux
     macnix.url = "path:./hosts/linux/macnix";
     nixos-pi5.url = "path:./hosts/linux/nixos-pi5";
+    nixos.url = "path:./hosts/linux/nixos";
+    nixos2.url = "path:./hosts/linux/nixos2";
+    madakara-nixos.url = "path:./hosts/linux/madakara-nixos";
+
+    # Hosts - macOS
+    BlackMac.url = "path:./hosts/mac/BlackMac";
+    MaikensMacbook.url = "path:./hosts/mac/MaikensMacbook";
+    iMac.url = "path:./hosts/mac/iMac";
   };
 
-  outputs = { nixpkgs, home-manager, macnix, nixos-pi5, ... }:
+  outputs = { macnix, nixos-pi5, nixos, nixos2, madakara-nixos, BlackMac, MaikensMacbook, iMac, ... }:
     {
-      homeConfigurations = let
+      homeConfigurations = {
+        # macOS hosts
+        "runih@BlackMac"              = BlackMac.outputs.homeConfigurations.BlackMac;
+        "maiken@MaikensMacbook.local" = MaikensMacbook.outputs.homeConfigurations.MaikensMacbook;
+        "runih@iMac.home.okkara.net"  = iMac.outputs.homeConfigurations.iMac;
 
-        username = builtins.getEnv "USER";  # Get the current user's username.
-
-        # Define shared modules for macOS systems.
-        # These modules include configurations specific to macOS, such as
-        # macOS-specific tools, fonts, and terminal settings.
-        sharedModulesMac = [
-          ./basic-mac.nix           # Basic macOS-specific configurations.
-          ./nerd-fonts.nix          # Configuration for Nerd Fonts.
-          ./zsh.nix                 # Zsh shell configuration.
-          ./zoxide.nix              # Zoxide configuration for macOS.
-          ./my-tmux.nix             # Custom tmux configuration.
-          ./vim.nix                 # Vim editor configuration.
-          ./wezterm.nix             # WezTerm terminal emulator configuration.
-          ./neovide.nix             # Neovide GUI for Neovim.
-          ./pass.nix                # Password manager configuration.
-          ./postgresql-client.nix   # PostgreSQL client configuration.
-        ];
-
-        # Define shared modules for Linux systems.
-        # These modules include configurations specific to Linux, such as
-        # Linux-compatible tools ane terminaeesettings.
-        sharedModulesLinux = [
-          ./simple-tmux.nix     # Tmux configuration for Linux.
-          ./vim.nix             # Vim editor configuration.
-          ./zsh.nix             # Zsh shell configuration.
-          ./zoxide.nix          # Zoxide configuration for Linux.
-          ./yazi.nix            # Yazi configuration for Linux.
-          ./pass.nix            # Password manager configuration.
-        ];
-
-      in {
-        # Configuration for the user "runih" on the system "BlackMac" (macOS).
-        "runih@BlackMac" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-          modules = sharedModulesMac ++ [ ./java.nix ./testssl.nix ];
-          extraSpecialArgs = {
-            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
-
-        "maiken@MaikensMacbook.local" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-          modules = sharedModulesMac ++ [ ./java.nix ./neovim.nix ];
-          extraSpecialArgs = {
-            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
-
-        # Configuration for the user "runih" on the system "BlackMac" (macOS).
-        "runih@iMac.home.okkara.net" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-          modules = sharedModulesMac ++ [ ./imac.nix ./java.nix ];
-          extraSpecialArgs = {
-            homeDirectory = "/Users/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
-
-        # Configuration for the user "runih" on the MacBook "macnix" (Linux).
-        "runih@macnix" = macnix.outputs.homeConfigurations.macnix;
-        "runih@nixos-pi5" = nixos-pi5.outputs.homeConfigurations.nixos-pi5;
-
-        # Configuration for the "minecraft" user on the system "nixos-pi5" (Linux).
+        # Linux hosts
+        "runih@macnix"        = macnix.outputs.homeConfigurations.macnix;
+        "runih@nixos-pi5"     = nixos-pi5.outputs.homeConfigurations.nixos-pi5;
         "minecraft@nixos-pi5" = nixos-pi5.outputs.homeConfigurations.minecraft;
-
-        # Configuration for the user "runih" on the system "nixos" (Linux).
-        "runih@nixos" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
-
-        # Configuration for the user "runih" on the system "nixos2" (Linux).
-        "runih@nixos2" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [ ./basic-linux.nix ] ++ sharedModulesLinux;
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
-
-        # Configuration for the user "runih" on the system "madakara-nixos" (Linux).
-        "runih@madakara-nixos" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          modules = [ ./basic-linux.nix ] ++ sharedModulesLinux ++ [ ../esh-minecraft.nix ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";  # Pass the home directory to the configuration.
-            username = username;            # Pass the username to the configuration.
-          };
-        };
+        "runih@nixos"         = nixos.outputs.homeConfigurations.nixos;
+        "runih@nixos2"        = nixos2.outputs.homeConfigurations.nixos2;
+        "runih@madakara-nixos" = madakara-nixos.outputs.homeConfigurations.madakara-nixos;
       };
     };
 }
