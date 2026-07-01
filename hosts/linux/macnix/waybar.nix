@@ -119,23 +119,51 @@ in {
         font-family: "Hack Nerd Font", monospace;
         font-size: 13px;
         min-height: 0;
+        border: none;
       }
 
       window#waybar {
-        background-color: rgba(26, 27, 38, 0.9);
+        background-color: transparent;
         color: #c0caf5;
-        border-bottom: 2px solid rgba(41, 49, 90, 0.8);
       }
 
       .modules-left, .modules-right, .modules-center {
-        padding: 0 8px;
+        padding: 0 4px;
+      }
+
+      #workspaces,
+      #submap,
+      #clock {
+        background-color: rgba(26, 27, 38, 0.9);
+        border-radius: 8px;
+        margin: 4px 3px;
+        padding: 2px 10px;
+      }
+
+      .modules-right {
+        background-color: rgba(26, 27, 38, 0.9);
+        border-radius: 8px;
+        margin: 4px 6px;
+        padding: 2px 4px;
+      }
+
+      #cpu,
+      #memory,
+      #network,
+      #wireplumber,
+      #tray,
+      #custom-power {
+        background-color: transparent;
+        border-radius: 0;
+        margin: 0;
+        padding: 2px 6px;
       }
 
       #workspaces button {
-        padding: 0 6px;
-        margin: 3px 0;
+        padding: 0 4px;
         color: #565f89;
         background: transparent;
+        border-radius: 6px;
       }
 
       #workspaces button.active {
@@ -145,7 +173,6 @@ in {
 
       #workspaces button.urgent {
         color: #f7768e;
-        border-bottom: 2px solid #f7768e;
       }
 
       #clock {
@@ -193,7 +220,7 @@ in {
       }
 
       #tray {
-        padding: 0 4px;
+        padding: 2px 6px;
       }
 
       #submap {
@@ -204,7 +231,7 @@ in {
       tooltip {
         background: rgba(26, 27, 38, 0.95);
         border: 1px solid #414868;
-        border-radius: 4px;
+        border-radius: 8px;
       }
     '';
   };
