@@ -7,18 +7,18 @@ let
 
     if [ "$online" = "1" ]; then
       if [ "$status" = "Charging" ]; then
-        echo "󰂄 $capacity%"
+        printf '{"text":"󰂄 %s%%","class":"charging"}\n' "$capacity"
       else
-        echo "󰚥 $capacity%"
+        printf '{"text":"󰚥 %s%%","class":"plugged"}\n' "$capacity"
       fi
     else
-      if   [ "$capacity" -le 20 ]; then icon="󰁺"
-      elif [ "$capacity" -le 40 ]; then icon="󰁻"
-      elif [ "$capacity" -le 60 ]; then icon="󰁽"
-      elif [ "$capacity" -le 80 ]; then icon="󰁿"
-      else icon="󰂂"
+      if   [ "$capacity" -le 20 ]; then icon="󰁺"; class="critical"
+      elif [ "$capacity" -le 30 ]; then icon="󰁻"; class="warning"
+      elif [ "$capacity" -le 60 ]; then icon="󰁽"; class=""
+      elif [ "$capacity" -le 80 ]; then icon="󰁿"; class=""
+      else icon="󰂂"; class=""
       fi
-      echo "$icon $capacity%"
+      printf '{"text":"%s %s%%","class":"%s"}\n' "$icon" "$capacity" "$class"
     fi
   '';
 in {
@@ -88,6 +88,7 @@ in {
       "custom/power" = {
         exec = "${batteryScript}";
         interval = 5;
+        return-type = "json";
         format = "{}";
       };
 
@@ -152,6 +153,15 @@ in {
 
       #custom-power {
         color: #9ece6a;
+      }
+
+      #custom-power.warning {
+        color: #e0af68;
+      }
+
+      #custom-power.critical {
+        color: #f7768e;
+        animation: blink 0.5s step-end infinite alternate;
       }
 
       @keyframes blink {
