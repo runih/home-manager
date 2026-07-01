@@ -34,7 +34,7 @@ in {
       spacing = 4;
 
       modules-left = [
-        "hyprland/workspaces"
+        "group/left-island"
         "hyprland/submap"
       ];
       modules-center = [
@@ -48,6 +48,16 @@ in {
         "memory"
         "custom/power"
       ];
+
+      "group/left-island" = {
+        orientation = "horizontal";
+        modules = ["hyprland/workspaces" "hyprland/window"];
+      };
+
+      "hyprland/window" = {
+        max-length = 50;
+        separate-outputs = true;
+      };
 
       "hyprland/workspaces" = {
         format = "{icon}";
@@ -131,13 +141,25 @@ in {
         padding: 0 4px;
       }
 
-      #workspaces,
+      #left-island,
       #submap,
       #clock {
         background-color: rgba(26, 27, 38, 0.9);
         border-radius: 8px;
         margin: 4px 3px;
         padding: 2px 10px;
+      }
+
+      #workspaces {
+        background-color: transparent;
+        border-radius: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      #window {
+        color: #a9b1d6;
+        padding: 0 6px;
       }
 
       .modules-right {
