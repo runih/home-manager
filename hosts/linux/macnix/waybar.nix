@@ -3,7 +3,9 @@ let
   batteryScript = pkgs.writeShellScript "waybar-battery" ''
     online=$(cat /sys/class/power_supply/ADP1/online)
     status=$(cat /sys/class/power_supply/BAT0/status)
-    capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+    charge_now=$(cat /sys/class/power_supply/BAT0/charge_now)
+    charge_full=$(cat /sys/class/power_supply/BAT0/charge_full)
+    capacity=$(( charge_now * 100 / charge_full ))
 
     if [ "$online" = "1" ]; then
       if [ "$status" = "Charging" ]; then
@@ -75,13 +77,13 @@ in {
       };
 
       cpu = {
-        format = "󰻪 {usage}%";
+        format = "󰍛 {usage}%";
         tooltip = false;
         interval = 5;
       };
 
       memory = {
-        format = "󰍛 {percentage}%";
+        format = "󰘚 {percentage}%";
         interval = 5;
       };
 
@@ -161,11 +163,13 @@ in {
 
       #custom-power.critical {
         color: #f7768e;
-        animation: blink 0.5s step-end infinite alternate;
+        animation: blink 1s linear infinite;
       }
 
       @keyframes blink {
-        to { color: #1a1b26; background-color: #f7768e; }
+        0%   { color: #f7768e; }
+        50%  { color: transparent; }
+        100% { color: #f7768e; }
       }
 
       #network {
