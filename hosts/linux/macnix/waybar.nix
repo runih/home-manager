@@ -1,4 +1,27 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  batteryScript = pkgs.writeShellScript "waybar-battery" ''
+    online=$(cat /sys/class/power_supply/ADP1/online)
+    status=$(cat /sys/class/power_supply/BAT0/status)
+    capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+
+    if [ "$online" = "1" ]; then
+      if [ "$status" = "Charging" ]; then
+        echo "󰂄 $capacity%"
+      else
+        echo "󰚥 $capacity%"
+      fi
+    else
+      if   [ "$capacity" -le 20 ]; then icon="󰁺"
+      elif [ "$capacity" -le 40 ]; then icon="󰁻"
+      elif [ "$capacity" -le 60 ]; then icon="󰁽"
+      elif [ "$capacity" -le 80 ]; then icon="󰁿"
+      else icon="󰂂"
+      fi
+      echo "$icon $capacity%"
+    fi
+  '';
+in {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -21,7 +44,7 @@
         "network"
         "cpu"
         "memory"
-        "battery"
+        "custom/power"
       ];
 
       "hyprland/workspaces" = {
@@ -52,30 +75,25 @@
       };
 
       cpu = {
-        format = " {usage}%";
+        format = "󰻪 {usage}%";
         tooltip = false;
         interval = 5;
       };
 
       memory = {
-        format = " {percentage}%";
+        format = "󰍛 {percentage}%";
         interval = 5;
       };
 
-      battery = {
-        states = {
-          warning = 30;
-          critical = 15;
-        };
-        format = "{icon} {capacity}%";
-        format-charging = " {capacity}%";
-        format-plugged = " {capacity}%";
-        format-icons = [ "" "" "" "" "" ];
+      "custom/power" = {
+        exec = "${batteryScript}";
+        interval = 5;
+        format = "{}";
       };
 
       network = {
-        format-wifi = " {essid}";
-        format-ethernet = " {ifname}";
+        format-wifi = "󰤨 {essid}";
+        format-ethernet = "󰈀 {ifname}";
         format-disconnected = "⚠ Disconnected";
         tooltip-format = "{ifname}: {ipaddr}/{cidr}";
         on-click = "nm-connection-editor";
@@ -83,9 +101,9 @@
 
       wireplumber = {
         format = "{icon} {volume}%";
-        format-muted = " muted";
+        format-muted = "󰝟 muted";
         on-click = "pavucontrol";
-        format-icons = [ "" "" "" ];
+        format-icons = [ "󰕿" "󰖀" "󰕾" ];
       };
 
       tray = {
@@ -95,7 +113,7 @@
 
     style = ''
       * {
-        font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
+        font-family: "Hack Nerd Font", monospace;
         font-size: 13px;
         min-height: 0;
       }
@@ -132,17 +150,8 @@
         font-weight: bold;
       }
 
-      #battery {
+      #custom-power {
         color: #9ece6a;
-      }
-
-      #battery.warning {
-        color: #e0af68;
-      }
-
-      #battery.critical {
-        color: #f7768e;
-        animation: blink 0.5s step-end infinite alternate;
       }
 
       @keyframes blink {

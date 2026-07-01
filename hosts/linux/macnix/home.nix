@@ -26,6 +26,7 @@
 
     # List of packages to be installed for the user
     packages = with pkgs; [
+      alsa-utils      # Utilities for ALSA sound system
       atlauncher      # Minecraft launcher
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
