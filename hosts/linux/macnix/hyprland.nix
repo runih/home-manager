@@ -30,7 +30,7 @@
               gaps_in    = 3,
               gaps_out   = 10,
               border_size = 2,
-              ["col.active_border"]   = { colors = {"rgba(7aa2f7ff)", "rgba(73dacaff)"}, angle = 45 },
+              ["col.active_border"]   = { colors = {"rgba(1a4fc4ff)", "rgba(73dacaff)"}, angle = 45 },
               ["col.inactive_border"] = "rgb(414868)",
               layout     = "dwindle",
             },
