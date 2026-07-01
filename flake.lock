@@ -52,6 +52,28 @@
         "type": "github"
       }
     },
+    "home-manager_10": {
+      "inputs": {
+        "nixpkgs": [
+          "nixos2",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782704057,
+        "narHash": "sha256-G1I1gd32F7mp9LAe1DaZ4ZL7NX5gyiKwdCMwro1Vrck=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "868d0a692de703c2de98fab61968e4e310b7c28e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-26.05",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "home-manager_2": {
       "inputs": {
         "nixpkgs": [
@@ -142,21 +164,21 @@
     "home-manager_6": {
       "inputs": {
         "nixpkgs": [
-          "madakara-nixos",
+          "macnix",
+          "zen-browser",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1782704057,
-        "narHash": "sha256-G1I1gd32F7mp9LAe1DaZ4ZL7NX5gyiKwdCMwro1Vrck=",
+        "lastModified": 1781497404,
+        "narHash": "sha256-9GAF8sSsnkyCVCWkomXR0T+zdSxyUlfPt6neQidimdg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "868d0a692de703c2de98fab61968e4e310b7c28e",
+        "rev": "1285cd3d6882a9847f2d56ed5541b3350c8a6162",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-26.05",
         "repo": "home-manager",
         "type": "github"
       }
@@ -164,7 +186,7 @@
     "home-manager_7": {
       "inputs": {
         "nixpkgs": [
-          "nixos",
+          "madakara-nixos",
           "nixpkgs"
         ]
       },
@@ -186,7 +208,7 @@
     "home-manager_8": {
       "inputs": {
         "nixpkgs": [
-          "nixos-pi5",
+          "nixos",
           "nixpkgs"
         ]
       },
@@ -208,7 +230,7 @@
     "home-manager_9": {
       "inputs": {
         "nixpkgs": [
-          "nixos2",
+          "nixos-pi5",
           "nixpkgs"
         ]
       },
@@ -245,7 +267,8 @@
     "macnix": {
       "inputs": {
         "home-manager": "home-manager_5",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_4",
+        "zen-browser": "zen-browser"
       },
       "locked": {
         "path": "./hosts/linux/macnix",
@@ -259,7 +282,7 @@
     },
     "madakara-nixos": {
       "inputs": {
-        "home-manager": "home-manager_6",
+        "home-manager": "home-manager_7",
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
@@ -274,7 +297,7 @@
     },
     "nixos": {
       "inputs": {
-        "home-manager": "home-manager_7",
+        "home-manager": "home-manager_8",
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
@@ -289,7 +312,7 @@
     },
     "nixos-pi5": {
       "inputs": {
-        "home-manager": "home-manager_8",
+        "home-manager": "home-manager_9",
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
@@ -304,7 +327,7 @@
     },
     "nixos2": {
       "inputs": {
-        "home-manager": "home-manager_9",
+        "home-manager": "home-manager_10",
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
@@ -473,6 +496,28 @@
         "nixos-pi5": "nixos-pi5",
         "nixos2": "nixos2",
         "nixpkgs": "nixpkgs_9"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "home-manager": "home-manager_6",
+        "nixpkgs": [
+          "macnix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782812215,
+        "narHash": "sha256-OPVK9WW9QsO2aj1R+Ln3p7fniFj5h441vb3LyrzpeE4=",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "rev": "a7c2a9a5e492e0e62072547f7e4c2abf138425c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "type": "github"
       }
     }
   },
