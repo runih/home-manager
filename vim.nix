@@ -14,8 +14,6 @@
 
       let g:session_autosave = 'no'
 
-      set relativenumber
-      set number
       set history=700
       set fileencoding=utf-8
       set encoding=utf-8
@@ -33,14 +31,8 @@
       set background=dark
       set backspace=2
       set backup
-      if has('win32')
-        if !isdirectory($HOME . '/vimfiles/backup')
-          call mkdir($HOME . '/vimfiles/backup', 'p')
-        endif
-      else
-        if !isdirectory($HOME . '/.vim/backup')
-          call mkdir($HOME . '/.vim/backup', 'p')
-        endif
+      if !isdirectory($HOME . '/.vim/backup')
+        call mkdir($HOME . '/.vim/backup', 'p')
       endif
       if has('win32')
         set backupdir=~/vimfiles/backup
@@ -65,7 +57,7 @@
       "set listchars=tab:▸\ ,eol:¬
       "highlight NonText guifg=#4a4a59
       "highlight SpecialKey guifg=#4a4a59
-      set ts=4 sts=4 sw=4 noexpandtab
+      set ts=4 sts=4 sw=4
       set laststatus=2
       set showtabline=0
       set ruler

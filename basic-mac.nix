@@ -13,37 +13,40 @@
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"
       "${homeDirectory}/bin"
+      "${homeDirectory}/.local/bin"
     ];
 
     # State version for compatibility with Home Manager
-    stateVersion = "25.11";
+    stateVersion = "26.05";
 
     # List of packages to install in the user's environment
     packages = with pkgs; [
-			bat          	# A cat clone with syntax highlighting
-			bc           	# An arbitrary precision calculator language
-			binutils     	# GNU binary utilities
-			btop         	# A resource monitor
-			dig          	# DNS lookup utility
-			fd           	# A simple, fast and user-friendly alternative to find
-			git          	# Version control system
-			gnupg1       	# GNU Privacy Guard (version 1)
-			go           	# Go programming language
-			htop-vim     	# Interactive process viewer with vim keybindings
-			lazygit      	# Simple terminal UI for git commands
-			libjpeg      	# JPEG image library
-			neovim       	# Modern Vim-based text editor
-			ninja        	# Build system
-			nodejs_22    	# Node.js runtime (version 22)
-			nurl         	# URL manipulation library
-			pstree       	# Display a tree of processes
-			ripgrep      	# A fast search tool
-			rustup       	# Rust toolchain installer
-			tree         	# Display directories as trees
-			unzip        	# Extract ZIP archives
-			utm		  		  # Virtual machine manager for macOS
-			w3m          	# Text-based web browser
-			wget         	# Command-line utility for downloading files
+      bat           # A cat clone with syntax highlighting
+      bc            # An arbitrary precision calculator language
+      binutils      # GNU binary utilities
+      claude-code   # A command-line interface for the Claude AI assistant
+      btop          # A resource monitor
+      dig           # DNS lookup utility
+      fd            # A simple, fast and user-friendly alternative to find
+      git           # Version control system
+      gh            # GitHub CLI
+      gnupg1        # GNU Privacy Guard (version 1)
+      go            # Go programming language
+      htop-vim      # Interactive process viewer with vim keybindings
+      lazygit       # Simple terminal UI for git commands
+      libjpeg       # JPEG image library
+      neovim        # Modern Vim-based text editor
+      ninja         # Build system
+      nodejs_22     # Node.js runtime (version 22)
+      nurl          # URL manipulation library
+      pstree        # Display a tree of processes
+      ripgrep       # A fast search tool
+      rustup        # Rust toolchain installer
+      tree          # Display directories as trees
+      unzip         # Extract ZIP archives
+      utm           # Virtual machine manager for macOS
+      w3m           # Text-based web browser
+      wget          # Command-line utility for downloading files
     ];
 
     # Configuration for user-specific files
@@ -71,6 +74,8 @@
       ".config/ghostty/config".text = ''
       window-padding-color = background
       theme = Dark Pastel
+      custom-shader = "shaders/cursor_blaze.glsl"
+      #custom-shader = "shaders/inside-the-matrix.glsl"
       background-opacity = 0.75
       macos-titlebar-style = hidden
       cursor-color = #ff0000
