@@ -143,7 +143,7 @@
         dots_spacing = 0.15
         dots_center = true
         dots_rounding = -1
-        outer_color = rbg(151515)
+        outer_color = rgb(00d4ff)
         inner_color = rbg(FFFFFF)
         font_color = rbg(10, 10, 10)
         fade_on_empty = true
