@@ -55,8 +55,9 @@
           })
 
           hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
-          hl.bind(mainMod .. " + Space",        hl.dsp.exec_cmd("rofi -show drun"))
-          hl.bind(mainMod .. " + ALT + Space",   hl.dsp.exec_cmd("wofi --show drun"))
+          hl.bind(mainMod .. " + Space",        hl.dsp.exec_cmd("wofi --show drun --allow-images"))
+          hl.bind(mainMod .. " + D",             hl.dsp.exec_cmd("rofi -show drun"))
+          hl.bind(mainMod .. " + ALT + Space",   hl.dsp.exec_cmd("rofi -show drun"))
           hl.bind(mainMod .. " + C",      hl.dsp.window.close())
           hl.bind(mainMod .. " + V",      hl.dsp.window.float())
           hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen())

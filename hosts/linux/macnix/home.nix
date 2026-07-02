@@ -68,6 +68,66 @@
       wofi            # Application launcher for Wayland
     ];
 
+    file.".config/wofi/config".text = ''
+      allow_images=true
+      allow_markup=true
+      image_size=20
+    '';
+
+    file.".config/wofi/style.css".text = ''
+      window {
+        background-color: rgba(26, 27, 38, 0.95);
+        border: 1px solid #414868;
+        border-radius: 8px;
+      }
+
+      #input {
+        background-color: #1e2030;
+        color: #c0caf5;
+        border: 1px solid #414868;
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin: 8px;
+        font-size: 14px;
+      }
+
+      #input:focus {
+        border-color: #7aa2f7;
+      }
+
+      #scroll {
+        margin: 0 8px 8px 8px;
+      }
+
+      #inner-box {
+        background-color: transparent;
+      }
+
+      #outer-box {
+        background-color: transparent;
+        padding: 4px;
+      }
+
+      #entry {
+        padding: 6px 10px;
+        border-radius: 4px;
+        color: #a9b1d6;
+      }
+
+      #entry:selected {
+        background-color: rgba(122, 162, 247, 0.2);
+        color: #c0caf5;
+      }
+
+      #text {
+        font-size: 13px;
+      }
+
+      #img {
+        margin-right: 8px;
+      }
+    '';
+
     file."bin/change_wallpaper" = {
       text = ''
         #!/usr/bin/env bash
