@@ -132,7 +132,7 @@
     file.".config/hypr/hyprlock.conf".text = ''
       background {
         monitor =
-        path = $HOME/Pictures/wallpapers/key7.png
+        path = $HOME/Pictures/hyprlock/key7.png
       }
 
       input-field {
