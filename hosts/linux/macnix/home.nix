@@ -218,6 +218,8 @@
       }
     '';
 
+    file."Pictures/hyprlock/key7.png".source = ./hyprlock/key7.png;
+
     file."bin/change_wallpaper" = {
       text = ''
         #!/usr/bin/env bash
