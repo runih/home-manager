@@ -227,6 +227,19 @@
         shadow_passes = 5
         shadow_size = 10
       }
+
+      label {
+        monitor =
+        text = cmd[update:60000] cat $HOME/.cache/weather 2>/dev/null || echo "N/A"
+        color = rgba(200, 200, 200, 0.1)
+        font_size = 60
+        font_family = Fira Semibold
+        position = 50, -50
+        halign = left
+        valign = top
+        shadow_passes = 5
+        shadow_size = 10
+      }
     '';
 
     file."Pictures/hyprlock/key7.png".source = ./hyprlock/key7.png;
@@ -274,6 +287,20 @@
       '';
       executable = true;
     };
+    file."bin/fetch-weather" = {
+      text = ''
+        #!/usr/bin/env bash
+        mkdir -p "$HOME/.cache"
+        result=$(${pkgs.curl}/bin/curl -sf --max-time 10 "wttr.in/?format=%c%20%C%20%t" 2>/dev/null)
+        if [ -n "$result" ]; then
+          echo "$result" > "$HOME/.cache/weather"
+        elif [ ! -f "$HOME/.cache/weather" ]; then
+          echo "N/A" > "$HOME/.cache/weather"
+        fi
+      '';
+      executable = true;
+    };
+
     file."bin/current-load" = {
       text = ''
       #!/usr/bin/env bash
@@ -420,5 +447,23 @@
     vim = {
       enable = true;                  # Enable vim
     };
+  };
+
+  systemd.user.services.weather-fetch = {
+    Unit.Description = "Fetch weather from wttr.in";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${homeDirectory}/bin/fetch-weather";
+    };
+  };
+
+  systemd.user.timers.weather-fetch = {
+    Unit.Description = "Weather fetch timer";
+    Timer = {
+      OnBootSec = "1min";
+      OnUnitActiveSec = "30min";
+      Unit = "weather-fetch.service";
+    };
+    Install.WantedBy = [ "timers.target" ];
   };
 }
