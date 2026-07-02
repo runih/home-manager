@@ -64,6 +64,7 @@
       w3m             # Text-based web browser
       wget            # Command-line utility for downloading files
       awww            # Wallpaper daemon for Wayland (swww)
+      hyprlock        # Lock screen for Hyprland
       wlogout         # Wayland logout screen
       wofi            # Application launcher for Wayland
     ];
