@@ -130,6 +130,13 @@
     '';
 
     file.".config/hypr/hyprlock.conf".text = ''
+      animations {
+        enabled = true
+        bezier = easeInOut, 0.4, 0, 0.6, 1
+        animation = fadeIn, 1, 5, easeInOut
+        animation = fadeOut, 1, 5, easeInOut
+      }
+
       background {
         monitor =
         path = $HOME/Pictures/hyprlock/key7.png
