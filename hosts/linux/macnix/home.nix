@@ -129,6 +129,95 @@
       }
     '';
 
+    file.".config/hypr/hyprlock.conf".text = ''
+      background {
+        monitor =
+        path = $HOME/Pictures/wallpapers/key7.png
+      }
+
+      input-field {
+        monitor =
+        size = 400, 50
+        outline_thickness = 3
+        dots_size = 0.33
+        dots_spacing = 0.15
+        dots_center = true
+        dots_rounding = -1
+        outer_color = rbg(151515)
+        inner_color = rbg(FFFFFF)
+        font_color = rbg(10, 10, 10)
+        fade_on_empty = true
+        fade_timeout = 1000
+        placeholder_text = <i>Enter Password...</i>
+        hide_input = false
+        rounding = -1
+        check_color = rbg(204, 136, 34)
+        fail_color = rbg(204, 34, 34)
+        fail_text = <i>$FAIL <b>($ATTEMPTS)</b></i>
+        fail_transition = 300
+        capslock_color = -1
+        numlock_color = -1
+        bothlock_color = -1
+        invert_numlock = false
+        swap_font_color = false
+        position = 0, -20
+        halign = center
+        valign = center
+      }
+
+      label {
+        monitor =
+        text = cmd[update:1000] echo "$(date +'%V')"
+        color = rgba(200, 200, 200, 0.1)
+        font_size = 250
+        font_family = Fira Semibold
+        position = -10, 20
+        halign = right
+        valign = top
+        shadow_passes = 5
+        shadow_size = 10
+      }
+
+      label {
+        monitor =
+        text = cmd[update:1000] echo "$(date +'%d %B %Y')"
+        color = rgba(200, 200, 200, 0.1)
+        font_size = 120
+        font_family = Fira Semibold
+        position = 50, 20
+        halign = left
+        valign = bottom
+        shadow_passes = 5
+        shadow_size = 10
+      }
+
+      label {
+        monitor =
+        text = cmd[update:1000] echo "$TIME"
+        color = rgba(200, 200, 200, 1.0)
+        font_size = 55
+        font_family = Fira Semibold
+        position = -50, 50
+        halign = right
+        valign = bottom
+        shadow_passes = 5
+        shadow_size = 10
+      }
+
+      label {
+        monitor =
+        text = $USER
+        color = rgba(200, 200, 200, 1.0)
+        font_size = 20
+        font_family = Fira Semibold
+        position = -50, 150
+        halign = right
+        valign = bottom
+        shadow_passes = 5
+        shadow_size = 10
+      }
+    '';
+
     file."bin/change_wallpaper" = {
       text = ''
         #!/usr/bin/env bash
