@@ -3,7 +3,9 @@ let
   batteryScript = pkgs.writeShellScript "waybar-battery" ''
     online=$(cat /sys/class/power_supply/ADP1/online)
     status=$(cat /sys/class/power_supply/BAT0/status)
-    capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+    charge_now=$(cat /sys/class/power_supply/BAT0/charge_now)
+    charge_full=$(cat /sys/class/power_supply/BAT0/charge_full)
+    capacity=$(( charge_now * 100 / charge_full ))
 
     if [ "$online" = "1" ]; then
       if [ "$status" = "Charging" ]; then
@@ -32,7 +34,7 @@ in {
       spacing = 4;
 
       modules-left = [
-        "hyprland/workspaces"
+        "group/left-island"
         "hyprland/submap"
       ];
       modules-center = [
@@ -46,6 +48,16 @@ in {
         "memory"
         "custom/power"
       ];
+
+      "group/left-island" = {
+        orientation = "horizontal";
+        modules = ["hyprland/workspaces" "hyprland/window"];
+      };
+
+      "hyprland/window" = {
+        max-length = 50;
+        separate-outputs = true;
+      };
 
       "hyprland/workspaces" = {
         format = "{icon}";
@@ -75,13 +87,13 @@ in {
       };
 
       cpu = {
-        format = "󰻪 {usage}%";
+        format = "󰍛 {usage}%";
         tooltip = false;
         interval = 5;
       };
 
       memory = {
-        format = "󰍛 {percentage}%";
+        format = "󰘚 {percentage}%";
         interval = 5;
       };
 
@@ -117,23 +129,63 @@ in {
         font-family: "Hack Nerd Font", monospace;
         font-size: 13px;
         min-height: 0;
+        border: none;
       }
 
       window#waybar {
-        background-color: rgba(26, 27, 38, 0.9);
+        background-color: transparent;
         color: #c0caf5;
-        border-bottom: 2px solid rgba(41, 49, 90, 0.8);
       }
 
       .modules-left, .modules-right, .modules-center {
-        padding: 0 8px;
+        padding: 0 4px;
+      }
+
+      #left-island,
+      #submap,
+      #clock {
+        background-color: rgba(26, 27, 38, 0.9);
+        border-radius: 8px;
+        margin: 4px 3px;
+        padding: 2px 10px;
+      }
+
+      #workspaces {
+        background-color: transparent;
+        border-radius: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      #window {
+        color: #a9b1d6;
+        padding: 0 6px;
+      }
+
+      .modules-right {
+        background-color: rgba(26, 27, 38, 0.9);
+        border-radius: 8px;
+        margin: 4px 6px;
+        padding: 2px 4px;
+      }
+
+      #cpu,
+      #memory,
+      #network,
+      #wireplumber,
+      #tray,
+      #custom-power {
+        background-color: transparent;
+        border-radius: 0;
+        margin: 0;
+        padding: 2px 6px;
       }
 
       #workspaces button {
-        padding: 0 6px;
-        margin: 3px 0;
+        padding: 0 4px;
         color: #565f89;
         background: transparent;
+        border-radius: 6px;
       }
 
       #workspaces button.active {
@@ -143,7 +195,6 @@ in {
 
       #workspaces button.urgent {
         color: #f7768e;
-        border-bottom: 2px solid #f7768e;
       }
 
       #clock {
@@ -161,11 +212,13 @@ in {
 
       #custom-power.critical {
         color: #f7768e;
-        animation: blink 0.5s step-end infinite alternate;
+        animation: blink 1s linear infinite;
       }
 
       @keyframes blink {
-        to { color: #1a1b26; background-color: #f7768e; }
+        0%   { color: #f7768e; }
+        50%  { color: transparent; }
+        100% { color: #f7768e; }
       }
 
       #network {
@@ -189,7 +242,7 @@ in {
       }
 
       #tray {
-        padding: 0 4px;
+        padding: 2px 6px;
       }
 
       #submap {
@@ -200,7 +253,7 @@ in {
       tooltip {
         background: rgba(26, 27, 38, 0.95);
         border: 1px solid #414868;
-        border-radius: 4px;
+        border-radius: 8px;
       }
     '';
   };

@@ -30,7 +30,7 @@
               gaps_in    = 3,
               gaps_out   = 10,
               border_size = 2,
-              ["col.active_border"]   = "rgb(7aa2f7)",
+              ["col.active_border"]   = { colors = {"rgba(1a4fc4ff)", "rgba(73dacaff)"}, angle = 45 },
               ["col.inactive_border"] = "rgb(414868)",
               layout     = "dwindle",
             },
@@ -55,8 +55,9 @@
           })
 
           hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
-          hl.bind(mainMod .. " + Space",        hl.dsp.exec_cmd("rofi -show drun"))
-          hl.bind(mainMod .. " + ALT + Space",   hl.dsp.exec_cmd("wofi --show drun"))
+          hl.bind(mainMod .. " + Space",        hl.dsp.exec_cmd("wofi --show drun --allow-images"))
+          hl.bind(mainMod .. " + D",             hl.dsp.exec_cmd("rofi -show drun"))
+          hl.bind(mainMod .. " + ALT + Space",   hl.dsp.exec_cmd("rofi -show drun"))
           hl.bind(mainMod .. " + C",      hl.dsp.window.close())
           hl.bind(mainMod .. " + V",      hl.dsp.window.float())
           hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen())
