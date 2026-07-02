@@ -7,15 +7,20 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager }:
+  outputs = { self, nixpkgs, home-manager, zen-browser }:
     let
       callHost = path: args:
         let flake = import path;
         in flake.outputs (args // { self = {}; });
 
       hostArgs = { inherit nixpkgs home-manager; };
+      macnixArgs = hostArgs // { inherit zen-browser; };
     in {
       homeConfigurations = {
         # macOS hosts
@@ -24,7 +29,7 @@
         "runih@iMac.home.okkara.net"  = (callHost ./hosts/mac/iMac/flake.nix           hostArgs).homeConfigurations.iMac;
 
         # Linux hosts
-        "runih@macnix"         = (callHost ./hosts/linux/macnix/flake.nix        hostArgs).homeConfigurations.macnix;
+        "runih@macnix"         = (callHost ./hosts/linux/macnix/flake.nix        macnixArgs).homeConfigurations.macnix;
         "runih@nixos-pi5"      = (callHost ./hosts/linux/nixos-pi5/flake.nix     hostArgs).homeConfigurations.nixos-pi5;
         "minecraft@nixos-pi5"  = (callHost ./hosts/linux/nixos-pi5/flake.nix     hostArgs).homeConfigurations.minecraft;
         "runih@nixos"          = (callHost ./hosts/linux/nixos/flake.nix         hostArgs).homeConfigurations.nixos;
