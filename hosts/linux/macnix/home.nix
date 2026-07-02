@@ -165,7 +165,7 @@
         valign = center
         shadow_passes = 4
         shadow_size = 10
-        shadow_color = rgba(100, 149, 237, 0.8)
+        shadow_color = rgba(122, 162, 247, 0.8)
         shadow_boost = 1.5
       }
 
