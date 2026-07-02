@@ -11,11 +11,15 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
-      username = builtins.getEnv "USER";
+      username = "runih";
+      homeDirectory = "/Users/${username}";
     in {
       homeConfigurations = {
-        "BlackMac" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
+        "${username}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            system = "aarch64-darwin";
+            config.allowUnfree = true;
+          };
           modules = [
             ../../../basic-mac.nix
             ../../../nerd-fonts.nix
@@ -31,8 +35,7 @@
             ../../../testssl.nix
           ];
           extraSpecialArgs = {
-            homeDirectory = "/Users/${username}";
-            username = username;
+            inherit homeDirectory username;
           };
         };
       };
