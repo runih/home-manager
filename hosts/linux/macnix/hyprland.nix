@@ -21,6 +21,8 @@
           hl.env("XCURSOR_SIZE", "24")
           hl.env("HYPRCURSOR_SIZE", "24")
 
+          os.execute("(sleep 0.5 && hyprctl notify -1 2000 'rgb(7aa2f7)' 'Config reloaded') &")
+
           hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })
           hl.monitor({ output = "DP-1",  mode = "preferred", position = "auto", scale = "auto" })
           hl.monitor({ output = "",      mode = "preferred", position = "auto", scale = "auto" })
@@ -65,9 +67,47 @@
           hl.bind(mainMod .. " + j",      hl.dsp.focus({ direction = "down" }))
           hl.bind(mainMod .. " + k",      hl.dsp.focus({ direction = "up" }))
           hl.bind(mainMod .. " + l",      hl.dsp.focus({ direction = "right" }))
+          local function vmove(dir)
+            local function read_cmd(cmd)
+              local h = io.popen(cmd); local s = h:read("*a"); h:close(); return s
+            end
+            local aw   = read_cmd("hyprctl activewindow -j")
+            local ay   = tonumber(aw:match('"at":%s*%[%d+,%s*(%d+)'))  or 0
+            local ah   = tonumber(aw:match('"size":%s*%[%d+,%s*(%d+)')) or 0
+            local ax   = tonumber(aw:match('"at":%s*%[(%d+)'))          or 0
+            local bot  = ay + ah
+            local cs   = read_cmd("hyprctl clients -j")
+            local need_toggle = false
+            local function iter() return cs:gmatch('"at":%s*%[(%d+),%s*(%d+)%]') end
+            if dir == "up" then
+              local has_above = false
+              for _, cy in iter() do if tonumber(cy) < ay then has_above = true; break end end
+              if not has_above then
+                for cx, cy in iter() do
+                  if tonumber(cy) == ay and tonumber(cx) ~= ax then need_toggle = true; break end
+                end
+              end
+            else
+              local has_below = false
+              for _, cy in iter() do if tonumber(cy) >= bot then has_below = true; break end end
+              if not has_below then
+                for cx, cy in iter() do
+                  if tonumber(cy) == ay and tonumber(cx) ~= ax then need_toggle = true; break end
+                end
+              end
+            end
+            if need_toggle then hl.dispatch(hl.dsp.layout("togglesplit")) end
+            hl.dispatch(hl.dsp.window.move({ direction = dir }))
+          end
+
           hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
-          hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
-          hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
+          hl.bind(mainMod .. " + SHIFT + J", function() vmove("down") end)
+          hl.bind(mainMod .. " + SHIFT + K", function()
+            os.execute("hyprctl notify -1 2000 'rgb(ff0000)' 'K: before togglesplit'")
+            hl.dispatch(hl.dsp.layout("togglesplit"))
+            os.execute("hyprctl notify -1 2000 'rgb(00ff00)' 'K: after togglesplit'")
+            hl.dispatch(hl.dsp.window.move({ direction = "up" }))
+          end)
           hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
 
           for i = 1, 5 do
@@ -95,7 +135,7 @@
           hl.bind(mainMod .. " + M",                hl.dsp.exec_cmd(logout))
           hl.bind(mainMod .. " + E",                hl.dsp.exec_cmd(fileManager))
           hl.bind(mainMod .. " + N",                hl.dsp.exec_cmd(editor))
-          hl.bind(mainMod .. " + R",                hl.dsp.exec_cmd("~/.config/waybar/scripts/launch.sh"))
+          hl.bind(mainMod .. " + R",                hl.dsp.exec_cmd("hyprctl reload"))
           hl.bind(mainMod .. " + CTRL + Q",         hl.dsp.exec_cmd("hyprlock"))
           hl.bind(mainMod .. " + W",                hl.dsp.exec_cmd("~/bin/change_wallpaper"))
           hl.bind(mainMod .. " + SHIFT + W",        hl.dsp.exec_cmd("~/bin/change_wallpaper --random"))

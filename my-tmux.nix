@@ -6,6 +6,22 @@ let
     rev = "866bcaa0f38b05804c07ba3a012b0ff56c8451c1";
     hash = "sha256-vdGt9tTi6zQ1VDaydH0n4uIH+THgfZv6k102WV8YJeA=";
   };
+  my-tmux-config-with-titles = pkgs.runCommand "my-tmux-config-with-titles" {} ''
+    mkdir -p $out
+    cp -r ${my-tmux-config}/. $out/
+    cat >> $out/tmux.conf << 'EOF'
+
+# Terminal window title: show session and current window/program
+set-option -g set-titles on
+set-option -g set-titles-string "#{session_name}: #{window_name}"
+
+# Claude Code / TUI optimizations
+set -sg escape-time 0
+set -g history-limit 50000
+set -g focus-events on
+set -g allow-passthrough on
+EOF
+  '';
   tpm = pkgs.fetchFromGitHub {
     owner = "tmux-plugins";
     repo = "tpm";
@@ -38,7 +54,7 @@ in
   };
 
   xdg.configFile.tmux = {
-    source = my-tmux-config;
+    source = my-tmux-config-with-titles;
     recursive = true;
   };
   xdg.configFile."tmux/plugins/tpm" = {

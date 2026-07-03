@@ -35,6 +35,7 @@ in {
 
       modules-left = [
         "group/left-island"
+        "custom/tmux"
         "hyprland/submap"
       ];
       modules-center = [
@@ -52,6 +53,13 @@ in {
       "group/left-island" = {
         orientation = "horizontal";
         modules = ["hyprland/workspaces" "hyprland/window"];
+      };
+
+      "custom/tmux" = {
+        exec = "tmux display-message -p '#{session_name}: #{pane_current_command}' 2>/dev/null || echo ''";
+        interval = 2;
+        format = " {}";
+        tooltip = false;
       };
 
       "hyprland/window" = {
@@ -243,6 +251,14 @@ in {
 
       #tray {
         padding: 2px 6px;
+      }
+
+      #custom-tmux {
+        background-color: rgba(26, 27, 38, 0.9);
+        border-radius: 8px;
+        color: #9ece6a;
+        margin: 4px 3px;
+        padding: 2px 10px;
       }
 
       #submap {
