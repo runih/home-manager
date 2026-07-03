@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,14 +14,14 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser }:
+  outputs = inputs @ { self, nixpkgs, home-manager, zen-browser, ... }:
     let
       callHost = path: args:
         let flake = import path;
         in flake.outputs (args // { self = {}; });
 
       hostArgs = { inherit nixpkgs home-manager; };
-      macnixArgs = hostArgs // { inherit zen-browser; };
+      macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {
       homeConfigurations = {
         # macOS hosts

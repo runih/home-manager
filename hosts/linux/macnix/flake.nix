@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,15 +14,16 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, zen-browser, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, zen-browser, ... }:
     let
       username = builtins.getEnv "USER";  # Get the current user's username.
+      pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux";
     in {
       homeConfigurations = {
         "macnix" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           modules = [
-            { home.packages = [ zen-browser.packages."x86_64-linux".default ]; }
+            { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh ]; }
             ./home.nix
             ./hyprland.nix
             ./waybar.nix
