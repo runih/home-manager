@@ -33,7 +33,6 @@
       blueman         # Bluetooth manager
       bluetuith       # Bluetooth TUI
       btop            # Resource monitor
-      claude-code     # Claude AI command-line interface
       dnsutils        # Utilities for querying DNS servers
       fastfetch       # A fast system information tool
       fd              # A simple, fast and user-friendly alternative to find
@@ -63,6 +62,7 @@
       virtualenv      # Tool to create isolated Python environments
       w3m             # Text-based web browser
       wget            # Command-line utility for downloading files
+      wl-clipboard    # Wayland clipboard utilities (wl-copy, wl-paste)
       awww            # Wallpaper daemon for Wayland (swww)
       hyprlock        # Lock screen for Hyprland
       wlogout         # Wayland logout screen
@@ -287,6 +287,15 @@
       '';
       executable = true;
     };
+    file.".config/wireplumber/wireplumber.conf.d/51-macbook-cs4208-softvol.conf".text = ''
+      monitor.alsa.rules = [
+        {
+          matches = [ { device.name = "alsa_card.pci-0000_00_1f.3" } ]
+          actions = { update-props = { api.alsa.soft-mixer = true } }
+        }
+      ]
+    '';
+
     file."bin/fetch-weather" = {
       text = ''
         #!/usr/bin/env bash
@@ -441,6 +450,13 @@
       enable = true;                  # Enable oh-my-posh
       enableZshIntegration = true;    # Enable Zsh integration
       useTheme = "blue-owl";             # Set the theme to "sorin"
+    };
+
+    thunderbird = {
+      enable = true;
+      profiles.default = {
+        isDefault = true;
+      };
     };
 
     # Configuration for the vim program (text editor)

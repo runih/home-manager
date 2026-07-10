@@ -152,7 +152,7 @@ in {
       #left-island,
       #submap,
       #clock {
-        background-color: rgba(26, 27, 38, 0.9);
+        background-color: rgba(26, 27, 38, 0.5);
         border-radius: 8px;
         margin: 4px 3px;
         padding: 2px 10px;
@@ -171,7 +171,7 @@ in {
       }
 
       .modules-right {
-        background-color: rgba(26, 27, 38, 0.9);
+        background-color: rgba(26, 27, 38, 0.5);
         border-radius: 8px;
         margin: 4px 6px;
         padding: 2px 4px;
@@ -254,7 +254,7 @@ in {
       }
 
       #custom-tmux {
-        background-color: rgba(26, 27, 38, 0.9);
+        background-color: rgba(26, 27, 38, 0.5);
         border-radius: 8px;
         color: #9ece6a;
         margin: 4px 3px;

@@ -17,13 +17,16 @@
   outputs = inputs @ { nixpkgs, home-manager, zen-browser, ... }:
     let
       username = builtins.getEnv "USER";  # Get the current user's username.
-      pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux";
+      pkgs-unstable = import inputs.nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
     in {
       homeConfigurations = {
         "macnix" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           modules = [
-            { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh ]; }
+            { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh pkgs-unstable.claude-code ]; }
             ./home.nix
             ./hyprland.nix
             ./waybar.nix
