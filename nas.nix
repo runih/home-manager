@@ -1,0 +1,74 @@
+{ pkgs, ... }:
+
+{
+  home = {
+    # Define the username for the home configuration
+    username = "runihadmin";
+
+    # Specify the home directory path
+    homeDirectory = "/volume1/homes/runihadmin";
+
+    # Set the default editor for the session
+    sessionVariables.EDITOR = "nvim";
+
+    # Add custom paths to the session's PATH environment variable
+    sessionPath = [
+      "/volume1/homes/runihadmin/.nix-profile/bin"
+    ];
+
+    # Specify the state version for compatibility
+    stateVersion = "25.05";
+
+    # List of packages to be installed for the user
+    packages = with pkgs; [
+      bat          # A cat clone with syntax highlighting
+      bc           # An arbitrary precision calculator language
+      file         # Determine file types
+      git          # Version control system
+      htop-vim     # Interactive process viewer with vim keybindings
+      lynx         # Text-based web browser
+      pstree       # Display a tree of processes
+      superfile    # (Assumed custom package, no description available)
+      tmux         # Terminal multiplexer
+      tree         # Display directories as trees
+      unzip        # Extract ZIP archives
+    ];
+  };
+
+  programs = {
+    # Enable home-manager for managing user configurations
+    home-manager.enable = true;
+
+    # Configuration for the eza program (modern ls replacement)
+    eza = {
+      enable = true;                  # Enable eza
+      enableZshIntegration = true;    # Enable Zsh integration
+      git = true;                     # Enable Git support
+      icons = "auto";                 # Automatically enable icons
+    };
+
+    # Configuration for the fzf program (fuzzy finder)
+    fzf = {
+      enable = true;                  # Enable fzf
+      enableZshIntegration = true;    # Enable Zsh integration
+    };
+
+    # Configuration for the oh-my-posh program (prompt theme engine)
+    oh-my-posh = {
+      enable = true;                  # Enable oh-my-posh
+      enableZshIntegration = true;    # Enable Zsh integration
+      useTheme = "sorin";             # Set the theme to "sorin"
+    };
+
+    # Configuration for the zoxide program (smart directory jumper)
+    zoxide = {
+      enable = true;                  # Enable zoxide
+      enableZshIntegration = true;    # Enable Zsh integration
+    };
+
+    # Configuration for the vim program (text editor)
+    vim = {
+      enable = true;                  # Enable vim
+    };
+  };
+}
