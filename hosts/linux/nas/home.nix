@@ -86,4 +86,14 @@
   programs.zsh.initContent = pkgs.lib.mkOrder 2000 ''
     eval "$(${pkgs.lib.getExe pkgs.zoxide} init zsh)"
   '';
+
+  # DSM's sshd negotiates a bare "xterm" TERM (only 8 colors per terminfo)
+  # instead of forwarding the client's real "xterm-256color"/"tmux-256color".
+  # Upgrade it as early as possible (.zshenv, before compinit/oh-my-posh/eza
+  # ever read $TERM) so color-aware tools see proper 256-color support.
+  programs.zsh.envExtra = ''
+    if [[ "$TERM" == "xterm" ]]; then
+      export TERM="xterm-256color"
+    fi
+  '';
 }
