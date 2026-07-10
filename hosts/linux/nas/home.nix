@@ -9,7 +9,13 @@
     homeDirectory = "/volume1/homes/runihadmin";
 
     # Set the default editor for the session
-    sessionVariables.EDITOR = "nvim";
+    sessionVariables = {
+      EDITOR = "nvim";
+      # DSM's system terminfo db doesn't ship a tmux-256color entry, which
+      # breaks the system `clear`/`tput`/etc. inside tmux. Point at nix's
+      # ncurses terminfo so those tools can resolve it.
+      TERMINFO_DIRS = "${pkgs.ncurses}/share/terminfo";
+    };
 
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
@@ -63,7 +69,12 @@
     # Configuration for the zoxide program (smart directory jumper)
     zoxide = {
       enable = true;                  # Enable zoxide
-      enableZshIntegration = true;    # Enable Zsh integration
+      # home-manager's own zsh integration inserts init at mkOrder 851
+      # ("after compinit"), but eza/fzf/oh-my-posh land at the default order
+      # 1000 and end up sourced *after* it. zoxide needs to run last, so
+      # integrate manually at a later order instead (mirroring the mkOrder
+      # 2000 home-manager already uses for bash).
+      enableZshIntegration = false;
     };
 
     # Configuration for the vim program (text editor)
@@ -71,4 +82,8 @@
       enable = true;                  # Enable vim
     };
   };
+
+  programs.zsh.initContent = pkgs.lib.mkOrder 2000 ''
+    eval "$(${pkgs.lib.getExe pkgs.zoxide} init zsh)"
+  '';
 }

@@ -22,6 +22,7 @@
 
       hostArgs = { inherit nixpkgs home-manager; };
       macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
+      nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {
       homeConfigurations = {
         # macOS hosts
@@ -36,7 +37,7 @@
         "runih@nixos"          = (callHost ./hosts/linux/nixos/flake.nix         hostArgs).homeConfigurations.nixos;
         "runih@nixos2"         = (callHost ./hosts/linux/nixos2/flake.nix        hostArgs).homeConfigurations.nixos2;
         "runih@madakara-nixos" = (callHost ./hosts/linux/madakara-nixos/flake.nix hostArgs).homeConfigurations.madakara-nixos;
-        "nas"                  = (callHost ./hosts/linux/nas/flake.nix           hostArgs).homeConfigurations.nas;
+        "nas"                  = (callHost ./hosts/linux/nas/flake.nix           nasArgs).homeConfigurations.nas;
       };
     };
 }
