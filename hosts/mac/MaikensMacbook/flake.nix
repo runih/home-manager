@@ -31,6 +31,7 @@
           ../../../postgresql-client.nix
           ../../../java.nix
           ../../../neovim.nix
+          ../../../claude-code.nix
         ];
       };
     };

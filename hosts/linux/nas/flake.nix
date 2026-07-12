@@ -31,6 +31,7 @@
           ../../../neovim.nix
           ../../../zsh.nix
           ../../../zoxide.nix
+          ../../../claude-code.nix
           ({ config, ... }: {
             nixpkgs.config.allowUnfree = true;
           })

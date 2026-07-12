@@ -34,6 +34,7 @@
           ../../../zsh.nix
           ../../../zoxide.nix
           ../../../pass.nix
+          ../../../claude-code.nix
           allowUnfree
         ];
       };

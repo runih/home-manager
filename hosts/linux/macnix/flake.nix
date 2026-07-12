@@ -48,8 +48,33 @@
           ../../../zoxide.nix
           #../../../yazi.nix
           ../../../pass.nix
+          ../../../claude-code.nix
           ({ config, ... }: {
             nixpkgs.config.allowUnfree = true;
+            claudeCode.hooks = {
+              Stop = [
+                {
+                  hooks = [
+                    { type = "command"; command = ''hyprctl notify -1 2000 'rgb(7aa2f7)' 'Claude is done' 2>/dev/null || true''; }
+                  ];
+                }
+              ];
+              Notification = [
+                {
+                  hooks = [
+                    { type = "command"; command = ''hyprctl notify -1 2000 'rgb(7aa2f7)' 'Claude is waiting for input' 2>/dev/null || true''; }
+                  ];
+                }
+              ];
+              PostToolUse = [
+                {
+                  matcher = "Bash";
+                  hooks = [
+                    { type = "command"; command = ''cmd=$(jq -r '.tool_input.command'); [[ "$cmd" == "hm"* ]] && hyprctl notify -1 2000 'rgb(7aa2f7)' 'Configuration reloaded' 2>/dev/null || true''; }
+                  ];
+                }
+              ];
+            };
           })
         ];
       };

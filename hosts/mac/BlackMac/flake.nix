@@ -36,6 +36,7 @@
           ../../../java.nix
           ../../../testssl.nix
           ../../../podman.nix
+          ../../../claude-code.nix
         ];
       };
     };
