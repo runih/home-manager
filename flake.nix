@@ -21,13 +21,14 @@
         in flake.outputs (args // { self = {}; });
 
       hostArgs = { inherit nixpkgs home-manager; };
+      blackMacArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       pi5Args = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {
       homeConfigurations = {
         # macOS hosts
-        "runih@BlackMac"              = (callHost ./hosts/mac/BlackMac/flake.nix       hostArgs).homeConfigurations.runih;
+        "runih@BlackMac"              = (callHost ./hosts/mac/BlackMac/flake.nix       blackMacArgs).homeConfigurations.runih;
         "maiken@MaikensMacbook.local" = (callHost ./hosts/mac/MaikensMacbook/flake.nix hostArgs).homeConfigurations.MaikensMacbook;
         "runih@iMac.home.okkara.net"  = (callHost ./hosts/mac/iMac/flake.nix           hostArgs).homeConfigurations.iMac;
 

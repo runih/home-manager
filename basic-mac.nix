@@ -24,7 +24,6 @@
       bat           # A cat clone with syntax highlighting
       bc            # An arbitrary precision calculator language
       binutils      # GNU binary utilities
-      claude-code   # A command-line interface for the Claude AI assistant
       btop          # A resource monitor
       dig           # DNS lookup utility
       fd            # A simple, fast and user-friendly alternative to find

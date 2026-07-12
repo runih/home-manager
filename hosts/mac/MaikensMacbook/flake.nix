@@ -19,6 +19,7 @@
         inherit username;
         homeDirectory = "/Users/${username}";
         modules = [
+          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
           ../../../basic-mac.nix
           ../../../nerd-fonts.nix
           ../../../zsh.nix
