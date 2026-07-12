@@ -11,33 +11,31 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = "runih";
       homeDirectory = "/Users/${username}";
     in {
-      homeConfigurations = {
-        "${username}" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "aarch64-darwin";
-            config.allowUnfree = true;
-          };
-          modules = [
-            ../../../basic-mac.nix
-            ../../../nerd-fonts.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../my-tmux.nix
-            ../../../vim.nix
-            ../../../wezterm.nix
-            ../../../neovide.nix
-            ../../../pass.nix
-            ../../../postgresql-client.nix
-            ../../../java.nix
-            ../../../testssl.nix
-          ];
-          extraSpecialArgs = {
-            inherit homeDirectory username;
-          };
+      homeConfigurations."${username}" = mkHome {
+        system = "aarch64-darwin";
+        inherit username homeDirectory;
+        pkgs = import nixpkgs {
+          system = "aarch64-darwin";
+          config.allowUnfree = true;
         };
+        modules = [
+          ../../../basic-mac.nix
+          ../../../nerd-fonts.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../my-tmux.nix
+          ../../../vim.nix
+          ../../../wezterm.nix
+          ../../../neovide.nix
+          ../../../pass.nix
+          ../../../postgresql-client.nix
+          ../../../java.nix
+          ../../../testssl.nix
+        ];
       };
     };
 }

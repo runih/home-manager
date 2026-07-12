@@ -11,26 +11,23 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
-      homeConfigurations = {
-        "madakara-nixos" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          modules = [
-            ../../../basic-linux.nix
-            ../../../simple-tmux.nix
-            ../../../vim.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../yazi.nix
-            ../../../pass.nix
-            ../../../esh-minecraft.nix
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";
-            username = username;
-          };
-        };
+      homeConfigurations."madakara-nixos" = mkHome {
+        system = "x86_64-linux";
+        inherit username;
+        homeDirectory = "/home/${username}";
+        modules = [
+          ../../../basic-linux.nix
+          ../../../simple-tmux.nix
+          ../../../vim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../yazi.nix
+          ../../../pass.nix
+          ../../../esh-minecraft.nix
+        ];
       };
     };
 }

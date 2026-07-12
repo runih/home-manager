@@ -62,10 +62,5 @@
       enableZshIntegration = true;    # Enable Zsh integration
       useTheme = "sorin";             # Set the theme to "sorin"
     };
-
-    # Configuration for the vim program (text editor)
-    vim = {
-      enable = true;                  # Enable vim
-    };
   };
 }

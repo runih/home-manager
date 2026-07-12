@@ -69,27 +69,7 @@
       enableZshIntegration = true;    # Enable Zsh integration
       useTheme = "sorin";             # Set the theme to "sorin"
     };
-
-    # Configuration for the zoxide program (smart directory jumper)
-    zoxide = {
-      enable = true;                  # Enable zoxide
-      # home-manager's own zsh integration inserts init at mkOrder 851
-      # ("after compinit"), but eza/fzf/oh-my-posh land at the default order
-      # 1000 and end up sourced *after* it. zoxide needs to run last, so
-      # integrate manually at a later order instead (mirroring the mkOrder
-      # 2000 home-manager already uses for bash).
-      enableZshIntegration = false;
-    };
-
-    # Configuration for the vim program (text editor)
-    vim = {
-      enable = true;                  # Enable vim
-    };
   };
-
-  programs.zsh.initContent = pkgs.lib.mkOrder 2000 ''
-    eval "$(${pkgs.lib.getExe pkgs.zoxide} init zsh)"
-  '';
 
   # DSM's sshd negotiates a bare "xterm" TERM (only 8 colors per terminfo)
   # instead of forwarding the client's real "xterm-256color"/"tmux-256color".

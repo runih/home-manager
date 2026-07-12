@@ -11,25 +11,22 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
-      homeConfigurations = {
-        "nixos" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [
-            ../../../basic-linux.nix
-            ../../../simple-tmux.nix
-            ../../../vim.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../yazi.nix
-            ../../../pass.nix
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";
-            username = username;
-          };
-        };
+      homeConfigurations."nixos" = mkHome {
+        system = "aarch64-linux";
+        inherit username;
+        homeDirectory = "/home/${username}";
+        modules = [
+          ../../../basic-linux.nix
+          ../../../simple-tmux.nix
+          ../../../vim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../yazi.nix
+          ../../../pass.nix
+        ];
       };
     };
 }

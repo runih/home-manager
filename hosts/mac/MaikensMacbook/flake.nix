@@ -11,30 +11,27 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
-      homeConfigurations = {
-        "MaikensMacbook" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-          modules = [
-            ../../../basic-mac.nix
-            ../../../nerd-fonts.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../my-tmux.nix
-            ../../../vim.nix
-            ../../../wezterm.nix
-            ../../../neovide.nix
-            ../../../pass.nix
-            ../../../postgresql-client.nix
-            ../../../java.nix
-            ../../../neovim.nix
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/Users/${username}";
-            username = username;
-          };
-        };
+      homeConfigurations."MaikensMacbook" = mkHome {
+        system = "aarch64-darwin";
+        inherit username;
+        homeDirectory = "/Users/${username}";
+        modules = [
+          ../../../basic-mac.nix
+          ../../../nerd-fonts.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../my-tmux.nix
+          ../../../vim.nix
+          ../../../wezterm.nix
+          ../../../neovide.nix
+          ../../../pass.nix
+          ../../../postgresql-client.nix
+          ../../../java.nix
+          ../../../neovim.nix
+        ];
       };
     };
 }

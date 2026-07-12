@@ -12,30 +12,28 @@
 
   outputs = inputs @ { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       pkgs-unstable = import inputs.nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
       };
     in {
-      homeConfigurations = {
-        "nas" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          modules = [
-            { home.packages = [ pkgs-unstable.claude-code ]; }
-            ./home.nix
-            ../../../simple-tmux.nix
-            ../../../vim.nix
-            ../../../neovim.nix
-            ../../../zsh.nix
-            ({ config, ... }: {
-              nixpkgs.config.allowUnfree = true;
-            })
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/var/services/homes/runihadmin";
-            username = "runihadmin";
-          };
-        };
+      homeConfigurations."nas" = mkHome {
+        system = "x86_64-linux";
+        username = "runihadmin";
+        homeDirectory = "/var/services/homes/runihadmin";
+        modules = [
+          { home.packages = [ pkgs-unstable.claude-code ]; }
+          ./home.nix
+          ../../../simple-tmux.nix
+          ../../../vim.nix
+          ../../../neovim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ({ config, ... }: {
+            nixpkgs.config.allowUnfree = true;
+          })
+        ];
       };
     };
 }

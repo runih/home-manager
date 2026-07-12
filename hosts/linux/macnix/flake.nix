@@ -16,45 +16,42 @@
 
   outputs = inputs @ { nixpkgs, home-manager, zen-browser, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
       pkgs-unstable = import inputs.nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
       };
     in {
-      homeConfigurations = {
-        "macnix" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          modules = [
-            { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh pkgs-unstable.claude-code ]; }
-            ./home.nix
-            ./hyprland.nix
-            ./waybar.nix
+      homeConfigurations."macnix" = mkHome {
+        system = "x86_64-linux";
+        inherit username;
+        homeDirectory = "/home/${username}";
+        modules = [
+          { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh pkgs-unstable.claude-code ]; }
+          ./home.nix
+          ./hyprland.nix
+          ./waybar.nix
 
-            ../../../niri.nix
-            ../../../wezterm.nix
-            ../../../foot.nix
-            ../../../nerd-fonts.nix
-            ../../../neovide.nix
-            ../../../postgresql-client.nix
-            ../../../ghostty.nix
-            ../../../testssl.nix
-            ../../../java.nix
-            ../../../simple-tmux.nix
-            ../../../vim.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            #../../../yazi.nix
-            ../../../pass.nix
-            ({ config, ... }: {
-              nixpkgs.config.allowUnfree = true;
-            })
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";
-            username = username;
-          };
-        };
+          ../../../niri.nix
+          ../../../wezterm.nix
+          ../../../foot.nix
+          ../../../nerd-fonts.nix
+          ../../../neovide.nix
+          ../../../postgresql-client.nix
+          ../../../ghostty.nix
+          ../../../testssl.nix
+          ../../../java.nix
+          ../../../simple-tmux.nix
+          ../../../vim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          #../../../yazi.nix
+          ../../../pass.nix
+          ({ config, ... }: {
+            nixpkgs.config.allowUnfree = true;
+          })
+        ];
       };
     };
 }

@@ -12,53 +12,47 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
+      allowUnfree = ({ config, ... }: {
+        nixpkgs.config.allowUnfree = true;
+      });
     in {
-      homeConfigurations = {
-        "nixos-pi5" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [
-            ./home.nix
+      homeConfigurations."nixos-pi5" = mkHome {
+        system = "aarch64-linux";
+        inherit username;
+        homeDirectory = "/home/${username}";
+        modules = [
+          ./home.nix
 
-            ../../../neovide.nix
-            ../../../postgresql-client.nix
-            ../../../testssl.nix
-            ../../../java.nix
-            ../../../simple-tmux.nix
-            ../../../vim.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../pass.nix
-            ({ config, ... }: {
-              nixpkgs.config.allowUnfree = true;
-            })
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/${username}";
-            username = username;
-          };
-        };
+          ../../../neovide.nix
+          ../../../postgresql-client.nix
+          ../../../testssl.nix
+          ../../../java.nix
+          ../../../simple-tmux.nix
+          ../../../vim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../pass.nix
+          allowUnfree
+        ];
+      };
 
-        "minecraft" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."aarch64-linux";
-          modules = [
-            ../../../simple-tmux.nix
-            ../../../neovim.nix
-            ../../../minecraft.nix
-            ../../../vim.nix
-            ../../../zsh.nix
-            ../../../zoxide.nix
-            ../../../yazi.nix
-            ../../../pass.nix
-            ({ config, ... }: {
-              nixpkgs.config.allowUnfree = true;
-            })
-          ];
-          extraSpecialArgs = {
-            homeDirectory = "/home/minecraft";
-            username = "minecraft";
-          };
-        };
+      homeConfigurations."minecraft" = mkHome {
+        system = "aarch64-linux";
+        username = "minecraft";
+        homeDirectory = "/home/minecraft";
+        modules = [
+          ../../../simple-tmux.nix
+          ../../../neovim.nix
+          ../../../minecraft.nix
+          ../../../vim.nix
+          ../../../zsh.nix
+          ../../../zoxide.nix
+          ../../../yazi.nix
+          ../../../pass.nix
+          allowUnfree
+        ];
       };
     };
 }
