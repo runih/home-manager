@@ -14,6 +14,8 @@
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"
+      "${homeDirectory}/bin"
+      "${homeDirectory}/.local/bin"
     ];
 
     # Specify the state version for compatibility

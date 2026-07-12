@@ -9,7 +9,7 @@
       shellAliases = {
         cd = "z";
         cdi = "zi";
-        hm = "home-manager switch --flake ~/.config/home-manager#nas";
+        hm = "home-manager switch --impure --flake ~/.config/home-manager#$USER@$(hostname)";
       };
     };
 }

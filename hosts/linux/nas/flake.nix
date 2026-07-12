@@ -17,11 +17,12 @@
         system = "x86_64-linux";
         config.allowUnfree = true;
       };
+      username = builtins.getEnv "USER";
     in {
       homeConfigurations."nas" = mkHome {
         system = "x86_64-linux";
-        username = "runihadmin";
-        homeDirectory = "/var/services/homes/runihadmin";
+        inherit username;
+        homeDirectory = "/var/services/homes/${username}";
         modules = [
           { home.packages = [ pkgs-unstable.claude-code ]; }
           ./home.nix

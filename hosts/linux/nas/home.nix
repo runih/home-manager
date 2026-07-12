@@ -1,15 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, lib, username, homeDirectory, ... }:
 
 {
   home = {
-    # Define the username for the home configuration
-    username = "runihadmin";
-
-    # Specify the home directory path (matches $HOME/passwd; /volume1/homes/...
-    # is a Synology-provided alias to the same directory, but tools that do a
-    # literal string match against $HOME, like `claude doctor`'s PATH check,
-    # don't recognize it as equivalent).
-    homeDirectory = "/var/services/homes/runihadmin";
+    inherit username homeDirectory;
 
     # Set the default editor for the session
     sessionVariables = {
@@ -22,8 +15,8 @@
 
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
-      "/var/services/homes/runihadmin/.nix-profile/bin"
-      "/var/services/homes/runihadmin/.local/bin"
+      "${homeDirectory}/.nix-profile/bin"
+      "${homeDirectory}/.local/bin"
     ];
 
     # Specify the state version for compatibility
@@ -75,6 +68,10 @@
   # instead of forwarding the client's real "xterm-256color"/"tmux-256color".
   # Upgrade it as early as possible (.zshenv, before compinit/oh-my-posh/eza
   # ever read $TERM) so color-aware tools see proper 256-color support.
+  programs.zsh.shellAliases = {
+    hm = lib.mkForce "home-manager switch --impure --flake ~/.config/home-manager#nas";
+  };
+
   programs.zsh.envExtra = ''
     if [[ "$TERM" == "xterm" ]]; then
       export TERM="xterm-256color"

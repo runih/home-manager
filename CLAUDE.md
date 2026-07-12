@@ -11,7 +11,7 @@ A single Nix flake that produces `home-manager` configurations for multiple pers
 Apply a configuration on the machine it belongs to:
 
 ```bash
-home-manager switch --flake ~/.config/home-manager#<name>
+home-manager switch --impure --flake ~/.config/home-manager#<name>
 ```
 
 `<name>` must match one of the attribute names under `homeConfigurations` in the root `flake.nix` (e.g. `runih@BlackMac`, `runih@macnix`, `runih@nixos-pi5`, `minecraft@nixos-pi5`, `nas`). Note the `hm` shell alias defined in `zsh.nix` is hardcoded to `#nas` — it is only correct on the `nas` host; on every other host run the `switch` command above with the right `<name>` explicitly.
