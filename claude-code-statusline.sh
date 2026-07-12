@@ -33,7 +33,7 @@ RESET='\033[0m'
 parts=()
 
 # current directory (shorten home)
-short_cwd="${cwd/#$HOME/\~}"
+short_cwd="${cwd/#$HOME/~}"
 parts+=("$(printf "${BLUE}📁 %s${RESET}" "$short_cwd")")
 
 # git branch
