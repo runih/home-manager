@@ -9,6 +9,7 @@ let
   my-tmux-config-with-titles = pkgs.runCommand "my-tmux-config-with-titles" {} ''
     mkdir -p $out
     cp -r ${my-tmux-config}/. $out/
+    chmod -R u+w $out/
     cat >> $out/tmux.conf << 'EOF'
 
 # Terminal window title: show session and current window/program
