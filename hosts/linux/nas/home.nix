@@ -5,8 +5,11 @@
     # Define the username for the home configuration
     username = "runihadmin";
 
-    # Specify the home directory path
-    homeDirectory = "/volume1/homes/runihadmin";
+    # Specify the home directory path (matches $HOME/passwd; /volume1/homes/...
+    # is a Synology-provided alias to the same directory, but tools that do a
+    # literal string match against $HOME, like `claude doctor`'s PATH check,
+    # don't recognize it as equivalent).
+    homeDirectory = "/var/services/homes/runihadmin";
 
     # Set the default editor for the session
     sessionVariables = {
@@ -19,7 +22,8 @@
 
     # Add custom paths to the session's PATH environment variable
     sessionPath = [
-      "/volume1/homes/runihadmin/.nix-profile/bin"
+      "/var/services/homes/runihadmin/.nix-profile/bin"
+      "/var/services/homes/runihadmin/.local/bin"
     ];
 
     # Specify the state version for compatibility

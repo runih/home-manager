@@ -32,7 +32,7 @@
             })
           ];
           extraSpecialArgs = {
-            homeDirectory = "/volume1/homes/runihadmin";
+            homeDirectory = "/var/services/homes/runihadmin";
             username = "runihadmin";
           };
         };
