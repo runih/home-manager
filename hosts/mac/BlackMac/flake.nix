@@ -35,6 +35,7 @@
           ../../../postgresql-client.nix
           ../../../java.nix
           ../../../testssl.nix
+          ../../../podman.nix
         ];
       };
     };
