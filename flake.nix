@@ -23,6 +23,7 @@
       hostArgs = { inherit nixpkgs home-manager; };
       macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
+      pi5Args = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {
       homeConfigurations = {
         # macOS hosts
@@ -32,8 +33,8 @@
 
         # Linux hosts
         "runih@macnix"         = (callHost ./hosts/linux/macnix/flake.nix        macnixArgs).homeConfigurations.macnix;
-        "runih@nixos-pi5"      = (callHost ./hosts/linux/nixos-pi5/flake.nix     hostArgs).homeConfigurations.nixos-pi5;
-        "minecraft@nixos-pi5"  = (callHost ./hosts/linux/nixos-pi5/flake.nix     hostArgs).homeConfigurations.minecraft;
+        "runih@nixos-pi5"      = (callHost ./hosts/linux/nixos-pi5/flake.nix     pi5Args).homeConfigurations.nixos-pi5;
+        "minecraft@nixos-pi5"  = (callHost ./hosts/linux/nixos-pi5/flake.nix     pi5Args).homeConfigurations.minecraft;
         "runih@nixos"          = (callHost ./hosts/linux/nixos/flake.nix         hostArgs).homeConfigurations.nixos;
         "runih@nixos2"         = (callHost ./hosts/linux/nixos2/flake.nix        hostArgs).homeConfigurations.nixos2;
         "runih@madakara-nixos" = (callHost ./hosts/linux/madakara-nixos/flake.nix hostArgs).homeConfigurations.madakara-nixos;
