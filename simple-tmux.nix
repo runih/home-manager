@@ -16,9 +16,15 @@ my-tmux-config-with-shell = pkgs.runCommand "simple-tmux-config-with-shell" {} '
 # since the system login shell (/etc/passwd) isn't always zsh.
 set-option -g default-shell "${pkgs.zsh}/bin/zsh"
 
-# Terminal window title: show session and the pane's current process
+# Terminal window title and tmux window name: relay whatever title the
+# running program sets (e.g. Claude Code's animated status), falling back
+# to the current process when nothing has set one. pane_title defaults to
+# the hostname until a program sets it via an OSC title escape sequence,
+# so compare against that to detect the "untouched" case.
 set-option -g set-titles on
-set-option -g set-titles-string "#{session_name}: #{pane_current_command}"
+set-option -g set-titles-string "#{session_name}: #{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
+set-option -g automatic-rename on
+set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
 EOF
 '';
 in
