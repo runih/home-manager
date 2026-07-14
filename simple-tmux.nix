@@ -15,6 +15,10 @@ my-tmux-config-with-shell = pkgs.runCommand "simple-tmux-config-with-shell" {} '
 # Use the home-manager-managed zsh as the default shell for new panes/windows,
 # since the system login shell (/etc/passwd) isn't always zsh.
 set-option -g default-shell "${pkgs.zsh}/bin/zsh"
+
+# Terminal window title: show session and the pane's current process
+set-option -g set-titles on
+set-option -g set-titles-string "#{session_name}: #{pane_current_command}"
 EOF
 '';
 in
