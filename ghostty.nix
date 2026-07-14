@@ -13,6 +13,19 @@ in
       enable = true;
       enableZshIntegration = true;
       installVimSyntax = true;
+      # GTK4 (4.20+/GNOME 49) dropped its built-in dead-key/compose fallback when no
+      # IME is running, breaking things like the Swedish dead-key tilde in Ghostty.
+      # Kitty/foot aren't GTK apps so they're unaffected. GTK_IM_MODULE=simple
+      # restores basic dead-key handling without requiring ibus/fcitx.
+      package = pkgs.symlinkJoin {
+        name = "ghostty";
+        paths = [ pkgs.ghostty ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/ghostty --set GTK_IM_MODULE simple
+        '';
+        passthru = { inherit (pkgs.ghostty) vim; };
+      };
     };
   };
   xdg.configFile."ghostty/config".text = ''

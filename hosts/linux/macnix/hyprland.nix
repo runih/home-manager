@@ -41,8 +41,8 @@
             },
             input = {
               kb_layout  = "se",
-              kb_options = "lv3:lalt_switch",
-              kb_model   = "apple:alupckeys",
+              kb_options = "lv3:lalt_switch,apple:alupckeys",
+              kb_model   = "apple",
               follow_mouse = 1,
               touchpad = {
                 disable_while_typing = true,
