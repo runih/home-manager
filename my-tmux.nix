@@ -12,9 +12,15 @@ let
     chmod -R u+w $out/
     cat >> $out/tmux.conf << 'EOF'
 
-# Terminal window title: show session and current window/program
+# Terminal window title and tmux window name: relay whatever title the
+# running program sets (e.g. Claude Code's animated status), falling back
+# to the current process when nothing has set one. pane_title defaults to
+# the hostname until a program sets it via an OSC title escape sequence,
+# so compare against that to detect the "untouched" case.
 set-option -g set-titles on
-set-option -g set-titles-string "#{session_name}: #{window_name}"
+set-option -g set-titles-string "#{session_name}: #{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
+set-option -g automatic-rename on
+set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
 
 # Claude Code / TUI optimizations
 set -sg escape-time 0
