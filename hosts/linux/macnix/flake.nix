@@ -43,6 +43,7 @@
           ../../../testssl.nix
           ../../../java.nix
           ../../../simple-tmux.nix
+          { host.hasBattery = true; }
           ../../../vim.nix
           ../../../zsh.nix
           ../../../zoxide.nix
