@@ -14,20 +14,14 @@
     let
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = "aarch64-linux";
-        config.allowUnfree = true;
-      };
-      allowUnfree = ({ config, ... }: {
-        nixpkgs.config.allowUnfree = true;
-      });
     in {
       homeConfigurations."nixos-pi5" = mkHome {
         system = "aarch64-linux";
         inherit username;
         homeDirectory = "/home/${username}";
+        nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          { home.packages = [ pkgs-unstable.claude-code ]; }
+          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ./home.nix
 
           ../../../neovide.nix
@@ -40,7 +34,7 @@
           ../../../zoxide.nix
           ../../../pass.nix
           ../../../claude-code.nix
-          allowUnfree
+          ../../../lib/allowUnfree.nix
         ];
       };
 
@@ -57,7 +51,7 @@
           ../../../zoxide.nix
           ../../../yazi.nix
           ../../../pass.nix
-          allowUnfree
+          ../../../lib/allowUnfree.nix
         ];
       };
     };

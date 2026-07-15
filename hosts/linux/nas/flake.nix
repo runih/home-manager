@@ -13,18 +13,15 @@
   outputs = inputs @ { nixpkgs, home-manager, ... }:
     let
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
       username = builtins.getEnv "USER";
     in {
       homeConfigurations."nas" = mkHome {
         system = "x86_64-linux";
         inherit username;
         homeDirectory = "/var/services/homes/${username}";
+        nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          { home.packages = [ pkgs-unstable.claude-code ]; }
+          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ./home.nix
           ../../../simple-tmux.nix
           ../../../vim.nix
@@ -32,9 +29,7 @@
           ../../../zsh.nix
           ../../../zoxide.nix
           ../../../claude-code.nix
-          ({ config, ... }: {
-            nixpkgs.config.allowUnfree = true;
-          })
+          ../../../lib/allowUnfree.nix
         ];
       };
     };

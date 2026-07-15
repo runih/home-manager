@@ -14,20 +14,14 @@
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = "runih";
       homeDirectory = "/Users/${username}";
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = "aarch64-darwin";
-        config.allowUnfree = true;
-      };
     in {
       homeConfigurations."${username}" = mkHome {
         system = "aarch64-darwin";
         inherit username homeDirectory;
-        pkgs = import nixpkgs {
-          system = "aarch64-darwin";
-          config.allowUnfree = true;
-        };
+        allowUnfree = true;
+        nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          { home.packages = [ pkgs-unstable.claude-code ]; }
+          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ../../../basic-mac.nix
           ../../../nerd-fonts.nix
           ../../../zsh.nix

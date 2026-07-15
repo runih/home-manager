@@ -18,17 +18,14 @@
     let
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
     in {
       homeConfigurations."macnix" = mkHome {
         system = "x86_64-linux";
         inherit username;
         homeDirectory = "/home/${username}";
+        nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          { home.packages = [ zen-browser.packages."x86_64-linux".default pkgs-unstable.gh pkgs-unstable.claude-code ]; }
+          ({ pkgsUnstable, ... }: { home.packages = [ zen-browser.packages."x86_64-linux".default pkgsUnstable.gh pkgsUnstable.claude-code ]; })
           ./home.nix
           ./hyprland.nix
           ./waybar.nix
@@ -47,11 +44,10 @@
           ../../../vim.nix
           ../../../zsh.nix
           ../../../zoxide.nix
-          #../../../yazi.nix
           ../../../pass.nix
           ../../../claude-code.nix
-          ({ config, ... }: {
-            nixpkgs.config.allowUnfree = true;
+          ../../../lib/allowUnfree.nix
+          {
             claudeCode.hooks = {
               Stop = [
                 {
@@ -76,7 +72,7 @@
                 }
               ];
             };
-          })
+          }
         ];
       };
     };
