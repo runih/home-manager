@@ -41,6 +41,7 @@
       hyprland = {
         enable = true;
         systemd.enable = true;
+        plugins = [ pkgs.hyprlandPlugins.hyprspace ];
         extraConfig = ''
           local mainMod = "SUPER"
           local terminal = "ghostty"
@@ -167,6 +168,7 @@
           hl.bind(mainMod .. " + E",                hl.dsp.exec_cmd(fileManager))
           hl.bind(mainMod .. " + N",                hl.dsp.exec_cmd(editor))
           hl.bind(mainMod .. " + R",                hl.dsp.exec_cmd("hyprctl reload"))
+          hl.bind(mainMod .. " + O",                hl.dsp.exec_cmd("hyprctl dispatch overview:toggle"))
           hl.bind(mainMod .. " + CTRL + Q",         hl.dsp.exec_cmd("hyprlock"))
           hl.bind(mainMod .. " + W",                hl.dsp.exec_cmd("~/bin/change_wallpaper"))
           hl.bind(mainMod .. " + SHIFT + W",        hl.dsp.exec_cmd("~/bin/change_wallpaper --random"))
