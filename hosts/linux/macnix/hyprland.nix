@@ -16,7 +16,7 @@
       listener = [
         {
           timeout = 120;
-          on-timeout = "powerprofilesctl set power-saver";
+          on-timeout = "sh -c '[ \"$(cat /sys/class/power_supply/ADP1/online)\" = 1 ] || powerprofilesctl set power-saver'";
           on-resume = "powerprofilesctl set balanced";
         }
         {
