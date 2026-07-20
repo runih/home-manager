@@ -242,6 +242,19 @@
         shadow_passes = 5
         shadow_size = 10
       }
+
+      label {
+        monitor =
+        text = cmd[update:10000] $HOME/bin/battery-status
+        color = rgba(200, 200, 200, 0.2)
+        font_size = 18
+        font_family = Fira Semibold
+        position = -50, 5
+        halign = right
+        valign = bottom
+        shadow_passes = 5
+        shadow_size = 10
+      }
     '';
 
     file."Pictures/hyprlock/key7.png".source = ./hyprlock/key7.png;
