@@ -138,4 +138,6 @@ in {
 
     style = themeLib.mkWaybarStyle defaultPalette;
   };
+
+  xdg.configFile."waybar/style.css".force = true;
 }

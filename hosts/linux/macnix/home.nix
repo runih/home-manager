@@ -81,7 +81,10 @@ in {
       image_size=20
     '';
 
-    file.".config/wofi/style.css".text = themeLib.mkWofiStyle defaultPalette;
+    file.".config/wofi/style.css" = {
+      text = themeLib.mkWofiStyle defaultPalette;
+      force = true;
+    };
 
     file.".config/hypr/hyprlock.conf".text = ''
       animations {

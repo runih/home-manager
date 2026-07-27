@@ -43,6 +43,7 @@
           ../../../simple-tmux.nix
           { host.hasBattery = true; }
           ../../../vim.nix
+          ../../../doom-emacs.nix
           ../../../zsh.nix
           ../../../zoxide.nix
           ../../../pass.nix
