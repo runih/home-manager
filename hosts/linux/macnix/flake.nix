@@ -29,6 +29,7 @@
           ./home.nix
           ./hyprland.nix
           ./waybar.nix
+          ./theme-switcher.nix
 
           ../../../niri.nix
           ../../../wezterm.nix

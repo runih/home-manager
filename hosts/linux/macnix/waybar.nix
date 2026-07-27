@@ -1,5 +1,9 @@
 { pkgs, ... }:
 let
+  themes = import ./themes.nix;
+  themeLib = import ./theme-lib.nix;
+  defaultPalette = themes.themes.${themes.default};
+
   batteryScript = pkgs.writeShellScript "waybar-battery" ''
     online=$(cat /sys/class/power_supply/ADP1/online)
     status=$(cat /sys/class/power_supply/BAT0/status)
@@ -132,145 +136,6 @@ in {
       };
     }];
 
-    style = ''
-      * {
-        font-family: "Hack Nerd Font", monospace;
-        font-size: 13px;
-        min-height: 0;
-        border: none;
-      }
-
-      window#waybar {
-        background-color: transparent;
-        color: #c0caf5;
-      }
-
-      .modules-left, .modules-right, .modules-center {
-        padding: 0 4px;
-      }
-
-      #left-island,
-      #submap,
-      #clock {
-        background-color: rgba(26, 27, 38, 0.5);
-        border-radius: 8px;
-        margin: 4px 3px;
-        padding: 2px 10px;
-      }
-
-      #workspaces {
-        background-color: transparent;
-        border-radius: 0;
-        margin: 0;
-        padding: 0;
-      }
-
-      #window {
-        color: #a9b1d6;
-        padding: 0 6px;
-      }
-
-      .modules-right {
-        background-color: rgba(26, 27, 38, 0.5);
-        border-radius: 8px;
-        margin: 4px 6px;
-        padding: 2px 4px;
-      }
-
-      #cpu,
-      #memory,
-      #network,
-      #wireplumber,
-      #tray,
-      #custom-power {
-        background-color: transparent;
-        border-radius: 0;
-        margin: 0;
-        padding: 2px 6px;
-      }
-
-      #workspaces button {
-        padding: 0 4px;
-        color: #565f89;
-        background: transparent;
-        border-radius: 6px;
-      }
-
-      #workspaces button.active {
-        color: #7aa2f7;
-        background: rgba(122, 162, 247, 0.15);
-      }
-
-      #workspaces button.urgent {
-        color: #f7768e;
-      }
-
-      #clock {
-        color: #7dcfff;
-        font-weight: bold;
-      }
-
-      #custom-power {
-        color: #9ece6a;
-      }
-
-      #custom-power.warning {
-        color: #e0af68;
-      }
-
-      #custom-power.critical {
-        color: #f7768e;
-        animation: blink 1s linear infinite;
-      }
-
-      @keyframes blink {
-        0%   { color: #f7768e; }
-        50%  { color: transparent; }
-        100% { color: #f7768e; }
-      }
-
-      #network {
-        color: #2ac3de;
-      }
-
-      #cpu {
-        color: #bb9af7;
-      }
-
-      #memory {
-        color: #73daca;
-      }
-
-      #wireplumber {
-        color: #ff9e64;
-      }
-
-      #wireplumber.muted {
-        color: #565f89;
-      }
-
-      #tray {
-        padding: 2px 6px;
-      }
-
-      #custom-tmux {
-        background-color: rgba(26, 27, 38, 0.5);
-        border-radius: 8px;
-        color: #9ece6a;
-        margin: 4px 3px;
-        padding: 2px 10px;
-      }
-
-      #submap {
-        color: #f7768e;
-        font-weight: bold;
-      }
-
-      tooltip {
-        background: rgba(26, 27, 38, 0.95);
-        border: 1px solid #414868;
-        border-radius: 8px;
-      }
-    '';
+    style = themeLib.mkWaybarStyle defaultPalette;
   };
 }

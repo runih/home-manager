@@ -1,6 +1,9 @@
-{ pkgs, username, homeDirectory, ... }:
-
-{
+{ pkgs, lib, username, homeDirectory, ... }:
+let
+  themes = import ./themes.nix;
+  themeLib = import ./theme-lib.nix;
+  defaultPalette = themes.themes.${themes.default};
+in {
   home = {
     # Define the username for the home configuration
     username = "${username}";
@@ -41,6 +44,7 @@
       file            # Determine file types
       gcc             # GNU Compiler Collection
       git             # Version control system
+      github-copilot-cli # GitHub Copilot CLI
       jq              # Command-line JSON processor
       gnumake         # Build automation tool
       neovim
@@ -77,59 +81,7 @@
       image_size=20
     '';
 
-    file.".config/wofi/style.css".text = ''
-      window {
-        background-color: rgba(26, 27, 38, 0.95);
-        border: 1px solid #414868;
-        border-radius: 8px;
-      }
-
-      #input {
-        background-color: #1e2030;
-        color: #c0caf5;
-        border: 1px solid #414868;
-        border-radius: 4px;
-        padding: 8px 12px;
-        margin: 8px;
-        font-size: 14px;
-      }
-
-      #input:focus {
-        border-color: #7aa2f7;
-      }
-
-      #scroll {
-        margin: 0 8px 8px 8px;
-      }
-
-      #inner-box {
-        background-color: transparent;
-      }
-
-      #outer-box {
-        background-color: transparent;
-        padding: 4px;
-      }
-
-      #entry {
-        padding: 6px 10px;
-        border-radius: 4px;
-        color: #a9b1d6;
-      }
-
-      #entry:selected {
-        background-color: rgba(122, 162, 247, 0.2);
-        color: #c0caf5;
-      }
-
-      #text {
-        font-size: 13px;
-      }
-
-      #img {
-        margin-right: 8px;
-      }
-    '';
+    file.".config/wofi/style.css".text = themeLib.mkWofiStyle defaultPalette;
 
     file.".config/hypr/hyprlock.conf".text = ''
       animations {
@@ -255,6 +207,31 @@
         shadow_passes = 5
         shadow_size = 10
       }
+
+      label {
+        monitor =
+        text = cmd[update:10000] $HOME/bin/current-load 30
+        color = rgba(200, 200, 200, 0.2)
+        font_size = 18
+        font_family = Fira Semibold
+        position = 50, 5
+        halign = left
+        valign = bottom
+        shadow_passes = 5
+        shadow_size = 10
+      }
+
+      image {
+        monitor =
+        path = $HOME/.cache/lock-calendar.png
+        size = 385
+        rounding = 0
+        border_size = 0
+        reload_time = 5
+        position = 50, -165
+        halign = left
+        valign = top
+      }
     '';
 
     file."Pictures/hyprlock/key7.png".source = ./hyprlock/key7.png;
@@ -302,6 +279,67 @@
       '';
       executable = true;
     };
+
+    file."bin/render-calendar" = {
+      text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      OUT="$HOME/.cache/lock-calendar.png"
+      FONT=$(${pkgs.fontconfig.bin}/bin/fc-match -f "%{file}" "Hack Nerd Font Mono")
+      PS=40
+      TODAY=$(date +%-d)
+      NCOLS=23
+
+      CAL=$(${pkgs.util-linux}/bin/cal -m -w)
+      NLINES=$(printf '%s\n' "$CAL" | wc -l)
+      ONELINE=$(printf '%0.sX' $(seq 1 $NCOLS))
+
+      read -r W1 H1 <<< "$(${pkgs.imagemagick}/bin/magick -font "$FONT" -pointsize "$PS" -background none label:"$ONELINE" -format "%w %h" info:)"
+      read -r _ H2 <<< "$(${pkgs.imagemagick}/bin/magick -font "$FONT" -pointsize "$PS" -background none label:"$ONELINE"$'\n'"$ONELINE" -format "%w %h" info:)"
+      CHARH=$((H2 - H1))
+      CHARW=$((W1 / NCOLS))
+      WIDTH=$W1
+      HEIGHT=$((H1 + (NLINES - 1) * CHARH))
+
+      ROW=-1
+      COL=-1
+      i=0
+      while IFS= read -r line; do
+        if [ "$i" -ge 2 ]; then
+          for c in 3 6 9 12 15 18 21; do
+            cell=''${line:$((c-1)):3}
+            num=$(echo "$cell" | tr -d ' ')
+            if [ "$num" = "$TODAY" ]; then
+              ROW=$i
+              COL=$((c-1))
+            fi
+          done
+        fi
+        i=$((i+1))
+      done <<< "$CAL"
+
+      mkdir -p "$(dirname "$OUT")"
+
+      ARGS=(-size "''${WIDTH}x''${HEIGHT}" xc:none)
+
+      if [ "$ROW" -ge 0 ]; then
+        DIGITLEN=''${#TODAY}
+        BOXW=$((CHARH + 4))
+        BOXH=$((CHARH - 4))
+        CENTERX=$(( (COL + 3) * CHARW - DIGITLEN * CHARW / 2 ))
+        BOXX=$(( CENTERX - BOXW / 2 ))
+        BOXY=$((ROW * CHARH - 4))
+        ARGS+=(-fill none -stroke "rgba(122,162,247,0.45)" -strokewidth 2 -draw "rectangle $BOXX,$BOXY,$((BOXX+BOXW)),$((BOXY+BOXH))")
+      fi
+
+      ARGS+=(-stroke none -font "$FONT" -pointsize "$PS" -fill "rgba(200,200,200,0.3)" -gravity NorthWest -annotate +0+0 "$CAL")
+
+      ${pkgs.imagemagick}/bin/magick "''${ARGS[@]}" "$OUT"
+      echo "$OUT"
+      '';
+      executable = true;
+    };
     file.".config/wireplumber/wireplumber.conf.d/51-macbook-cs4208-softvol.conf".text = ''
       monitor.alsa.rules = [
         {
@@ -346,6 +384,10 @@
       '';
       executable = true;
     };
+
+    activation.renderLockCalendar = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      run $HOME/bin/render-calendar
+    '';
   };
 
   accounts.email.accounts = {
@@ -494,6 +536,24 @@
       OnBootSec = "1min";
       OnUnitActiveSec = "30min";
       Unit = "weather-fetch.service";
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
+  systemd.user.services.render-lock-calendar = {
+    Unit.Description = "Render the lockscreen calendar image";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${homeDirectory}/bin/render-calendar";
+    };
+  };
+
+  systemd.user.timers.render-lock-calendar = {
+    Unit.Description = "Midnight refresh timer for the lockscreen calendar";
+    Timer = {
+      OnCalendar = "00:00:01";
+      Persistent = true;
+      Unit = "render-lock-calendar.service";
     };
     Install.WantedBy = [ "timers.target" ];
   };

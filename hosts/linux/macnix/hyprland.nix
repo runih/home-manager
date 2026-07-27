@@ -1,4 +1,8 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  themes = import ./themes.nix;
+  defaultPalette = themes.themes.${themes.default};
+in {
   home = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
@@ -9,7 +13,7 @@
     enable = true;
     settings = {
       general = {
-        lock_cmd = "pidof hyprlock || hyprlock";
+        lock_cmd = "pidof hyprlock || (~/bin/render-calendar; hyprlock)";
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
       };
@@ -59,8 +63,8 @@
               gaps_in    = 3,
               gaps_out   = 10,
               border_size = 2,
-              ["col.active_border"]   = { colors = {"rgba(1a4fc4ff)", "rgba(73dacaff)"}, angle = 45 },
-              ["col.inactive_border"] = "rgb(414868)",
+              ["col.active_border"]   = { colors = {"rgba(${defaultPalette.borderActive1}ff)", "rgba(${defaultPalette.teal}ff)"}, angle = 45 },
+              ["col.inactive_border"] = "rgb(${defaultPalette.border})",
               layout     = "dwindle",
             },
             decoration = {
@@ -163,9 +167,10 @@
           hl.bind(mainMod .. " + E",                hl.dsp.exec_cmd(fileManager))
           hl.bind(mainMod .. " + N",                hl.dsp.exec_cmd(editor))
           hl.bind(mainMod .. " + R",                hl.dsp.exec_cmd("hyprctl reload"))
-          hl.bind(mainMod .. " + CTRL + Q",         hl.dsp.exec_cmd("hyprlock"))
+          hl.bind(mainMod .. " + CTRL + Q",         hl.dsp.exec_cmd("~/bin/render-calendar; hyprlock"))
           hl.bind(mainMod .. " + W",                hl.dsp.exec_cmd("~/bin/change_wallpaper"))
           hl.bind(mainMod .. " + SHIFT + W",        hl.dsp.exec_cmd("~/bin/change_wallpaper --random"))
+          hl.bind(mainMod .. " + SHIFT + T",        hl.dsp.exec_cmd("~/bin/theme-switch"))
           hl.bind(mainMod .. " + CTRL + 3",         hl.dsp.exec_cmd("hyprshot -m window"))
           hl.bind(mainMod .. " + CTRL + 4",         hl.dsp.exec_cmd("hyprshot -m region"))
           hl.bind(mainMod .. " + SHIFT + CTRL + 4", hl.dsp.exec_cmd("hyprshot -m output"))
