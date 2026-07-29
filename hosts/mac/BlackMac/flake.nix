@@ -28,6 +28,7 @@
           ../../../zoxide.nix
           ../../../my-tmux.nix
           ../../../vim.nix
+          ../../../doom-emacs.nix
           ../../../wezterm.nix
           ../../../neovide.nix
           ../../../pass.nix
