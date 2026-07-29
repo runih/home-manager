@@ -19,7 +19,7 @@
         inherit username;
         homeDirectory = "/Users/${username}";
         modules = [
-          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
+          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code pkgs.github-copilot-cli ]; })
           ../../../basic-mac.nix
           ../../../nerd-fonts.nix
           ../../../zsh.nix

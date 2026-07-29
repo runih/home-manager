@@ -27,6 +27,7 @@
       btop          # A resource monitor
       dig           # DNS lookup utility
       fd            # A simple, fast and user-friendly alternative to find
+      ffmpeg        # Audio/video conversion tool
       git           # Version control system
       gh            # GitHub CLI
       gnupg1        # GNU Privacy Guard (version 1)
