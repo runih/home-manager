@@ -14,8 +14,9 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, zen-browser, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, zen-browser, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
     in {
@@ -31,24 +32,35 @@
           ./waybar.nix
           ./theme-switcher.nix
 
-          ../../../niri.nix
-          ../../../wezterm.nix
-          ../../../foot.nix
-          ../../../nerd-fonts.nix
-          ../../../neovide.nix
-          ../../../postgresql-client.nix
-          ../../../ghostty.nix
-          ../../../testssl.nix
-          ../../../java.nix
-          ../../../simple-tmux.nix
+          m.niri
+          m.wezterm
+          m.foot
+          m.nerd-fonts
+          m.neovide
+          m.postgresql-client
+          m.ghostty
+          m.testssl
+          m.java
+          m.simple-tmux
           { host.hasBattery = true; }
-          ../../../vim.nix
-          ../../../doom-emacs.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../pass.nix
-          ../../../claude-code.nix
-          ../../../lib/allowUnfree.nix
+          m.vim
+          m.doom-emacs
+          m.zsh
+          m.zoxide
+          m.pass
+          m.claude-code
+          m.copilot-cli
+          m.allowUnfree
+          {
+            copilotCli.allowedUrls = [
+              "http://localhost:8080"
+              "http://localhost:7000"
+              "http://172.16.4.10:8080"
+              "http://192.168.7.37:8080"
+              "http://192.168.7.37:7000"
+              "https://gitlab.com"
+            ];
+          }
           {
             claudeCode.hooks = {
               Stop = [

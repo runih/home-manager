@@ -9,8 +9,9 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
@@ -19,20 +20,21 @@
         inherit username;
         homeDirectory = "/Users/${username}";
         modules = [
-          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code pkgs.github-copilot-cli ]; })
-          ../../../basic-mac.nix
-          ../../../nerd-fonts.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../my-tmux.nix
-          ../../../vim.nix
-          ../../../wezterm.nix
-          ../../../neovide.nix
-          ../../../pass.nix
-          ../../../postgresql-client.nix
-          ../../../imac.nix
-          ../../../java.nix
-          ../../../claude-code.nix
+          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
+          m.basic-mac
+          m.nerd-fonts
+          m.zsh
+          m.zoxide
+          m.my-tmux
+          m.vim
+          m.wezterm
+          m.neovide
+          m.pass
+          m.postgresql-client
+          m.imac
+          m.java
+          m.claude-code
+          m.copilot-cli
         ];
       };
     };

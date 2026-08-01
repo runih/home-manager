@@ -10,8 +10,9 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";  # Get the current user's username.
     in {
@@ -24,17 +25,18 @@
           ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ./home.nix
 
-          ../../../neovide.nix
-          ../../../postgresql-client.nix
-          ../../../testssl.nix
-          ../../../java.nix
-          ../../../simple-tmux.nix
-          ../../../vim.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../pass.nix
-          ../../../claude-code.nix
-          ../../../lib/allowUnfree.nix
+          m.neovide
+          m.postgresql-client
+          m.testssl
+          m.java
+          m.simple-tmux
+          m.vim
+          m.zsh
+          m.zoxide
+          m.pass
+          m.claude-code
+          m.copilot-cli
+          m.allowUnfree
         ];
       };
 
@@ -43,15 +45,15 @@
         username = "minecraft";
         homeDirectory = "/home/minecraft";
         modules = [
-          ../../../simple-tmux.nix
-          ../../../neovim.nix
-          ../../../minecraft.nix
-          ../../../vim.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../yazi.nix
-          ../../../pass.nix
-          ../../../lib/allowUnfree.nix
+          m.simple-tmux
+          m.neovim
+          m.minecraft
+          m.vim
+          m.zsh
+          m.zoxide
+          m.yazi
+          m.pass
+          m.allowUnfree
         ];
       };
     };

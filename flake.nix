@@ -20,7 +20,9 @@
         let flake = import path;
         in flake.outputs (args // { self = {}; });
 
-      hostArgs = { inherit nixpkgs home-manager; };
+      sharedModules = import ./modules;
+
+      hostArgs = { inherit nixpkgs home-manager sharedModules; };
       blackMacArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };

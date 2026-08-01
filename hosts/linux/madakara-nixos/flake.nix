@@ -9,8 +9,9 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
@@ -19,14 +20,14 @@
         inherit username;
         homeDirectory = "/home/${username}";
         modules = [
-          ../../../basic-linux.nix
-          ../../../simple-tmux.nix
-          ../../../vim.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../yazi.nix
-          ../../../pass.nix
-          ../../../esh-minecraft.nix
+          m.basic-linux
+          m.simple-tmux
+          m.vim
+          m.zsh
+          m.zoxide
+          m.yazi
+          m.pass
+          m.esh-minecraft
         ];
       };
     };

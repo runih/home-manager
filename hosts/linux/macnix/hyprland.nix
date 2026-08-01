@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 let
   themes = import ./themes.nix;
   defaultPalette = themes.themes.${themes.default};

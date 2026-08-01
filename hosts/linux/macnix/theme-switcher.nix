@@ -1,4 +1,4 @@
-{ pkgs, lib, homeDirectory, ... }:
+{ lib, homeDirectory, ... }:
 let
   themes = import ./themes.nix;
   themeLib = import ./theme-lib.nix;

@@ -33,6 +33,7 @@ in {
     packages = with pkgs; [
       alsa-utils      # Utilities for ALSA sound system
       atlauncher      # Minecraft launcher
+      bash            # GNU Bourne-Again Shell
       bat             # A cat clone with syntax highlighting
       bc              # An arbitrary precision calculator language
       blueman         # Bluetooth manager

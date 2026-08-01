@@ -10,8 +10,9 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
@@ -23,13 +24,14 @@
         modules = [
           ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ./home.nix
-          ../../../simple-tmux.nix
-          ../../../vim.nix
-          ../../../neovim.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../claude-code.nix
-          ../../../lib/allowUnfree.nix
+          m.simple-tmux
+          m.vim
+          m.neovim
+          m.zsh
+          m.zoxide
+          m.claude-code
+          m.copilot-cli
+          m.allowUnfree
         ];
       };
     };

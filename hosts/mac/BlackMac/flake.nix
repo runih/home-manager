@@ -9,8 +9,9 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, sharedModules, ... }:
     let
+      m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = "runih";
       homeDirectory = "/Users/${username}";
@@ -21,22 +22,23 @@
         allowUnfree = true;
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code pkgsUnstable.github-copilot-cli ]; })
-          ../../../basic-mac.nix
-          ../../../nerd-fonts.nix
-          ../../../zsh.nix
-          ../../../zoxide.nix
-          ../../../my-tmux.nix
-          ../../../vim.nix
-          ../../../doom-emacs.nix
-          ../../../wezterm.nix
-          ../../../neovide.nix
-          ../../../pass.nix
-          ../../../postgresql-client.nix
-          ../../../java.nix
-          ../../../testssl.nix
-          ../../../podman.nix
-          ../../../claude-code.nix
+          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
+          m.basic-mac
+          m.nerd-fonts
+          m.zsh
+          m.zoxide
+          m.my-tmux
+          m.vim
+          m.doom-emacs
+          m.wezterm
+          m.neovide
+          m.pass
+          m.postgresql-client
+          m.java
+          m.testssl
+          m.podman
+          m.claude-code
+          m.copilot-cli
         ];
       };
     };
