@@ -45,7 +45,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -83,9 +83,25 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; Move between windows with C-hjkl directly, instead of the default
+;; C-w prefix followed by hjkl. This intentionally shadows Emacs's
+;; built-in C-h help prefix (use SPC h for Doom's help instead).
+(map! "C-h" #'evil-window-left
+      "C-j" #'evil-window-down
+      "C-k" #'evil-window-up
+      "C-l" #'evil-window-right)
+
 (use-package! claude-code
   :config
   (claude-code-mode))
 
 (map! :leader
       :desc "Claude Code" "a" claude-code-command-map)
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . #'copilot-accept-completion)
+              ("TAB" . #'copilot-accept-completion)
+              ("C-TAB" . #'copilot-accept-completion-by-word)
+              ("C-<tab>" . #'copilot-accept-completion-by-word)))

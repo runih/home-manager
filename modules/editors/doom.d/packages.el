@@ -58,3 +58,8 @@
            :branch "main"
            :files ("*.el" (:exclude "images/*"))))
 (package! eat) ;; terminal backend claude-code.el uses by default
+
+;; GitHub Copilot completions.
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el"
+           :files ("*.el")))
