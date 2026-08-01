@@ -23,7 +23,7 @@
       };
       Service = {
         Type = "oneshot";
-        WorkingDirectory = "{homeDirectory}";
+        WorkingDirectory = "${homeDirectory}";
         ExecStart = toString(
           pkgs.writeShellScript "minecraft-backup-script" ''
           #!/usr/bin/env bash
