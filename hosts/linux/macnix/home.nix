@@ -71,6 +71,7 @@ in {
       wget            # Command-line utility for downloading files
       wl-clipboard    # Wayland clipboard utilities (wl-copy, wl-paste)
       awww            # Wallpaper daemon for Wayland (swww)
+      brightnessctl   # Screen/keyboard backlight control
       hyprlock        # Lock screen for Hyprland
       wlogout         # Wayland logout screen
       wofi            # Application launcher for Wayland
@@ -243,15 +244,24 @@ in {
     file."bin/change_wallpaper" = {
       text = ''
         #!/usr/bin/env bash
+        set -euo pipefail
         WALLPAPER_DIR="$HOME/Pictures/wallpapers"
-        if [ "$1" = "--random" ]; then
+        arg="''${1:-}"
+        if [ "$arg" = "--random" ]; then
           wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
-        elif [ -n "$1" ]; then
-          wall="$1"
+        elif [ -n "$arg" ]; then
+          wall="$arg"
         else
           wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
         fi
-        swww img "$wall" --transition-type wipe --transition-duration 1
+
+        pgrep -x awww-daemon >/dev/null || awww-daemon &
+        for _ in $(seq 1 50); do
+          awww query >/dev/null 2>&1 && break
+          sleep 0.1
+        done
+
+        awww img "$wall" --transition-type wipe --transition-duration 1
       '';
       executable = true;
     };

@@ -1,14 +1,19 @@
-{ config, ... }: {
+{ config, pkgs, ... }: {
+  home.packages = [ pkgs.fuzzel ];
+
   home.file.".config/systemd/user/dms.service.d/niri-only.conf".text = ''
     [Unit]
     ConditionEnvironment=NIRI_SOCKET
   '';
 
-  home.file."config/niri/config.kdl".text = ''
+  home.file.".config/niri/config.kdl".text = ''
     // This config is in the KDL format: https://kdl.dev
     // "/-" comments out the following node.
     // Check the wiki for a full description of the configuration:
     // https://yalter.github.io/niri/Configuration:-Introduction
+
+    // Launch the wallpaper daemon and set an initial random wallpaper.
+    spawn-at-startup "${config.home.homeDirectory}/bin/change_wallpaper" "--random"
 
     // Input device configuration.
     // Find the full list of options on the wiki:
@@ -135,6 +140,9 @@
         Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
         Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
 
+        Super+Alt+W hotkey-overlay-title="Change Wallpaper" { spawn-sh "${config.home.homeDirectory}/bin/change_wallpaper"; }
+        Super+Alt+Shift+W hotkey-overlay-title="Random Wallpaper" { spawn-sh "${config.home.homeDirectory}/bin/change_wallpaper --random"; }
+
         Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
         XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
@@ -149,6 +157,9 @@
 
         XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
         XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
+        XF86KbdBrightnessUp allow-when-locked=true { spawn "brightnessctl" "-d" "spi::kbd_backlight" "set" "+10%"; }
+        XF86KbdBrightnessDown allow-when-locked=true { spawn "brightnessctl" "-d" "spi::kbd_backlight" "set" "10%-"; }
 
         Mod+O repeat=false { toggle-overview; }
 
