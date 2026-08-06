@@ -1,0 +1,25 @@
+# Lima configuration for the NixOS Podman VM.
+# The `images` list is overridden at creation time by lima-podman-start
+# with the path to the locally-built NixOS QCOW2 image.
+images: []
+
+vmType: vz
+os: Linux
+arch: aarch64
+
+containerd:
+  system: false
+  user: false
+
+mounts:
+  - location: "~"
+    writable: true
+
+portForwards:
+  - guestSocket: "/run/podman/podman.sock"
+    hostSocket: "{{.Dir}}/sock/docker.sock"
+
+message: |
+  Podman VM is running.
+  CONTAINER_HOST and DOCKER_HOST are set by home-manager (modules/tools/lima.nix).
+  Use: podman info
