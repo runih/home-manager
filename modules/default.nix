@@ -38,6 +38,7 @@
   testssl           = ./tools/testssl.nix;
   yazi              = ./tools/yazi.nix;
   podman            = ./tools/podman.nix;
+  lima              = ./tools/lima.nix;
   raspberry-pi5-leds = ./tools/raspberry-pi5-leds.nix;
 
   # AI assistants

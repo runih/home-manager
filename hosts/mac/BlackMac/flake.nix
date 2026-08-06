@@ -36,9 +36,9 @@
           m.postgresql-client
           m.java
           m.testssl
-          m.podman
           m.claude-code
           m.copilot-cli
+          m.lima
         ];
       };
     };
