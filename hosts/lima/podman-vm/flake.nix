@@ -25,19 +25,5 @@
         ];
       };
 
-      # `nix run .#podman-vm start|stop|ssh|...`
-      apps.${hostSystem}.${vmName} = {
-        type = "app";
-        program =
-          let
-            pkgs        = import nixpkgs { system = hostSystem; };
-            nixos-lima-bin = nixos-lima.packages.${hostSystem}.nixos-lima;
-            app = pkgs.writeShellApplication {
-              name = vmName;
-              runtimeInputs = [ nixos-lima-bin ];
-              text = ''nixos-lima "${self}#${vmName}" "''${@}"'';
-            };
-          in "${app}/bin/${vmName}";
-      };
     };
 }

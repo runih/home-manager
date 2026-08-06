@@ -1,0 +1,71 @@
+{
+  "nodes": {
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixos-lima",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762276996,
+        "narHash": "sha256-TtcPgPmp2f0FAnc+DMEw4ardEgv1SGNR3/WFGH0N19M=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "af087d076d3860760b3323f6b583f4d828c1ac17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
+    "nixos-lima": {
+      "inputs": {
+        "disko": "disko",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1771622856,
+        "narHash": "sha256-AgyRT1S8PhBck16vmT/+hhIZbEg4ecNYd7PqSNzqweM=",
+        "owner": "ciderale",
+        "repo": "nixos-lima",
+        "rev": "438797f3c974b841c4344d861018def3c033770c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ciderale",
+        "repo": "nixos-lima",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1771218441,
+        "narHash": "sha256-BZ2vjG1LMwWoLTRb+OJksrTyLo5xbo3Vs9TiB+ozarY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "007d7747527cde542ffec2a4011d17658d2c6ab2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixos-lima": "nixos-lima",
+        "nixpkgs": [
+          "nixos-lima",
+          "nixpkgs"
+        ]
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
