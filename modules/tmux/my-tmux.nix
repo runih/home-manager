@@ -27,6 +27,10 @@ set -sg escape-time 0
 set -g history-limit 50000
 set -g focus-events on
 set -g allow-passthrough on
+
+# Remove home-manager's session-vars guard from the tmux environment so that
+# new panes always source hm-session-vars.sh and pick up sessionVariables.
+set-environment -gu __HM_SESS_VARS_SOURCED
 EOF
   '';
   tpm = pkgs.fetchFromGitHub {
