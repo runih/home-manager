@@ -8,6 +8,8 @@ let
 in {
   home.packages = with pkgs; [
     lima
+    podman       # remote client — connects via CONTAINER_HOST socket
+    lazydocker   # TUI for containers
   ];
 
   # Point both CONTAINER_HOST and DOCKER_HOST at the Lima VM's Podman socket.
