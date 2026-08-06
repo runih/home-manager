@@ -43,7 +43,9 @@ with lib;
       executable = true;
     };
 
-    home.file.".copilot/settings.json".text = builtins.toJSON ({
+    home.file.".copilot/settings.json" = {
+      force = true;
+      text  = builtins.toJSON ({
       model = config.copilotCli.model;
       effortLevel = config.copilotCli.effortLevel;
       statusLine = {
@@ -55,5 +57,6 @@ with lib;
     } // optionalAttrs (config.copilotCli.hooks != { }) {
       hooks = config.copilotCli.hooks;
     } // config.copilotCli.extraSettings);
+    };
   };
 }
