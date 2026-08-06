@@ -22,7 +22,7 @@
         allowUnfree = true;
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
+          ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code pkgsUnstable.github-copilot-cli ]; })
           m.basic-mac
           m.nerd-fonts
           m.zsh
