@@ -9,12 +9,19 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, sharedModules, ... }:
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      sharedModules,
+      ...
+    }:
     let
       m = sharedModules;
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
-    in {
+    in
+    {
       homeConfigurations."madakara-nixos" = mkHome {
         system = "x86_64-linux";
         inherit username;
@@ -25,9 +32,8 @@
           m.vim
           m.zsh
           m.zoxide
-          m.yazi
           m.pass
-          m.esh-minecraft
+          m.neovim
         ];
       };
     };
