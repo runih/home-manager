@@ -23,6 +23,7 @@
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
           ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code pkgsUnstable.github-copilot-cli ]; })
+          ({ pkgs, ... }: { home.packages = [ pkgs.vscode ]; })
           m.basic-mac
           m.nerd-fonts
           m.zsh
