@@ -44,6 +44,7 @@
   # AI assistants
   claude-code = ./ai/claude-code.nix;
   copilot-cli = ./ai/copilot-cli.nix;
+  ollama      = ./ai/ollama.nix;
 
   # Gaming
   minecraft     = ./gaming/minecraft.nix;

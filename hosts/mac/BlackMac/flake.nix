@@ -40,6 +40,8 @@
           m.claude-code
           m.copilot-cli
           m.lima
+          m.ollama
+          { ollama.host = "0.0.0.0"; }
         ];
       };
     };

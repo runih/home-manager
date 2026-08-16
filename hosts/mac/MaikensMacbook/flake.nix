@@ -35,6 +35,8 @@
           m.neovim
           m.claude-code
           m.copilot-cli
+          m.ollama
+          { ollama.host = "0.0.0.0"; }
         ];
       };
     };
