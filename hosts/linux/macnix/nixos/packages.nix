@@ -16,5 +16,6 @@
     python313
     sof-firmware
     xkeyboard_config
+    audit # auditctl/auditd/ausearch, for testing the kernel audit subsystem
   ];
 }
