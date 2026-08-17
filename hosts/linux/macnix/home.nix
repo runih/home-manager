@@ -355,6 +355,18 @@ in {
       '';
       executable = true;
     };
+    # Force zen-beta to use VA-API hardware video decode and skip AV1 (this
+    # Kaby Lake iGPU has no AV1 decode block, so it'd fall back to slow
+    # software decode) in favor of VP9, which is hardware-accelerated.
+    # NOTE: targets the existing profile dir by its randomly-generated name
+    # (see ~/.config/zen/profiles.ini) — won't apply to a freshly created
+    # profile without updating this path.
+    file.".config/zen/dwdoa3o0.Default Profile/user.js".text = ''
+      user_pref("media.hardware-video-decoding.force-enabled", true);
+      user_pref("media.ffmpeg.vaapi.enabled", true);
+      user_pref("media.av1.enabled", false);
+    '';
+
     file.".config/wireplumber/wireplumber.conf.d/51-macbook-cs4208-softvol.conf".text = ''
       monitor.alsa.rules = [
         {
