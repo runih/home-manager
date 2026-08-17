@@ -30,6 +30,8 @@
 
     # Enable the X11 windowing system.
     displayManager.gdm.enable = true;
+    # Default session offered at the GDM login screen (plain Hyprland, no UWSM).
+    displayManager.defaultSession = "hyprland";
     # Enable the GNOME Desktop Environment.
     desktopManager.gnome.enable = true;
     xserver = {
