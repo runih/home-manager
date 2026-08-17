@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
 ghostty-shaders = pkgs.fetchFromGitHub {
   owner = "0xhckr";
@@ -8,6 +8,15 @@ ghostty-shaders = pkgs.fetchFromGitHub {
 };
 in
 {
+  # Default "no override" stub — a theme switcher (see hosts/linux/macnix)
+  # can overwrite this with `theme = ...` / `cursor-color = ...` lines; ghostty
+  # re-reads config-file includes on its own file-watch reload (or manual
+  # reload_config keybind, already bound below).
+  xdg.configFile."ghostty/current-theme" = {
+    text = lib.mkDefault "";
+    force = true;
+  };
+
   programs = {
     ghostty = {
       enable = true;
@@ -43,6 +52,7 @@ in
     font-size = 14
     keybind = global:shift+cmd+space=toggle_quick_terminal
     keybind = global:shift+ctrl+r=reload_config
+    config-file = current-theme
     '';
   xdg.configFile."ghostty/shaders" = {
     source = ghostty-shaders;

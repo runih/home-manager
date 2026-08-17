@@ -47,6 +47,7 @@ in {
       git             # Version control system
       github-copilot-cli # GitHub Copilot CLI
       jq              # Command-line JSON processor
+      gimp            # GNU Image Manipulation Program
       gnumake         # Build automation tool
       neovim
       go             # Go programming language

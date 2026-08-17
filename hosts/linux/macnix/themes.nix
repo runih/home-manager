@@ -12,8 +12,11 @@
   # muted         = inactive workspace + muted icons
   # blue / blueRgb = primary accent (active workspace, wofi focus outline)
   # red, green, yellow, orange, cyan, purple = status colors
+  # mode          = "dark" or "light" — picks which terminal (wezterm/foot/
+  #                 ghostty) color set theme-switcher.nix applies
   themes = {
     tokyo-night = {
+      mode          = "dark";
       borderActive1 = "1a4fc4";
       teal          = "73daca";
       border        = "414868";
@@ -36,6 +39,7 @@
     };
 
     catppuccin-mocha = {
+      mode          = "dark";
       borderActive1 = "89b4fa";
       teal          = "94e2d5";
       border        = "313244";
@@ -58,6 +62,7 @@
     };
 
     gruvbox-dark = {
+      mode          = "dark";
       borderActive1 = "83a598";
       teal          = "8ec07c";
       border        = "504945";
@@ -80,6 +85,7 @@
     };
 
     nord = {
+      mode          = "dark";
       borderActive1 = "81a1c1";
       teal          = "8fbcbb";
       border        = "4c566a";
@@ -99,6 +105,29 @@
       netCyan       = "88c0d0";
       purple        = "b48ead";
       wallpaperDir  = "nord";
+    };
+
+    catppuccin-latte = {
+      mode          = "light";
+      borderActive1 = "1e66f5";
+      teal          = "179299";
+      border        = "bcc0cc";
+      bg            = "eff1f5";
+      bgRgb         = "239, 241, 245";
+      bg2           = "e6e9ef";
+      fg            = "4c4f69";
+      fg2           = "5c5f77";
+      muted         = "9ca0b0";
+      blue          = "1e66f5";
+      blueRgb       = "30, 102, 245";
+      red           = "d20f39";
+      green         = "40a02b";
+      yellow        = "df8e1b";
+      orange        = "fe640b";
+      cyan          = "04a5e5";
+      netCyan       = "209fb5";
+      purple        = "8839ef";
+      wallpaperDir  = "catppuccin-latte";
     };
   };
 }

@@ -26,7 +26,7 @@
         homeDirectory = "/home/${username}";
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          ({ pkgsUnstable, ... }: { home.packages = [ zen-browser.packages."x86_64-linux".default pkgsUnstable.gh pkgsUnstable.claude-code ]; })
+          ({ pkgsUnstable, ... }: { home.packages = [ zen-browser.packages."x86_64-linux".default pkgsUnstable.gh pkgsUnstable.claude-code pkgsUnstable.ollama ]; })
           ./home.nix
           ./hyprland.nix
           ./waybar.nix

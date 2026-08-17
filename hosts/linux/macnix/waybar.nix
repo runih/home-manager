@@ -4,6 +4,13 @@ let
   themeLib = import ./theme-lib.nix;
   defaultPalette = themes.themes.${themes.default};
 
+  gpuScript = pkgs.writeShellScript "waybar-gpu" ''
+    busy=$(timeout 3 /run/wrappers/bin/intel_gpu_top -J -s 1000 -n 2 -o - 2>/dev/null \
+      | ${pkgs.jq}/bin/jq -r '(.[-1].engines // {} | to_entries[] | select(.key | startswith("Render")) | .value.busy) // 0')
+    busy=$(printf '%.0f' "''${busy:-0}")
+    printf '{"text":"󰢮 %s%%","tooltip":"GPU busy: %s%%"}\n' "$busy" "$busy"
+  '';
+
   batteryScript = pkgs.writeShellScript "waybar-battery" ''
     online=$(cat /sys/class/power_supply/ADP1/online)
     status=$(cat /sys/class/power_supply/BAT0/status)
@@ -50,6 +57,7 @@ in {
         "wireplumber"
         "network"
         "cpu"
+        "custom/gpu"
         "memory"
         "custom/power"
       ];
@@ -107,6 +115,13 @@ in {
       memory = {
         format = "󰘚 {percentage}%";
         interval = 5;
+      };
+
+      "custom/gpu" = {
+        exec = "${gpuScript}";
+        interval = 5;
+        return-type = "json";
+        format = "{}";
       };
 
       "custom/power" = {
