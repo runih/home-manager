@@ -40,7 +40,7 @@ in
   xdg.configFile."ghostty/config".text = ''
     window-padding-color = background
     theme = Dark Pastel
-    custom-shader = "shaders/cursor_blaze.glsl"
+    # custom-shader = "shaders/cursor_blaze.glsl"
     background-opacity = 0.75
     macos-titlebar-style = hidden
     gtk-titlebar = false
