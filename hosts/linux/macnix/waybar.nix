@@ -6,8 +6,8 @@ let
 
   gpuScript = pkgs.writeShellScript "waybar-gpu" ''
     busy=$(timeout 3 /run/wrappers/bin/intel_gpu_top -J -s 1000 -n 2 -o - 2>/dev/null \
-      | ${pkgs.jq}/bin/jq -r '(.[-1].engines // {} | to_entries[] | select(.key | startswith("Render")) | .value.busy) // 0')
-    busy=$(printf '%.0f' "''${busy:-0}")
+      | ${pkgs.jq}/bin/jq -r '(.[-1].engines // {} | to_entries[] | select(.key | startswith("Render")) | .value.busy) // 0 | round')
+    busy="''${busy:-0}"
     printf '{"text":"󰢮 %s%%","tooltip":"GPU busy: %s%%"}\n' "$busy" "$busy"
   '';
 
