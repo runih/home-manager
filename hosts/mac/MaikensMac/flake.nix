@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration for maiken@MaikensMacbook.local";
+  description = "Home Manager configuration for runih@MaikensMac";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
@@ -15,28 +15,15 @@
       mkHome = import ../../../lib/mkHome.nix { inherit nixpkgs home-manager; };
       username = builtins.getEnv "USER";
     in {
-      homeConfigurations."MaikensMacbook" = mkHome {
+      homeConfigurations."MaikensMac" = mkHome {
         system = "aarch64-darwin";
         inherit username;
         homeDirectory = "/Users/${username}";
         modules = [
-          ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
           m.basic-mac
-          m.nerd-fonts
           m.zsh
-          m.zoxide
-          m.my-tmux
-          m.vim
-          m.wezterm
-          m.neovide
-          m.pass
-          m.postgresql-client
-          m.java
+          m.simple-tmux
           m.neovim
-          m.claude-code
-          m.copilot-cli
-          m.ollama
-          { ollama.host = "0.0.0.0"; }
         ];
       };
     };

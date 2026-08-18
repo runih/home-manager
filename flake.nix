@@ -31,7 +31,7 @@
       homeConfigurations = {
         # macOS hosts
         "runih@BlackMac"              = (callHost ./hosts/mac/BlackMac/flake.nix       blackMacArgs).homeConfigurations.runih;
-        "maiken@MaikensMacbook.local" = (callHost ./hosts/mac/MaikensMacbook/flake.nix hostArgs).homeConfigurations.MaikensMacbook;
+        "runih@MaikensMac"            = (callHost ./hosts/mac/MaikensMac/flake.nix      hostArgs).homeConfigurations.MaikensMac;
         "runih@iMac.home.okkara.net"  = (callHost ./hosts/mac/iMac/flake.nix           hostArgs).homeConfigurations.iMac;
 
         # Linux hosts
