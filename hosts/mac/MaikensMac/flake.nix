@@ -28,7 +28,11 @@
           m.neovim
           m.wezterm
           m.ollama
-          { ollama.host = "0.0.0.0"; }
+          # Bind to this machine's home-LAN IP specifically, not 0.0.0.0 —
+          # off that network (no interface holds this address) the bind
+          # fails at startup and Ollama simply isn't reachable anywhere,
+          # instead of listening on whatever untrusted network it's on.
+          { ollama.host = "192.168.7.12"; }
           # This machine isn't kept logged in (not personally owned), so the
           # gui/<uid> LaunchAgent from m.ollama can never bootstrap — macOS
           # only runs that domain during an active graphical session. Ollama

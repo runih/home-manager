@@ -41,7 +41,11 @@
           m.copilot-cli
           m.lima
           m.ollama
-          { ollama.host = "0.0.0.0"; }
+          # Bind to this machine's home-LAN IP specifically, not 0.0.0.0 —
+          # off that network (no interface holds this address) the bind
+          # fails at startup and Ollama simply isn't reachable anywhere,
+          # instead of listening on whatever untrusted network it's on.
+          { ollama.host = "192.168.7.11"; }
           # Same reasoning as MaikensMac: run via a system LaunchDaemon
           # instead of the gui/<uid> user agent, so it's not tied to an
           # active login session. See ~/Projects/local-ai/CLAUDE.md.
