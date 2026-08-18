@@ -29,6 +29,14 @@
           m.wezterm
           m.ollama
           { ollama.host = "0.0.0.0"; }
+          # This machine isn't kept logged in (not personally owned), so the
+          # gui/<uid> LaunchAgent from m.ollama can never bootstrap — macOS
+          # only runs that domain during an active graphical session. Ollama
+          # instead runs as a hand-installed system LaunchDaemon (see
+          # ~/Projects/local-ai/CLAUDE.md), which starts at boot with no
+          # login required. Disable the LaunchAgent here so the two don't
+          # fight over port 11434; home.packages still installs the binary.
+          ({ lib, ... }: { launchd.agents.ollama.enable = lib.mkForce false; })
         ];
       };
     };
