@@ -24,6 +24,8 @@
           m.zsh
           m.simple-tmux
           m.neovim
+          m.ollama
+          { ollama.host = "0.0.0.0"; }
         ];
       };
     };
