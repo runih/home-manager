@@ -23,7 +23,6 @@
     packages = with pkgs; [
       bat           # A cat clone with syntax highlighting
       bc            # An arbitrary precision calculator language
-      binutils      # GNU binary utilities
       btop          # A resource monitor
       dig           # DNS lookup utility
       fd            # A simple, fast and user-friendly alternative to find
