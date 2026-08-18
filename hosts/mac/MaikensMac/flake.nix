@@ -21,9 +21,12 @@
         homeDirectory = "/Users/${username}";
         modules = [
           m.basic-mac
+          m.nerd-fonts
           m.zsh
+          m.zoxide
           m.simple-tmux
           m.neovim
+          m.wezterm
           m.ollama
           { ollama.host = "0.0.0.0"; }
         ];
