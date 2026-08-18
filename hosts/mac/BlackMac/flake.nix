@@ -42,6 +42,10 @@
           m.lima
           m.ollama
           { ollama.host = "0.0.0.0"; }
+          # Same reasoning as MaikensMac: run via a system LaunchDaemon
+          # instead of the gui/<uid> user agent, so it's not tied to an
+          # active login session. See ~/Projects/local-ai/CLAUDE.md.
+          ({ lib, ... }: { launchd.agents.ollama.enable = lib.mkForce false; })
         ];
       };
     };
