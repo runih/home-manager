@@ -6,6 +6,15 @@ my-tmux-config = pkgs.fetchFromGitHub {
   rev = "666cb10c8603ca157622c33da83bf670148319ff";
   hash = "sha256-XUZQPe+TuB5MGq6LyefPERrdbyXWbbOwx6bem5lNvfE=";
 };
+darwinTmuxConf = ''
+
+# The base tmux.conf's status-left/status-right fall back to "Unknown" and
+# "loadavg is missing" on macOS, since they only know how to read
+# /etc/os-release and /proc/loadavg (Linux-only). Override with macOS-native
+# equivalents: sw_vers for the OS name, sysctl for the load average.
+set-option -g status-left "#[fg=yellow]#(sw_vers -productName) #(sw_vers -productVersion) #[fg=blue]  #S #[fg=red]|#[default] "
+set-option -g status-right "#[fg=cyan]#(id -un)@#[fg=brightmagenta]#H #[fg=red][#[fg=yellow]#(sysctl -n vm.loadavg | tr -d '{}')#{?@show_time,#[fg=red]|#[fg=cyan]%H:%M,}#[fg=red]]#[default]"
+'';
 batteryTmuxConf = ''
 
 # Battery percentage in status-right, prepended to the existing line from
@@ -34,6 +43,7 @@ set-option -g set-titles on
 set-option -g set-titles-string "#{session_name}: #{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
 set-option -g automatic-rename on
 set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
+${lib.optionalString pkgs.stdenv.isDarwin darwinTmuxConf}
 ${lib.optionalString config.host.hasBattery batteryTmuxConf}
 EOF
 '';
