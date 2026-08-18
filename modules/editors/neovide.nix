@@ -1,5 +1,7 @@
-{ homeDirectory, ... }:
+{ pkgs, homeDirectory, ... }:
 {
+  home.packages = [ pkgs.neovim ];
+
   programs.neovide = {
     enable = true;
     settings = {

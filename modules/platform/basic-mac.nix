@@ -34,7 +34,6 @@
       htop-vim      # Interactive process viewer with vim keybindings
       lazygit       # Simple terminal UI for git commands
       libjpeg       # JPEG image library
-      neovim        # Modern Vim-based text editor
       ninja         # Build system
       nodejs_22     # Node.js runtime (version 22)
       nurl          # URL manipulation library
