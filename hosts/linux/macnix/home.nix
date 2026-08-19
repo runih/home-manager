@@ -31,6 +31,7 @@ in {
 
     # List of packages to be installed for the user
     packages = with pkgs; [
+      aichat          # Terminal client for GPT-4, Gemini, Ollama and other LLMs
       alsa-utils      # Utilities for ALSA sound system
       atlauncher      # Minecraft launcher
       bash            # GNU Bourne-Again Shell
@@ -49,6 +50,7 @@ in {
       jq              # Command-line JSON processor
       gimp            # GNU Image Manipulation Program
       gnumake         # Build automation tool
+      libreoffice     # Office productivity suite
       neovim
       go             # Go programming language
       htop-vim        # Interactive process viewer with vim keybindings
