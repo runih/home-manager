@@ -1,7 +1,34 @@
-{ ... }:
+{ pkgs, pkgsUnstable, ... }:
 let
   themes = import ./themes.nix;
   defaultPalette = themes.themes.${themes.default};
+  # Built against pkgsUnstable because macnix's system Hyprland (from
+  # programs.hyprland in hosts/linux/macnix/nixos) runs 0.56.2, while the
+  # stable-pinned pkgs.hyprland here is still 0.55.4. Hyprland plugins are
+  # ABI-pinned to the exact source headers of the running compositor, so the
+  # plugin must be built against the same v0.56.2 tag nixpkgs-unstable ships.
+  hyprexpo = pkgsUnstable.hyprlandPlugins.mkHyprlandPlugin {
+    pluginName = "hyprexpo";
+    version = "unstable-2026-08-17";
+    src = pkgs.fetchFromGitHub {
+      owner = "sandwichfarm";
+      repo = "hyprexpo";
+      rev = "f3ed01d3b024e404563e7ce18efdf1583aaa8cba";
+      hash = "sha256-KGZFBldDdAgUuNRJYxhdIIQnnsTb+PMCScSnB8IGBH4=";
+    };
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/lib
+      mv hyprexpo.so $out/lib/libhyprexpo.so
+      runHook postInstall
+    '';
+    meta = with pkgs.lib; {
+      homepage = "https://github.com/sandwichfarm/hyprexpo";
+      description = "Maintained fork of the Hyprland expose-style workspace overview plugin";
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+    };
+  };
 in {
   home = {
     sessionVariables = {
@@ -41,6 +68,7 @@ in {
       hyprland = {
         enable = true;
         systemd.enable = true;
+        plugins = [ hyprexpo ];
         extraConfig = ''
           local mainMod = "SUPER"
           local terminal = "ghostty"
@@ -84,6 +112,19 @@ in {
             misc = {
               force_default_wallpaper = -1,
               disable_hyprland_logo   = false,
+            },
+            plugin = {
+              hyprexpo = {
+                columns = 3,
+                gaps_in = 5,
+                gaps_out = 10,
+                bg_col = "rgb(111111)",
+                workspace_method = "center current",
+                gesture_distance = 200,
+                cancel_key = "escape",
+                show_cursor = 1,
+                drag_drop_enable = 0,
+              },
             },
           })
 
@@ -181,6 +222,7 @@ in {
           hl.bind(mainMod .. " + T",                hl.dsp.layout("togglesplit"))
           hl.bind(mainMod .. " + S",                hl.dsp.workspace.toggle_special("magic"))
           hl.bind(mainMod .. " + SHIFT + S",        hl.dsp.window.move({ workspace = "special:magic" }))
+          hl.bind(mainMod .. " + O",                function() hl.plugin.hyprexpo.expo("toggle") end)
         '';
       };
     };
