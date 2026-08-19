@@ -14,7 +14,8 @@
       ./packages.nix
       ./programs.nix
       ./users.nix
-      ./hyprland.nix
+      ./desktop.nix
+      ./keyboard.nix
       ./docker.nix
       ./macbook12-audio.nix
       ./intel-gpu-tools.nix
@@ -37,9 +38,6 @@
     LC_TELEPHONE = "sv_SE.UTF-8";
     LC_TIME = "sv_SE.UTF-8";
   };
-
-  # Configure console keymap
-  console.keyMap = "sv-latin1";
 
   security.rtkit.enable = true;
 

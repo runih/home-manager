@@ -1,14 +1,16 @@
 { pkgs, ... }:
 
 {
-
-  # Install firefox.
   programs = {
     nix-ld = {
       enable = true;
     };
     firefox.enable = true;
     zsh.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+    };
     niri = {
       enable = true;
     };

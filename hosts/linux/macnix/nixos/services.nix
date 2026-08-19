@@ -1,8 +1,6 @@
 { pkgs, ... }:
 
 {
-  # List services that you want to enable:
-
   services = {
     # Let members of the "video" group control screen and keyboard
     # backlight brightness without root (needed for brightnessctl /
@@ -36,11 +34,8 @@
     desktopManager.gnome.enable = true;
     xserver = {
       enable = true;
-      # Configure keymap in X11
-      xkb = {
-        layout = "se";
-        variant = "mac";
-      };
+      # Keymap (console.keyMap, xserver.xkb, and the custom XKB symbol file)
+      # lives in keyboard.nix.
     };
     # Enable CUPS to print documents.
     printing.enable = false;
@@ -64,8 +59,5 @@
     power-profiles-daemon.enable = true;
     upower.enable = true;
     thermald.enable = true;
-
   };
-
-
 }
