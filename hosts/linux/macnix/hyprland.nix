@@ -34,6 +34,15 @@ in {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
     };
+    pointerCursor = {
+      enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 24;
+      gtk.enable = true;
+      x11.enable = true;
+      hyprcursor.enable = true;
+    };
   };
 
   services.hypridle = {
@@ -76,9 +85,6 @@ in {
           local editor = "neovide"
           local fileManager = "nautilus"
           local logout = "wlogout"
-
-          hl.env("XCURSOR_SIZE", "24")
-          hl.env("HYPRCURSOR_SIZE", "24")
 
           os.execute("(sleep 0.5 && hyprctl notify -1 2000 'rgb(7aa2f7)' 'Config reloaded') &")
 
