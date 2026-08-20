@@ -50,6 +50,7 @@
           m.pass
           m.claude-code
           m.copilot-cli
+          m.opencode
           m.allowUnfree
           {
             copilotCli.allowedUrls = [

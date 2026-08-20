@@ -39,6 +39,7 @@
           m.testssl
           m.claude-code
           m.copilot-cli
+          m.opencode
           m.lima
           m.ollama
           # Bind to this machine's home-LAN IP specifically, not 0.0.0.0 —
