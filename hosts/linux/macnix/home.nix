@@ -549,6 +549,16 @@ in {
     vim = {
       enable = true;                  # Enable vim
     };
+
+    # System rebuild always via explicit --flake path, not a bare
+    # `nixos-rebuild switch` — a shim flake.nix under /etc/nixos can't
+    # just `import` this repo's flake.nix (nix's flake front end needs a
+    # literal attrset at the top of flake.nix to statically read `inputs`
+    # before evaluation, so an indirection like that fails with
+    # "must be an attribute set"). Same pattern as the `hm` alias.
+    zsh.shellAliases = {
+      nixos-switch = "sudo nixos-rebuild switch --flake ${homeDirectory}/.config/home-manager/hosts/linux/macnix/nixos#macnix";
+    };
   };
 
   systemd.user.services.weather-fetch = {
