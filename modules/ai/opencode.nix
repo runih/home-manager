@@ -17,10 +17,19 @@ with lib;
       # nixpkgs-unstable instead, same as claude-code/github-copilot-cli.
       package = if pkgsUnstable != null then pkgsUnstable.opencode else pkgs.opencode;
       settings = {
+        lsp = true;
+        permission = {
+          lsp = "allow";
+          edit = "allow";
+          write = "allow";
+          bash = "allow";
+          read = "allow";
+        };
         provider.ollama = {
           npm = "@ai-sdk/openai-compatible";
           name = "Home LAN Ollama";
           options.baseURL = config.opencode.baseURL;
+          options.apiKey = "ollama";
           models = {
             "qwen2.5-coder:14b".name = "Qwen2.5 Coder 14B";
             "llama3.1:8b".name = "Llama 3.1 8B";
