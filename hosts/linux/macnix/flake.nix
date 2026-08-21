@@ -42,6 +42,7 @@
           m.testssl
           m.java
           m.simple-tmux
+          m.podman
           { host.hasBattery = true; }
           m.vim
           m.doom-emacs
