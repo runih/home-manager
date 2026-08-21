@@ -123,10 +123,10 @@ in {
             },
             plugin = {
               hyprexpo = {
-                # drag_drop_enable was added after the v0.55.4 tag this
-                # plugin build is pinned to (see comment above hyprexpo
-                # definition) — the older binary rejects it as an unknown
-                # config key.
+                -- drag_drop_enable was added after the v0.55.4 tag this
+                -- plugin build is pinned to (see comment above hyprexpo
+                -- definition) — the older binary rejects it as an unknown
+                -- config key.
                 columns = 3,
                 gaps_in = 5,
                 gaps_out = 10,
