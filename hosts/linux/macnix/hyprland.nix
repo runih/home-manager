@@ -1,20 +1,22 @@
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, ... }:
 let
   themes = import ./themes.nix;
   defaultPalette = themes.themes.${themes.default};
-  # Built against pkgsUnstable because macnix's system Hyprland (from
-  # programs.hyprland in hosts/linux/macnix/nixos) runs 0.56.2, while the
-  # stable-pinned pkgs.hyprland here is still 0.55.4. Hyprland plugins are
-  # ABI-pinned to the exact source headers of the running compositor, so the
-  # plugin must be built against the same v0.56.2 tag nixpkgs-unstable ships.
-  hyprexpo = pkgsUnstable.hyprlandPlugins.mkHyprlandPlugin {
+  # Built against stable pkgs (not pkgsUnstable) because macnix's system
+  # Hyprland (from programs.hyprland in hosts/linux/macnix/nixos, now
+  # pinned to nixos-26.05) runs 0.55.4 — the same version stable pkgs.hyprland
+  # here ships. Hyprland plugins are ABI-pinned to the exact source headers
+  # of the running compositor, so a mismatch (e.g. building against
+  # nixpkgs-unstable's 0.56.2) makes Hyprland show a version-mismatch error
+  # banner on login instead of loading the plugin.
+  hyprexpo = pkgs.hyprlandPlugins.mkHyprlandPlugin {
     pluginName = "hyprexpo";
-    version = "unstable-2026-08-17";
+    version = "0.55.4";
     src = pkgs.fetchFromGitHub {
       owner = "sandwichfarm";
       repo = "hyprexpo";
-      rev = "f3ed01d3b024e404563e7ce18efdf1583aaa8cba";
-      hash = "sha256-KGZFBldDdAgUuNRJYxhdIIQnnsTb+PMCScSnB8IGBH4=";
+      rev = "v0.55.4";
+      hash = "sha256-sERoTu9NcGD0RA3jAdHc4GOPkRbgqMrgDT8f7+Jv9fc=";
     };
     installPhase = ''
       runHook preInstall
@@ -121,6 +123,10 @@ in {
             },
             plugin = {
               hyprexpo = {
+                # drag_drop_enable was added after the v0.55.4 tag this
+                # plugin build is pinned to (see comment above hyprexpo
+                # definition) — the older binary rejects it as an unknown
+                # config key.
                 columns = 3,
                 gaps_in = 5,
                 gaps_out = 10,
@@ -129,7 +135,6 @@ in {
                 gesture_distance = 200,
                 cancel_key = "escape",
                 show_cursor = 1,
-                drag_drop_enable = 0,
               },
             },
           })
