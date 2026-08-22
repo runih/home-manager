@@ -258,9 +258,13 @@ in {
         fi
 
         if [ "$arg" = "--pick" ]; then
-          selection=$(cd "$WALLPAPER_DIR" && find . -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | sed 's|^\./||' | sort | rofi -dmenu -i -p "Wallpaper")
+          entries=$(cd "$WALLPAPER_DIR" && find . -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | sed 's|^\./||' | sort | while read -r rel; do
+            printf 'img:%s/%s:text:%s\n' "$WALLPAPER_DIR" "$rel" "$rel"
+          done)
+          selection=$(printf '%s\n' "$entries" | wofi --dmenu --insensitive --allow-images --prompt "Wallpaper")
           [ -n "$selection" ] || exit 0
-          wall="$WALLPAPER_DIR/$selection"
+          wall=$(printf '%s' "$selection" | sed -n 's/^img:\(.*\):text:.*/\1/p')
+          [ -n "$wall" ] || exit 0
         elif [ "$arg" = "--random" ] || [ -z "$arg" ]; then
           wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
         else
