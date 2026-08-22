@@ -62,6 +62,7 @@ in {
       pciutils        # Utilities for listing PCI devices
       pstree          # Display a tree of processes
       ripgrep         # A fast search tool
+      rofi-network-manager # Rofi-based wifi/ethernet connection picker
       rustup          # Rust toolchain installer
       superfile       # (Assumed custom package, no description available)
       teams-for-linux # Unofficial Microsoft Teams client for Linux

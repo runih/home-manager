@@ -136,7 +136,7 @@ in {
         format-ethernet = "󰈀 {ifname}";
         format-disconnected = "⚠ Disconnected";
         tooltip-format = "{ifname}: {ipaddr}/{cidr}";
-        on-click = "nm-connection-editor";
+        on-click = "rofi-network-manager";
       };
 
       wireplumber = {

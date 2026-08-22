@@ -219,6 +219,7 @@ in {
           hl.bind(mainMod .. " + SHIFT + Return",   hl.dsp.exec_cmd(terminal2))
           hl.bind(mainMod .. " + M",                hl.dsp.exec_cmd(logout))
           hl.bind(mainMod .. " + E",                hl.dsp.exec_cmd(fileManager))
+          hl.bind(mainMod .. " + I",                hl.dsp.exec_cmd("rofi-network-manager"))
           hl.bind(mainMod .. " + N",                hl.dsp.exec_cmd(editor))
           hl.bind(mainMod .. " + R",                hl.dsp.exec_cmd("hyprctl reload"))
           hl.bind(mainMod .. " + CTRL + Q",         hl.dsp.exec_cmd("~/bin/render-calendar; hyprlock"))
