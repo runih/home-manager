@@ -259,13 +259,22 @@ in {
           wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
         fi
 
-        pgrep -x awww-daemon >/dev/null || awww-daemon &
+        pgrep -f awww-daemon >/dev/null || awww-daemon &
         for _ in $(seq 1 50); do
           awww query >/dev/null 2>&1 && break
           sleep 0.1
         done
 
         awww img "$wall" --transition-type wipe --transition-duration 1
+      '';
+      executable = true;
+    };
+
+    file."bin/remove_wallpaper" = {
+      text = ''
+        #!/usr/bin/env bash
+        set -euo pipefail
+        pkill -f awww-daemon || true
       '';
       executable = true;
     };
