@@ -251,12 +251,20 @@ in {
         set -euo pipefail
         WALLPAPER_DIR="$HOME/Pictures/wallpapers"
         arg="''${1:-}"
-        if [ "$arg" = "--random" ]; then
+
+        if [ "$arg" = "--clear" ] || [ "$arg" = "--stop" ]; then
+          pkill -f awww-daemon || true
+          exit 0
+        fi
+
+        if [ "$arg" = "--pick" ]; then
+          selection=$(cd "$WALLPAPER_DIR" && find . -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | sed 's|^\./||' | sort | rofi -dmenu -i -p "Wallpaper")
+          [ -n "$selection" ] || exit 0
+          wall="$WALLPAPER_DIR/$selection"
+        elif [ "$arg" = "--random" ] || [ -z "$arg" ]; then
           wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
-        elif [ -n "$arg" ]; then
-          wall="$arg"
         else
-          wall=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n1)
+          wall="$arg"
         fi
 
         pgrep -f awww-daemon >/dev/null || awww-daemon &
@@ -266,15 +274,6 @@ in {
         done
 
         awww img "$wall" --transition-type wipe --transition-duration 1
-      '';
-      executable = true;
-    };
-
-    file."bin/remove_wallpaper" = {
-      text = ''
-        #!/usr/bin/env bash
-        set -euo pipefail
-        pkill -f awww-daemon || true
       '';
       executable = true;
     };
