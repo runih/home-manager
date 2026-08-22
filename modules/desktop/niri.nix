@@ -22,7 +22,12 @@
     input {
         keyboard {
             xkb {
-                layout "se"
+                // macnix-se is a custom layout defined in
+                // hosts/linux/macnix/nixos/keyboard.nix (via
+                // services.xserver.xkb.extraLayouts) that corrects a
+                // hardware keycode swap on this MacBook's internal
+                // keyboard; see hosts/linux/macnix/nixos/custom_mac_se.
+                layout "macnix-se"
             }
 
             numlock
