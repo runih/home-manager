@@ -3,7 +3,6 @@
 {
   # Bootloader.
   boot = {
-    # Stay up-to-date with the latest Linux kernel.
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       systemd-boot = {
@@ -29,6 +28,11 @@
       # Intel HD 615: framebuffer compression + panel self-refresh (Retina battery saving)
       "i915.enable_fbc=1"
       "i915.enable_psr=1"
+      # MacBook10,1's ACPI S3 (deep) resume path hangs the machine every time
+      # (confirmed via journalctl: every past "PM: suspend entry (deep)" is
+      # followed by a fresh boot ID, never a resume). s2idle reliably wakes
+      # on this hardware where deep sleep doesn't.
+      "mem_sleep_default=s2idle"
     ];
     consoleLogLevel = 0;
     initrd = {
