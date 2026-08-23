@@ -59,6 +59,7 @@ in {
         "cpu"
         "custom/gpu"
         "memory"
+        "power-profiles-daemon"
         "custom/power"
       ];
 
@@ -129,6 +130,18 @@ in {
         interval = 5;
         return-type = "json";
         format = "{}";
+      };
+
+      "power-profiles-daemon" = {
+        format = "{icon}";
+        tooltip-format = "Power profile: {profile}\nClick to cycle";
+        tooltip = true;
+        format-icons = {
+          default = "";
+          performance = "";
+          balanced = "";
+          power-saver = "";
+        };
       };
 
       network = {

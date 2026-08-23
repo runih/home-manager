@@ -50,11 +50,24 @@
     #network,
     #wireplumber,
     #tray,
+    #power-profiles-daemon,
     #custom-power {
       background-color: transparent;
       border-radius: 0;
       margin: 0;
       padding: 2px 6px;
+    }
+
+    #power-profiles-daemon.performance {
+      color: #${p.red};
+    }
+
+    #power-profiles-daemon.balanced {
+      color: #${p.blue};
+    }
+
+    #power-profiles-daemon.power-saver {
+      color: #${p.green};
     }
 
     #workspaces button {
