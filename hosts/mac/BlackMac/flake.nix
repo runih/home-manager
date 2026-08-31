@@ -34,6 +34,7 @@
           m.wezterm
           m.neovide
           m.pass
+          m.ssh_config
           m.postgresql-client
           m.java
           m.testssl

@@ -33,6 +33,7 @@
 
   # Tools
   pass              = ./tools/pass.nix;
+  ssh_config        = ./tools/ssh_config.nix;
   java              = ./tools/java.nix;
   postgresql-client = ./tools/postgresql-client.nix;
   testssl           = ./tools/testssl.nix;

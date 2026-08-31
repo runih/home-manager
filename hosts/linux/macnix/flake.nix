@@ -49,6 +49,7 @@
           m.zsh
           m.zoxide
           m.pass
+          m.ssh_config
           m.claude-code
           m.copilot-cli
           m.opencode
