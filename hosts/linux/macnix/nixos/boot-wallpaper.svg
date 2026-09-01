@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#15151d"/>
+      <stop offset="0.5" stop-color="#1a1b26"/>
+      <stop offset="1"   stop-color="#1e2030"/>
+    </linearGradient>
+
+    <radialGradient id="vignette" cx="0.5" cy="0.46" r="0.75">
+      <stop offset="0"    stop-color="#0d0e14" stop-opacity="0"/>
+      <stop offset="0.62" stop-color="#0d0e14" stop-opacity="0"/>
+      <stop offset="1"    stop-color="#0b0c11" stop-opacity="0.62"/>
+    </radialGradient>
+
+    <radialGradient id="centerLift" cx="0.5" cy="0.46" r="0.42">
+      <stop offset="0" stop-color="#7aa2f7" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#7aa2f7" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="130"/>
+    </filter>
+
+    <pattern id="hexes" width="132" height="76.21" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#2b3048" stroke-width="1.4" stroke-opacity="0.55">
+        <path d="M-44,38.1 L-22,0 L22,0 L44,38.1 L22,76.21 L-22,76.21 Z"/>
+        <path d="M22,0 L44,-38.1 L88,-38.1 L110,0 L88,38.1 L44,38.1 Z"/>
+        <path d="M22,76.21 L44,38.1 L88,38.1 L110,76.21 L88,114.3 L44,114.3 Z"/>
+        <path d="M88,38.1 L110,0 L154,0 L176,38.1 L154,76.21 L110,76.21 Z"/>
+      </g>
+    </pattern>
+
+    <linearGradient id="hexFade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0.14"/>
+    </linearGradient>
+    <mask id="hexMask">
+      <rect width="1920" height="1080" fill="url(#hexFade)"/>
+    </mask>
+
+    <g id="corner">
+      <path d="M0,64 L0,0 L64,0" fill="none" stroke="#7aa2f7" stroke-width="2.5" stroke-opacity="0.42"/>
+      <path d="M14,92 L14,14 L92,14" fill="none" stroke="#7dcfff" stroke-width="1.4" stroke-opacity="0.22"/>
+      <circle cx="0" cy="0" r="3.5" fill="#7aa2f7" fill-opacity="0.6"/>
+    </g>
+  </defs>
+
+  <!-- base -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- aurora -->
+  <g filter="url(#soft)">
+    <ellipse cx="1560" cy="150"  rx="520" ry="360" fill="#7aa2f7" fill-opacity="0.14"/>
+    <ellipse cx="230"  cy="960"  rx="560" ry="420" fill="#bb9af7" fill-opacity="0.11"/>
+    <ellipse cx="1680" cy="1010" rx="470" ry="320" fill="#7dcfff" fill-opacity="0.09"/>
+    <ellipse cx="60"   cy="80"   rx="420" ry="320" fill="#2ac3de" fill-opacity="0.07"/>
+  </g>
+
+  <!-- hex grid -->
+  <rect width="1920" height="1080" fill="url(#hexes)" mask="url(#hexMask)"/>
+
+  <!-- centre glow + vignette -->
+  <rect width="1920" height="1080" fill="url(#centerLift)"/>
+  <rect width="1920" height="1080" fill="url(#vignette)"/>
+
+  <!-- hud accents -->
+  <g opacity="0.9">
+    <use href="#corner" x="40"   y="40"/>
+    <use href="#corner" x="1880" y="40"   transform="rotate(90 1880 40)"/>
+    <use href="#corner" x="1880" y="1040" transform="rotate(180 1880 1040)"/>
+    <use href="#corner" x="40"   y="1040" transform="rotate(270 40 1040)"/>
+  </g>
+
+  <!-- top divider under the branding title -->
+  <g stroke="#7aa2f7" stroke-opacity="0.18">
+    <line x1="620" y1="150" x2="1300" y2="150" stroke-width="1"/>
+  </g>
+  <circle cx="620"  cy="150" r="2.2" fill="#7aa2f7" fill-opacity="0.5"/>
+  <circle cx="1300" cy="150" r="2.2" fill="#7aa2f7" fill-opacity="0.5"/>
+
+  <!-- scattered crosshairs -->
+  <g stroke="#565f89" stroke-opacity="0.35" stroke-width="1.2">
+    <path d="M300,240 h16 M308,232 v16"/>
+    <path d="M1620,300 h16 M1628,292 v16"/>
+    <path d="M1500,820 h16 M1508,812 v16"/>
+    <path d="M360,780 h16 M368,772 v16"/>
+  </g>
+</svg>
