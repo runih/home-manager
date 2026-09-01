@@ -31,6 +31,9 @@
       # (and again after) the greeter — the "console text" around the login
       # window. Boot messages still render on VT2–6 if you switch there.
       "fbcon=vc:2-6"
+      # Keep the firmware/Plymouth video mode instead of a fresh modeset on
+      # i915 init — cuts the mode-transition flash on the way to the greeter.
+      "i915.fastboot=1"
       # Intel HD 615: framebuffer compression + panel self-refresh (Retina battery saving)
       "i915.enable_fbc=1"
       "i915.enable_psr=1"

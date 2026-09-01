@@ -44,6 +44,11 @@ let
     xwayland disable
     default_border none
     seat * hide_cursor 8000
+    # Tear the splash down only once sway is up and has painted its dark
+    # background — so the Plymouth→greeter handoff never exposes the bare
+    # (white) framebuffer. Paired with no ExecStartPre quit in the greetd
+    # unit below.
+    exec "${pkgs.plymouth}/bin/plymouth quit --retain-splash || true"
     exec "${lib.getExe config.programs.regreet.package}; swaymsg exit"
   '';
 in
@@ -59,8 +64,10 @@ in
   services.displayManager.gdm.enable = lib.mkForce (!useGreetd);
 
   services.greetd = lib.mkMerge [
-    # Hand off straight from the Plymouth splash (see systemd block below).
-    (lib.mkIf useGreetd { greeterManagesPlymouth = true; })
+    # regreet path hands off straight from the Plymouth splash (the sway
+    # config + systemd block below manage it). tuigreet keeps stock
+    # Plymouth handling.
+    (lib.mkIf (useGreetd && greeter == "regreet") { greeterManagesPlymouth = true; })
 
     # Run ReGreet under sway instead of the module's default cage (grey
     # clear flash). mkForce beats programs.regreet's mkDefault command.
@@ -183,24 +190,27 @@ in
 
   # ── Clean handoff: no console text, no white flash ─────────────────────
   # Stock NixOS runs `plymouth quit` right after systemd-user-sessions,
-  # long before greetd — that early quit is what exposes the bare console
-  # and the cleared framebuffer (the "white background") in the gap before
-  # the greeter draws. Drop those two units from the boot (neither gates a
-  # target) and let the splash stay up until greetd's ExecStartPre tears it
-  # down with --retain-splash, right as it launches the compositor.
-  systemd.services = lib.mkIf useGreetd {
-    plymouth-quit.wantedBy = lib.mkForce [ ];
-    plymouth-quit-wait.wantedBy = lib.mkForce [ ];
+  # long before greetd — that early quit exposes the bare console and the
+  # cleared (white) framebuffer in the gap before the greeter draws. For
+  # the regreet path, drop those two units (neither gates a target) so the
+  # splash stays up through boot; the sway greeter config quits it with
+  # --retain-splash only after sway has painted its dark background.
+  systemd.services = lib.mkMerge [
+    (lib.mkIf (useGreetd && greeter == "regreet") {
+      plymouth-quit.wantedBy = lib.mkForce [ ];
+      plymouth-quit-wait.wantedBy = lib.mkForce [ ];
+    })
 
-    greetd.serviceConfig = {
-      ExecStartPre = "-${pkgs.plymouth}/bin/plymouth quit --retain-splash";
-      # Keep greetd / cage / regreet stderr and any late boot logs off the
+    (lib.mkIf useGreetd {
+      # Keep greetd / sway / regreet stderr and late boot logs off the
       # screen (the "debug text" before and after the login window).
-      StandardError = "journal";
-      TTYPath = "/dev/tty1";
-      TTYReset = true;
-      TTYVHangup = true;
-      TTYVTDisallocate = true;
-    };
-  };
+      greetd.serviceConfig = {
+        StandardError = "journal";
+        TTYPath = "/dev/tty1";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+      };
+    })
+  ];
 }

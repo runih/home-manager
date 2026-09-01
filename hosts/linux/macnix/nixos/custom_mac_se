@@ -16,4 +16,11 @@ xkb_symbols "basic" {
 
     key <TLDE> { [ less, greater, bar, brokenbar ] };
     key <LSGT> { [ section, degree ] };
+
+    // se(mac) maps this key to plain, non-combining acute/grave instead of
+    // the dead_acute/dead_grave that plain se(se) uses, which silently
+    // broke composing accents (e.g. ´ + u -> ú) when this layout replaced
+    // bare "se" as the active Hyprland/niri kb_layout. Restore the dead
+    // keys here; keep se(mac)'s AltGr-level dead_cedilla/dead_ogonek.
+    key <AE12> { [ dead_acute, dead_grave, dead_cedilla, dead_ogonek ] };
 };
