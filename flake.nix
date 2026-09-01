@@ -12,6 +12,14 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Opinionated Omarchy-style Hyprland desktop (DHH's Omarchy, reimplemented
+    # for NixOS). Only consumed by macnix, and only when its `enableOmarchy`
+    # toggle is flipped on — otherwise this input is never evaluated.
+    omarchy-nix = {
+      url = "github:henrysipp/omarchy-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs = inputs @ { self, nixpkgs, home-manager, zen-browser, ... }:
@@ -24,7 +32,7 @@
 
       hostArgs = { inherit nixpkgs home-manager sharedModules; };
       blackMacArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
-      macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
+      macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; "omarchy-nix" = inputs.omarchy-nix; };
       nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       pi5Args = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {
