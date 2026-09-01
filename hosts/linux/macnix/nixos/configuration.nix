@@ -11,6 +11,7 @@
       ./boot.nix
       ./networking.nix
       ./services.nix
+      ./login-manager.nix
       ./packages.nix
       ./programs.nix
       ./users.nix
