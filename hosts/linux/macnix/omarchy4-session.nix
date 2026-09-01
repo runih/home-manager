@@ -162,6 +162,15 @@ EOF
       ${pkgs.gnused}/bin/sed -i \
         's/^  local reserved = monitor\.reserved$/  local reserved = monitor.reserved or { top = 0, bottom = 0 }/' \
         $out/default/hypr/qconsole.lua
+
+      # The power/system menu's "Log out" runs `uwsm stop`, but this
+      # launcher starts Hyprland via start-hyprland, not uwsm — so logout
+      # silently does nothing. Swap in a plain compositor exit; the
+      # start-hyprland watchdog sees the clean exit and ends the session.
+      # (reboot/shutdown use systemctl and already work.)
+      ${pkgs.gnused}/bin/sed -i \
+        's/uwsm stop/hyprctl dispatch exit/' \
+        $out/bin/omarchy-system-logout
       # ------------------------------------------------------------------
     '';
 
