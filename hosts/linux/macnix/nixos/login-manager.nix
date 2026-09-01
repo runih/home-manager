@@ -160,13 +160,17 @@ in
   security.pam.services.greetd.enableGnomeKeyring = lib.mkIf useGreetd true;
 
   # ── Clean handoff: no console text, no white flash ─────────────────────
-  # greeterManagesPlymouth (set above) stops greetd waiting for
-  # plymouth-quit-wait, which otherwise flashes the bare console before the
-  # greeter. ExecStartPre tears the splash down right before greetd starts
-  # the compositor, keeping the last frame on the fb (--retain-splash) so
-  # there's no black/white gap.
-  systemd.services.greetd = lib.mkIf useGreetd {
-    serviceConfig = {
+  # Stock NixOS runs `plymouth quit` right after systemd-user-sessions,
+  # long before greetd — that early quit is what exposes the bare console
+  # and the cleared framebuffer (the "white background") in the gap before
+  # the greeter draws. Drop those two units from the boot (neither gates a
+  # target) and let the splash stay up until greetd's ExecStartPre tears it
+  # down with --retain-splash, right as it launches the compositor.
+  systemd.services = lib.mkIf useGreetd {
+    plymouth-quit.wantedBy = lib.mkForce [ ];
+    plymouth-quit-wait.wantedBy = lib.mkForce [ ];
+
+    greetd.serviceConfig = {
       ExecStartPre = "-${pkgs.plymouth}/bin/plymouth quit --retain-splash";
       # Keep greetd / cage / regreet stderr and any late boot logs off the
       # screen (the "debug text" before and after the login window).
