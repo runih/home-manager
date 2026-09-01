@@ -187,7 +187,12 @@ EOF
     # $OMARCHY_PATH/bin first (Omarchy's own CLI), then the Nix runtime
     # deps, then the user + system profiles, then whatever we inherited.
     export PATH="${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}:$HOME/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin''${PATH:+:$PATH}"
-    exec ${pkgs.hyprland}/bin/Hyprland
+
+    # start-hyprland (not the raw Hyprland binary) is Hyprland 0.55's
+    # supported entry point — watchdog + crash-restart + systemd/dbus
+    # session setup. Matches this box's normal "Hyprland" GDM session and
+    # silences "launched without start-hyprland".
+    exec ${pkgs.hyprland}/bin/start-hyprland
   '';
 in
 {
