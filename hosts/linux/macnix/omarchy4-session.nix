@@ -95,10 +95,7 @@ let
 
   # The upstream checkout, shebang-patched for NixOS. This whole path becomes
   # $OMARCHY_PATH.
-  omarchyTree = pkgs.runCommand "omarchy4-tree"
-    {
-      nativeBuildInputs = [ pkgs.python3 ];
-    }
+  omarchyTree = pkgs.runCommand "omarchy4-tree" { }
     ''
       cp -r ${omarchy4} $out
       chmod -R u+w $out
@@ -113,6 +110,23 @@ let
             -e '1s@^#!/usr/bin/python3.*@#!${pkgs.python3}/bin/python3@' \
             "$f"
         done
+
+      # Omarchy's Hyprland bootstrap hardcodes ~/.config in the Lua module
+      # search path (package.path) and ignores XDG_CONFIG_HOME — which this
+      # session points at ~/.config-omarchy4. Without this, the require()s
+      # at hyprland.lua:19+ (`require("hypr.monitors")` &c.) resolve against
+      # ~/.config/hypr (the NORMAL session's tree) and error out. Append a
+      # fixup that also searches $XDG_CONFIG_HOME, ahead of the hardcode.
+      cat >> $out/default/hypr/bootstrap.lua <<'EOF'
+
+-- macnix: also search $XDG_CONFIG_HOME (Omarchy hardcodes ~/.config above).
+do
+  local xdg = os.getenv("XDG_CONFIG_HOME")
+  if xdg and xdg ~= "" then
+    package.path = xdg .. "/?.lua;" .. package.path
+  end
+end
+EOF
 
       # --- macnix (MacBook10,1) local patches -----------------------------
       # Internal keyboard: this box has a custom "macnix-se" XKB layout
@@ -131,24 +145,32 @@ hl.config({
 EOF
 
       # HiDPI panel — the normal session runs eDP-1 at scale 1.5
-      # (hosts/.../hyprland.nix), so match it here instead of Omarchy's
-      # "auto" + GDK_SCALE=2.
+      # (hosts/.../hyprland.nix); match it, and drop Omarchy's GDK_SCALE=2
+      # (its "leave XWayland unscaled" trick assumes an integer monitor
+      # scale). Pure append + one sed — no line surgery that can break Lua.
       ${pkgs.gnused}/bin/sed -i \
-        -e 's@^local omarchy_gdk_scale = .*@local omarchy_gdk_scale = 1@' \
-        -e 's@^hl.monitor({ output = "", mode = "preferred".*@hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })\nhl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })@' \
+        's/^local omarchy_gdk_scale = .*/local omarchy_gdk_scale = 1/' \
         $out/config/hypr/monitors.lua
+      printf '\nhl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })\n' \
+        >> $out/config/hypr/monitors.lua
       # ------------------------------------------------------------------
     '';
 
   launcher = pkgs.writeShellScript "omarchy4-session" ''
+    # GDM runs this .desktop Exec with a bare PATH and none of the
+    # home-manager session vars, so `hm` / `nix` / user tools are missing
+    # inside the session. Pull them in first.
+    [ -r "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && \
+      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
     export OMARCHY_PATH="${omarchyTree}"
     export XDG_CONFIG_HOME="${configHome}"
     export XDG_CURRENT_DESKTOP=Hyprland
     export XDG_SESSION_DESKTOP=Hyprland
     export XDG_SESSION_TYPE=wayland
-    # $OMARCHY_PATH/bin first (Omarchy's own CLI), then the Nix runtime deps,
-    # then whatever the login shell already had.
-    export PATH="${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}''${PATH:+:$PATH}"
+    # $OMARCHY_PATH/bin first (Omarchy's own CLI), then the Nix runtime
+    # deps, then the user + system profiles, then whatever we inherited.
+    export PATH="${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}:$HOME/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin''${PATH:+:$PATH}"
     exec ${pkgs.hyprland}/bin/Hyprland
   '';
 in
