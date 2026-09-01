@@ -34,6 +34,18 @@ let
     fg = "#c0caf5";
     accent = "#7aa2f7";
   };
+
+  # ReGreet runs inside a compositor. cage (the module default) clears the
+  # screen to flat grey before the greeter paints — a white-ish flash after
+  # Plymouth hands off. Use a one-shot sway instead: it paints a solid dark
+  # background immediately, then launches ReGreet, then exits with it.
+  greetSwayConfig = pkgs.writeText "greetd-sway.conf" ''
+    output * bg ${tn.bg} solid_color
+    xwayland disable
+    default_border none
+    seat * hide_cursor 8000
+    exec "${lib.getExe config.programs.regreet.package}; swaymsg exit"
+  '';
 in
 {
   services.displayManager.defaultSession = "hyprland";
@@ -49,6 +61,16 @@ in
   services.greetd = lib.mkMerge [
     # Hand off straight from the Plymouth splash (see systemd block below).
     (lib.mkIf useGreetd { greeterManagesPlymouth = true; })
+
+    # Run ReGreet under sway instead of the module's default cage (grey
+    # clear flash). mkForce beats programs.regreet's mkDefault command.
+    (lib.mkIf (useGreetd && greeter == "regreet") {
+      settings.default_session.command = lib.mkForce (lib.concatStringsSep " " [
+        "${pkgs.dbus}/bin/dbus-run-session"
+        "${pkgs.sway}/bin/sway"
+        "--config ${greetSwayConfig}"
+      ]);
+    })
 
     # ── tuigreet ────────────────────────────────────────────────────────
     (lib.mkIf (useGreetd && greeter == "tuigreet") {
