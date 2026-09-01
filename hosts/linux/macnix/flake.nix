@@ -78,6 +78,17 @@
           # its own `pkgs.neovim` in home.nix and sets EDITOR=nvim — the two
           # collide on `bin/nvim` in the profile. Keep macnix's.
           programs.neovim.enable = lib.mkForce false;
+
+          # home-manager 26.05 defaults Hyprland `configType` to "lua", but
+          # omarchy-nix's module is written for the "hyprlang" style — it
+          # sets `settings.$terminal = "ghostty"` etc., which the lua writer
+          # renders as `hl.$terminal("ghostty")`. `$` is invalid in a Lua
+          # identifier, so Hyprland fails to parse the whole config and
+          # falls back to keybind-less defaults (Super+Return does nothing).
+          # Force the native hyprland.conf writer, where `$terminal = ...`
+          # is valid. (The repo's own hyprland.nix, dropped when omarchy is
+          # on, is what actually needs lua — so this only applies here.)
+          wayland.windowManager.hyprland.configType = lib.mkForce "hyprlang";
         }
         {
           # omarchy-nix's home-manager module is written to run as part of a
