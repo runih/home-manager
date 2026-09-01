@@ -153,6 +153,15 @@ EOF
         $out/config/hypr/monitors.lua
       printf '\nhl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })\n' \
         >> $out/config/hypr/monitors.lua
+
+      # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle has
+      # no `.reserved` field (added upstream later), so qconsole.lua:71
+      # errors with "attempt to index a nil value (local 'reserved')" and
+      # trips the on-screen config-error overlay. Default it to a zero
+      # inset — worst case the Quake console ignores the bar height.
+      ${pkgs.gnused}/bin/sed -i \
+        's/^  local reserved = monitor\.reserved$/  local reserved = monitor.reserved or { top = 0, bottom = 0 }/' \
+        $out/default/hypr/qconsole.lua
       # ------------------------------------------------------------------
     '';
 
