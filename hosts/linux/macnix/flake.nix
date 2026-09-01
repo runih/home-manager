@@ -50,6 +50,16 @@
       # ---------------------------------------------------------------------
       enableOmarchy = false;
 
+      # Separate, additive "Omarchy" GDM session that sits NEXT TO the normal
+      # Hyprland session (unlike `enableOmarchy` above, which replaces it).
+      # Vendors omarchy-nix's config tree into ~/.config-omarchy and adds a
+      # launcher; the GDM entry is registered in nixos/omarchy-session.nix
+      # (needs `nixos-switch` once). See ./omarchy-session.nix.
+      enableOmarchySession = true;
+
+      omarchySessionModule =
+        import ./omarchy-session.nix { inherit home-manager omarchy-nix nixpkgs; };
+
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [
         ./hyprland.nix
@@ -140,7 +150,8 @@
           { host.hasBattery = true; }
           m.vim
           m.doom-emacs
-        ] ++ withoutOmarchy m.zsh ++ withoutOmarchy m.zoxide ++ [
+        ] ++ withoutOmarchy m.zsh ++ withoutOmarchy m.zoxide
+          ++ lib.optional (enableOmarchySession && !enableOmarchy) omarchySessionModule ++ [
           m.pass
           m.ssh_config
           m.claude-code

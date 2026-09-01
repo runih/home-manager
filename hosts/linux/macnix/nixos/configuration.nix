@@ -19,6 +19,7 @@
       ./docker.nix
       ./macbook12-audio.nix
       ./intel-gpu-tools.nix
+      ./omarchy-session.nix
     ];
 
   # Set your time zone.
