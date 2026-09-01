@@ -46,23 +46,29 @@ in
   # GNOME would otherwise pull GDM back in as mkDefault.
   services.displayManager.gdm.enable = lib.mkForce (!useGreetd);
 
-  # ── tuigreet ────────────────────────────────────────────────────────────
-  services.greetd = lib.mkIf (useGreetd && greeter == "tuigreet") {
-    enable = true;
-    settings.default_session = {
-      command = lib.concatStringsSep " " [
-        "${pkgs.greetd.tuigreet}/bin/tuigreet"
-        "--time"
-        "--remember"
-        "--remember-session"
-        "--asterisks"
-        "--theme 'border=blue;text=cyan;prompt=green;time=blue;action=blue;button=magenta;container=black;input=white'"
-        "--greeting 'macnix'"
-        "--sessions ${waylandSessions}"
-      ];
-      user = "greeter";
-    };
-  };
+  services.greetd = lib.mkMerge [
+    # Hand off straight from the Plymouth splash (see systemd block below).
+    (lib.mkIf useGreetd { greeterManagesPlymouth = true; })
+
+    # ── tuigreet ────────────────────────────────────────────────────────
+    (lib.mkIf (useGreetd && greeter == "tuigreet") {
+      enable = true;
+      useTextGreeter = true;
+      settings.default_session = {
+        command = lib.concatStringsSep " " [
+          "${pkgs.greetd.tuigreet}/bin/tuigreet"
+          "--time"
+          "--remember"
+          "--remember-session"
+          "--asterisks"
+          "--theme 'border=blue;text=cyan;prompt=green;time=blue;action=blue;button=magenta;container=black;input=white'"
+          "--greeting 'macnix'"
+          "--sessions ${waylandSessions}"
+        ];
+        user = "greeter";
+      };
+    })
+  ];
 
   # ── ReGreet (graphical) ─────────────────────────────────────────────────
   programs.regreet = lib.mkIf (useGreetd && greeter == "regreet") {
@@ -103,7 +109,9 @@ in
     # ReGreet 0.3.0's templates.rs (`frame.background` = the login card and
     # the clock bar; `#message_label` = the greeting).
     extraCss = ''
-      window, .background { background-color: transparent; }
+      /* solid dark on the toplevel so there's no white flash before the
+         wallpaper Picture paints */
+      window { background-color: ${tn.bg}; }
 
       frame.background {
         background-color: alpha(${tn.bg}, 0.60);
@@ -150,4 +158,23 @@ in
   };
 
   security.pam.services.greetd.enableGnomeKeyring = lib.mkIf useGreetd true;
+
+  # ── Clean handoff: no console text, no white flash ─────────────────────
+  # greeterManagesPlymouth (set above) stops greetd waiting for
+  # plymouth-quit-wait, which otherwise flashes the bare console before the
+  # greeter. ExecStartPre tears the splash down right before greetd starts
+  # the compositor, keeping the last frame on the fb (--retain-splash) so
+  # there's no black/white gap.
+  systemd.services.greetd = lib.mkIf useGreetd {
+    serviceConfig = {
+      ExecStartPre = "-${pkgs.plymouth}/bin/plymouth quit --retain-splash";
+      # Keep greetd / cage / regreet stderr and any late boot logs off the
+      # screen (the "debug text" before and after the login window).
+      StandardError = "journal";
+      TTYPath = "/dev/tty1";
+      TTYReset = true;
+      TTYVHangup = true;
+      TTYVTDisallocate = true;
+    };
+  };
 }
