@@ -44,7 +44,11 @@ let
     xwayland disable
     default_border none
     seat * hide_cursor 8000
-    exec "${lib.getExe config.programs.regreet.package}; swaymsg exit"
+    # ReGreet is plain GTK4. gnome-themes-extra's "Adwaita-dark" ships no
+    # gtk-4.0/, so a theme_name lookup falls back to GTK4's built-in
+    # Adwaita *light* (white window). GTK_THEME=Adwaita:dark forces the
+    # dark variant of the built-in theme instead.
+    exec "GTK_THEME=Adwaita:dark ${lib.getExe config.programs.regreet.package}; swaymsg exit"
   '';
 in
 {
@@ -106,8 +110,10 @@ in
       name = "Adwaita";
     };
     theme = {
+      # GTK4 built-in Adwaita; dark variant is forced via GTK_THEME in the
+      # sway greeter config (gnome-themes-extra's Adwaita-dark is GTK3-only).
       package = pkgs.gnome-themes-extra;
-      name = "Adwaita-dark";
+      name = "Adwaita";
     };
 
     settings = {
