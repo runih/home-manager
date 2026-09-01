@@ -21,6 +21,7 @@
       ./macbook12-audio.nix
       ./intel-gpu-tools.nix
       ./omarchy-session.nix
+      ./omarchy4-session.nix
     ];
 
   # Set your time zone.

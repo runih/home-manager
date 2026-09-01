@@ -19,9 +19,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    # Upstream Omarchy 4 tree — only consumed when `enableOmarchy4Session`
+    # below is true. Ignored when built through the root flake (which
+    # injects its own copy via macnixArgs).
+    omarchy4 = {
+      url = "github:omacom/omarchy";
+      flake = false;
+    };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, zen-browser, sharedModules, omarchy-nix ? null, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, zen-browser, sharedModules, omarchy-nix ? null, omarchy4 ? null, ... }:
     let
       m = sharedModules;
       lib = nixpkgs.lib;
@@ -59,6 +66,17 @@
 
       omarchySessionModule =
         import ./omarchy-session.nix { inherit home-manager omarchy-nix nixpkgs; };
+
+      # EXPERIMENTAL — the real upstream Omarchy 4 ("Quattro") desktop, run
+      # isolated in ~/.config-omarchy4 as its own GDM session, NEXT TO
+      # everything else (independent of `enableOmarchy` /
+      # `enableOmarchySession`, which both use omarchy-nix's older
+      # Omarchy-3-era stack). Needs the GDM entry from
+      # nixos/omarchy4-session.nix registered once via `nixos-switch`.
+      # See ./omarchy4-session.nix for what works and what doesn't.
+      enableOmarchy4Session = true;
+
+      omarchy4SessionModule = import ./omarchy4-session.nix { inherit omarchy4; };
 
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [
@@ -151,7 +169,8 @@
           m.vim
           m.doom-emacs
         ] ++ withoutOmarchy m.zsh ++ withoutOmarchy m.zoxide
-          ++ lib.optional (enableOmarchySession && !enableOmarchy) omarchySessionModule ++ [
+          ++ lib.optional (enableOmarchySession && !enableOmarchy) omarchySessionModule
+        ++ lib.optional (enableOmarchy4Session && !enableOmarchy) omarchy4SessionModule ++ [
           m.pass
           m.ssh_config
           m.claude-code

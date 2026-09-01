@@ -522,6 +522,22 @@
         "type": "github"
       }
     },
+    "omarchy4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788279117,
+        "narHash": "sha256-mL4ZeoHDMq6OGCbJ+9YdL6P8Vi44HlRgu80nR5YQAkk=",
+        "owner": "omacom",
+        "repo": "omarchy",
+        "rev": "b71dcad96e9d0b2962b7d225828a5cb6000ad720",
+        "type": "github"
+      },
+      "original": {
+        "owner": "omacom",
+        "repo": "omarchy",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -552,6 +568,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "omarchy-nix": "omarchy-nix",
+        "omarchy4": "omarchy4",
         "zen-browser": "zen-browser"
       }
     },
