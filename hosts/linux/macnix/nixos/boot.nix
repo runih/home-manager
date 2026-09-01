@@ -25,6 +25,12 @@
       "rd.udev.log_level=3"
       "udev.log_priority=3"
       "video=1920x1080"
+      # Keep the framebuffer text console off VT1. greetd/the greeter own
+      # VT1; without this, when Plymouth releases the display `fbcon` takes
+      # over VT1 and dumps the buffered boot log to the screen right before
+      # (and again after) the greeter — the "console text" around the login
+      # window. Boot messages still render on VT2–6 if you switch there.
+      "fbcon=vc:2-6"
       # Intel HD 615: framebuffer compression + panel self-refresh (Retina battery saving)
       "i915.enable_fbc=1"
       "i915.enable_psr=1"
