@@ -31,6 +31,11 @@
       # (and again after) the greeter — the "console text" around the login
       # window. Boot messages still render on VT2–6 if you switch there.
       "fbcon=vc:2-6"
+      # Inherit the firmware/Plymouth mode on i915 handoff instead of doing
+      # a fresh full modeset — removes the flicker right before the greeter.
+      # If the panel ever comes up wrong (offset/squished), drop this and
+      # boot the previous generation.
+      "i915.fastboot=1"
       # Intel HD 615: framebuffer compression + panel self-refresh (Retina battery saving)
       "i915.enable_fbc=1"
       "i915.enable_psr=1"
