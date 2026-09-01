@@ -172,6 +172,13 @@ EOF
     [ -r "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && \
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
+    # XDG_CONFIG_HOME below also redirects `nix`'s own config lookup, and
+    # ~/.config-omarchy4/nix/nix.conf doesn't exist — so `nix` / `hm` would
+    # lose `experimental-features` and every other setting. Pin the real
+    # user nix.conf explicitly (a ~/.config-omarchy4/nix -> ~/.config/nix
+    # symlink from the HM module backs this up).
+    export NIX_USER_CONF_FILES="$HOME/.config/nix/nix.conf"
+
     export OMARCHY_PATH="${omarchyTree}"
     export XDG_CONFIG_HOME="${configHome}"
     export XDG_CURRENT_DESKTOP=Hyprland
@@ -199,6 +206,14 @@ in
     source = launcher;
     executable = true;
   };
+
+  # XDG_CONFIG_HOME=~/.config-omarchy4 redirects every XDG-respecting tool,
+  # not just Hyprland/Omarchy. Pass the ones that must NOT be isolated
+  # straight through to the real ~/.config. `nix` is the critical one (its
+  # nix.conf holds experimental-features — without it `hm` breaks inside
+  # the session); add more here if other tools misbehave.
+  home.file.".config-omarchy4/nix".source =
+    config.lib.file.mkOutOfStoreSymlink "${homeDirectory}/.config/nix";
 
   # Seed the "current theme" pointer Hyprland's bootstrap + the shell look
   # for at login:
