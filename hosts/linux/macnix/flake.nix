@@ -48,7 +48,7 @@
       # nixos-unstable; it is pinned to nixos-26.05 here via `follows`, so
       # expect to iterate if upstream uses something newer than 26.05 ships.
       # ---------------------------------------------------------------------
-      enableOmarchy = false;
+      enableOmarchy = true;
 
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [
@@ -72,6 +72,12 @@
           # when omarchy's own zsh config takes over.
           programs.zsh.shellAliases.hm =
             "home-manager switch --impure --flake ~/.config/home-manager#$USER@$(hostname)";
+
+          # omarchy enables a bare, unconfigured `programs.neovim` ("TODO:
+          # Add an actual nvim config" upstream). macnix already installs
+          # its own `pkgs.neovim` in home.nix and sets EDITOR=nvim — the two
+          # collide on `bin/nvim` in the profile. Keep macnix's.
+          programs.neovim.enable = lib.mkForce false;
         }
         {
           # omarchy-nix's home-manager module is written to run as part of a
@@ -102,7 +108,12 @@
         homeDirectory = "/home/${username}";
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          ({ pkgsUnstable, ... }: { home.packages = [ zen-browser.packages."x86_64-linux".default pkgsUnstable.gh pkgsUnstable.claude-code pkgsUnstable.ollama ]; })
+          # `gh` from unstable is dropped when omarchy is on — its git.nix
+          # enables `programs.gh` (stable), and two gh's collide in the profile.
+          ({ pkgsUnstable, ... }: {
+            home.packages = [ zen-browser.packages."x86_64-linux".default pkgsUnstable.claude-code pkgsUnstable.ollama ]
+              ++ lib.optional (!enableOmarchy) pkgsUnstable.gh;
+          })
           ./home.nix
         ] ++ desktopModules ++ [
           m.wezterm
