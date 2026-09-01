@@ -85,7 +85,7 @@ let
   omarchyLauncher = pkgs.writeShellScript "omarchy-hyprland" ''
     export XDG_CONFIG_HOME="$HOME/.config-omarchy"
     export XDG_CURRENT_DESKTOP=Hyprland
-    exec Hyprland
+    exec ${pkgs.hyprland}/bin/Hyprland
   '';
 in
 {
