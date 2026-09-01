@@ -48,7 +48,7 @@
       # nixos-unstable; it is pinned to nixos-26.05 here via `follows`, so
       # expect to iterate if upstream uses something newer than 26.05 ships.
       # ---------------------------------------------------------------------
-      enableOmarchy = true;
+      enableOmarchy = false;
 
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [
