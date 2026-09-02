@@ -193,6 +193,13 @@ EOF
     export XDG_CURRENT_DESKTOP=Hyprland
     export XDG_SESSION_DESKTOP=Hyprland
     export XDG_SESSION_TYPE=wayland
+
+    # Quickshell's Qt build bundles qtsvg but NOT qtimageformats, so it
+    # can't decode .webp — which is the format of nearly every Omarchy
+    # theme background ("Unsupported image format" in the shell log, and
+    # the wallpaper never changes). Add the matching-version image-format
+    # plugins; Qt merges this with its built-in plugin path.
+    export QT_PLUGIN_PATH="${pkgs.qt6.qtimageformats}/lib/qt-6/plugins''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}"
     # $OMARCHY_PATH/bin first (Omarchy's own CLI), then the Nix runtime
     # deps, then the user + system profiles, then whatever we inherited.
     export PATH="${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}:$HOME/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin''${PATH:+:$PATH}"
@@ -229,17 +236,21 @@ in
   home.file.".config-omarchy4/nix".source =
     config.lib.file.mkOutOfStoreSymlink "${homeDirectory}/.config/nix";
 
-  # Seed the "current theme" pointer Hyprland's bootstrap + the shell look
-  # for at login:
-  #   require("omarchy.current.theme.*")  resolves via  ~/.local/state/?.lua
-  #   -> ~/.local/state/omarchy/current/theme/...
-  # (theme-set would normally manage these; it needs pacman-era plumbing we
-  # don't have, so pin tokyo-night by hand. Re-run `hm` to reset.)
+  # Seed an initial "current theme" ONLY on first run — the shell + Hyprland
+  # both read ~/.local/state/omarchy/current/{theme,background,theme.name} at
+  # login, and `require("omarchy.current.theme.*")` resolves theme/ via
+  # ~/.local/state/?.lua. After that, `omarchy-theme-set` (the menu) owns
+  # this state — so bail if it already exists rather than clobbering it
+  # (an unconditional `ln -sfn` into what is by then a real directory just
+  # nests a link inside it). `omarchy theme set <name>` to change it, or
+  # wipe ~/.local/state/omarchy/current to re-seed.
   home.activation.omarchy4Theme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     state="${homeDirectory}/.local/state/omarchy/current"
-    run mkdir -p "$state"
-    run ln -sfn "${omarchyTree}/themes/tokyo-night" "$state/theme"
-    run ln -sfn "${omarchyTree}/themes/tokyo-night/backgrounds/1-quattro.webp" "$state/background"
-    run sh -c 'printf "%s\n" "Tokyo Night" > "'"$state"'/theme.name"'
+    if [ ! -e "$state/theme" ]; then
+      run mkdir -p "$state"
+      run ln -s "${omarchyTree}/themes/tokyo-night" "$state/theme"
+      run ln -s "${omarchyTree}/themes/tokyo-night/backgrounds/1-quattro.webp" "$state/background"
+      run sh -c 'printf "%s\n" "Tokyo Night" > "'"$state"'/theme.name"'
+    fi
   '';
 }
