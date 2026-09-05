@@ -180,6 +180,22 @@ EOF
         "s/uwsm stop/hyprctl dispatch 'hl.dsp.exit()'/" \
         $out/bin/omarchy-system-logout
 
+      # Default editor → neovide. omarchy-launch-editor is what every "open
+      # this in an editor" path funnels through (the SUPER+SHIFT+N bind, the
+      # menu's "edit config" actions, omarchy-clipboard-open, the branding
+      # editors). Two fixes:
+      #   - default it to `neovide` instead of `nvim` (its `omarchy default
+      #     editor` menu list — code/zed/helix/vim/nvim/… — has no neovide,
+      #     and ~/.local/state/omarchy/defaults/editor is unset here). The
+      #     menu can still override this at runtime.
+      #   - drop the `uwsm-app` wrapper on the GUI-editor branch — this
+      #     session isn't uwsm-managed, so `uwsm-app -- neovide` never fires
+      #     (same reason as the terminal / logout patches above).
+      ${pkgs.gnused}/bin/sed -i \
+        -e 's#editor="nvim"#editor="neovide"#g' \
+        -e 's#uwsm-app -- ##' \
+        $out/bin/omarchy-launch-editor
+
       # $OMARCHY_PATH/themes/* is in the read-only Nix store, so
       # omarchy-theme-set's `cp -r "$OMARCHY_THEMES_PATH/$THEME_NAME/"*`
       # produces mode-0555 copies (backgrounds/ and its files above all).
@@ -314,6 +330,10 @@ in
       -- `omarchy-default-terminal ghostty` once — menu: Setup > Default Terminal.)
       hl.unbind("SUPER + RETURN")
       o.bind("SUPER + RETURN", "Terminal", "ghostty")
+
+      -- (Editor: Super+Shift+N and every "edit config" flow go through
+      -- omarchy-launch-editor, which the runCommand patches to launch
+      -- neovide directly — no keybind override needed here.)
     '';
   };
 
