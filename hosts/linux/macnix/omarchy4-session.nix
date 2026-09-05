@@ -28,6 +28,12 @@
 #   the compositor, the Quickshell bar / menu / launcher / lock, and the
 #   theming that ships inside the repo (tokyo-night is the default).
 #
+# NEOVIM: the `omarchy-nvim` / `omarchy-lazyvim` Arch package has no Nix
+#   build, so the config half (LazyVim starter + omarchy's thin overlay) is
+#   assembled here as `nvimConfig` and isolated via NVIM_APPNAME=omarchy-nvim;
+#   lazy.nvim bootstraps the plugins on first `nvim`/`neovide` launch (needs
+#   network, ~1–2 min). The user's real ~/.config/nvim is untouched.
+#
 # WHAT DOES NOT:
 #   * every menu action that shells out to pacman / yay / snapper / limine /
 #     `systemctl` as root — install, update, rollback, most of the "system"
@@ -94,7 +100,57 @@ let
     procps
     util-linux
     libqalculate
+    # LazyVim ("omarchy-nvim") first-run bootstrap + day-to-day deps — see
+    # nvimConfig below. lazy.nvim clones plugins with git; nvim-treesitter
+    # compiles parsers with `cc` (gcc) + make; LazyVim's pickers want ripgrep
+    # + fd, <leader>gg wants lazygit, mason/parsers occasionally unzip.
+    # (node for LSP/mason comes from the profile — home.nix's nodejs_22.)
+    git
+    gcc
+    gnumake
+    tree-sitter
+    ripgrep
+    fd
+    lazygit
+    unzip
   ]);
+
+  # Omarchy 4's Neovim is the `omarchy-nvim` / `omarchy-lazyvim` Arch package
+  # (LazyVim starter + a thin overlay + a pre-built plugin cache) — no Nix
+  # equivalent, so build the config half from its parts here and let
+  # lazy.nvim bootstrap the plugins on first launch. Isolated from the user's
+  # real ~/.config/nvim via NVIM_APPNAME=omarchy-nvim in the launcher.
+  lazyvimStarter = pkgs.fetchFromGitHub {
+    owner = "LazyVim";
+    repo = "starter";
+    rev = "803bc181d7c0d6d5eeba9274d9be49b287294d99";
+    hash = "sha256-QrpnlDD4r1X4C8PqBhQ+S3ar5C+qDrU1Jm/lPqyMIFM=";
+  };
+  omarchyLazyvim = pkgs.fetchFromGitHub {
+    owner = "omacom";
+    repo = "omarchy-lazyvim";
+    rev = "17dcc3706475f2cd719d831394323f29314bf0ba";
+    hash = "sha256-lEBmjGj7ela26VqC4W4dYv+TSU+xAqGk0izbzwSi8mQ=";
+  };
+  nvimConfig = pkgs.runCommand "omarchy4-nvim-config" { } ''
+    cp -r ${lazyvimStarter} $out
+    chmod -R u+w $out
+    rm -rf $out/.git
+
+    # omarchy-lazyvim's overlay on top of the LazyVim starter (see its
+    # PKGBUILD): the neo-tree extra, the transparency after/ plugin, the
+    # animated-scrolling-off spec, and relativenumber off.
+    install -Dm644 ${omarchyLazyvim}/lazyvim.json $out/lazyvim.json
+    cp -r ${omarchyLazyvim}/plugin $out/
+    install -Dm644 \
+      ${omarchyLazyvim}/lua/plugins/snacks-animated-scrolling-off.lua \
+      $out/lua/plugins/snacks-animated-scrolling-off.lua
+    printf '\nvim.opt.relativenumber = false\n' >> $out/lua/config/options.lua
+
+    # NOT copying omarchy-lazyvim's static lua/plugins/theme.lua — that slot
+    # is a live symlink to Omarchy's current-theme state (home.file below),
+    # so the colorscheme follows `omarchy theme set`.
+  '';
 
   # The upstream checkout, shebang-patched for NixOS. This whole path becomes
   # $OMARCHY_PATH.
@@ -277,6 +333,12 @@ EOF
     export XDG_SESSION_DESKTOP=Hyprland
     export XDG_SESSION_TYPE=wayland
 
+    # Omarchy 4's LazyVim ("omarchy-nvim"), namespaced away from the user's
+    # real ~/.config/nvim: every nvim/neovide in this session uses
+    # ~/.config-omarchy4/omarchy-nvim + ~/.local/{share,state}/omarchy-nvim +
+    # ~/.cache/omarchy-nvim. See nvimConfig / the home.file entries.
+    export NVIM_APPNAME=omarchy-nvim
+
     # Quickshell's Qt build bundles qtsvg but NOT qtimageformats, so it
     # can't decode .webp — which is the format of nearly every Omarchy
     # theme background ("Unsupported image format" in the shell log, and
@@ -311,6 +373,23 @@ in
     source = "${omarchyTree}/config";
     recursive = true;
   };
+
+  # Omarchy 4's LazyVim config (see nvimConfig). recursive so the dir stays
+  # writable — lazy.nvim drops lazy-lock.json into it and plugins bootstrap
+  # on first `nvim` launch. NVIM_APPNAME=omarchy-nvim (launcher) is what
+  # points nvim/neovide here instead of the user's ~/.config/nvim.
+  home.file.".config-omarchy4/omarchy-nvim" = {
+    source = nvimConfig;
+    recursive = true;
+  };
+
+  # theme.lua → a live link to whatever `omarchy theme set` last staged, so
+  # LazyVim's colorscheme follows the Omarchy theme (the omarchy-lazyvim
+  # package + migrations/17850*.sh do the same). home.activation.omarchy4Theme
+  # below seeds this state on first run (tokyo-night → tokyonight-night).
+  home.file.".config-omarchy4/omarchy-nvim/lua/plugins/theme.lua".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${homeDirectory}/.local/state/omarchy/current/theme/neovim.lua";
 
   # User keybinds overlay — loaded by hyprland.lua after Omarchy's defaults,
   # so your keybinds layer on top without modifying the upstream tree.
