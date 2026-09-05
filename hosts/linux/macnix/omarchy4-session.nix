@@ -38,15 +38,17 @@
 #     the launcher to `uwsm start` if it matters.
 #   * first-run/provisioning hooks, mise, voxtype, fingerprint, etc.
 #
-# VERSION SKEW (the real risk): nixos-26.05 ships Hyprland 0.55.4 and
-# Quickshell 0.3.0; Omarchy 4 tracks whatever Arch shipped at its release.
-# Hyprland's Lua config API and Quickshell's QML API both move fast — if the
-# bar won't render or Hyprland rejects the config, that's almost certainly
-# why. Bump the `omarchy4` input / try newer pkgs and re-test.
+# VERSION SKEW (the real risk): Hyprland comes from nixpkgs-unstable now
+# (pkgsUnstable, currently 0.56.2 — see hosts/linux/macnix/nixos/programs.nix
+# and hyprland.nix); Quickshell is still nixos-26.05's 0.3.0. Omarchy 4
+# tracks whatever Arch shipped at its release. Hyprland's Lua config API and
+# Quickshell's QML API both move fast — if the bar won't render or Hyprland
+# rejects the config, that's almost certainly why. Bump the `omarchy4` input
+# / try newer pkgs and re-test.
 
 { omarchy4 }:
 
-{ pkgs, lib, config, username, homeDirectory, ... }:
+{ pkgs, pkgsUnstable, lib, config, username, homeDirectory, ... }:
 
 let
   configHome = "${homeDirectory}/.config-omarchy4";
@@ -55,12 +57,13 @@ let
   # that DO have a nixpkgs equivalent. Arch-only ones (pacman, yay, snapper,
   # limine, mise-bin, asdcontrol, expac, ...) are deliberately absent — the
   # scripts that need them will fail, and that's covered above.
-  runtimeDeps = with pkgs; [
+  runtimeDeps = (with pkgsUnstable; [
     hyprland                # hyprctl, and the compositor the launcher execs
     hyprland-qtutils        # hyprland-dialog / hyprland-toast used by scripts
     hypridle
     hyprsunset
     hyprpicker
+  ]) ++ (with pkgs; [
     quickshell              # `qs` + `quickshell`, the Omarchy 4 shell host
     uwsm                    # uwsm-app, for o.launch()-wrapped keybinds
     wl-clipboard
@@ -91,7 +94,7 @@ let
     procps
     util-linux
     libqalculate
-  ];
+  ]);
 
   # The upstream checkout, shebang-patched for NixOS. This whole path becomes
   # $OMARCHY_PATH.
@@ -154,23 +157,87 @@ EOF
       printf '\nhl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })\n' \
         >> $out/config/hypr/monitors.lua
 
-      # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle has
-      # no `.reserved` field (added upstream later), so qconsole.lua:71
-      # errors with "attempt to index a nil value (local 'reserved')" and
-      # trips the on-screen config-error overlay. Default it to a zero
-      # inset — worst case the Quake console ignores the bar height.
+      # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle had
+      # no `.reserved` field, so qconsole.lua:71 errored with "attempt to
+      # index a nil value (local 'reserved')" and tripped the config-error
+      # overlay. 0.56.2 (pkgsUnstable) has the field, so this is now a
+      # harmless no-op — keep it as a guard, drop it if the tree ever moves
+      # on and the sed pattern stops matching.
       ${pkgs.gnused}/bin/sed -i \
         's/^  local reserved = monitor\.reserved$/  local reserved = monitor.reserved or { top = 0, bottom = 0 }/' \
         $out/default/hypr/qconsole.lua
 
       # The power/system menu's "Log out" runs `uwsm stop`, but this
       # launcher starts Hyprland via start-hyprland, not uwsm — so logout
-      # silently does nothing. Swap in a plain compositor exit; the
-      # start-hyprland watchdog sees the clean exit and ends the session.
-      # (reboot/shutdown use systemctl and already work.)
+      # silently does nothing. Swap in a compositor exit. Under Hyprland
+      # 0.56's Lua config, `hyprctl dispatch` evaluates its argument as Lua
+      # (the old bare `dispatch exit` / `dispatch <name> <args>` forms are
+      # gone — they now error with "expected a dispatcher"), so it must be
+      # the `hl.dsp.exit()` call form. Matches Hyprland 0.56's own default
+      # Super+M bind. start-hyprland sees the clean exit and ends the
+      # session. (reboot/shutdown use systemctl and already work.)
       ${pkgs.gnused}/bin/sed -i \
-        's/uwsm stop/hyprctl dispatch exit/' \
+        "s/uwsm stop/hyprctl dispatch 'hl.dsp.exit()'/" \
         $out/bin/omarchy-system-logout
+
+      # $OMARCHY_PATH/themes/* is in the read-only Nix store, so
+      # omarchy-theme-set's `cp -r "$OMARCHY_THEMES_PATH/$THEME_NAME/"*`
+      # produces mode-0555 copies (backgrounds/ and its files above all).
+      # The *next* theme switch then can't `rm -rf "$CURRENT_THEME_PATH"`
+      # — rm can't unlink entries inside a non-writable directory — so
+      # `mv "$NEXT_THEME_PATH" "$CURRENT_THEME_PATH"` finds the old dir
+      # still there, silently fails, and
+      # ~/.local/state/omarchy/current/theme is left with no
+      # colors.toml / hyprland.lua / shell.toml: the whole session loses
+      # its theme (Quickshell + Hyprland come up unthemed / broken). On
+      # Arch $OMARCHY_PATH is a writable git checkout so this never bites.
+      # Force the staging trees writable right before each rm.
+      ${pkgs.gnused}/bin/sed -i \
+        -e 's@^rm -rf "$NEXT_THEME_PATH"@chmod -R u+w "$NEXT_THEME_PATH" 2>/dev/null || true; &@' \
+        -e 's@^rm -rf "$CURRENT_THEME_PATH"@chmod -R u+w "$CURRENT_THEME_PATH" 2>/dev/null || true; &@' \
+        $out/bin/omarchy-theme-set
+
+      # --- macnix: EXPERIMENTAL spacer-pane "gap" hack for tmux -----------
+      # tmux draws every pane border as one continuous rule the full length
+      # of the shared edge (pane-border-lines) — there's no built-in option
+      # for a real blank gap between panes the way a tiling compositor's
+      # gaps_in works. This fakes one: each split also carves off a 1-cell
+      # pane that just runs `sleep infinity` (no shell, nothing to
+      # accidentally type into) and inserts it *between* the two real
+      # panes, so you get an actual blank cell instead of a drawn rule.
+      # Appending redefines the same keys tmux.conf already binds above —
+      # tmux uses the last `bind` for a given key/table, so this wins.
+      #
+      # Rough edges (proof of concept, not a polished feature):
+      #   - killing a real pane next to a spacer leaves the spacer
+      #     orphaned; `prefix k`/`prefix K` (kill-window/-session) clear a
+      #     whole window/session at once, killing one pane at a time does
+      #     not.
+      #   - the spacer is a real pane: pane-cycling binds (C-M-arrow) and
+      #     `prefix q` (show pane numbers) can land on / label it.
+      #   - splitting again inside an already-gapped layout stacks another
+      #     spacer; layouts get spacer-dense fast.
+      # Revert by deleting this block.
+      cat >> $out/config/tmux/tmux.conf <<'EOF'
+
+# macnix: spacer-pane gap hack (see omarchy4-session.nix)
+bind -N "Split pane vertically (gapped)" -n M-Enter split-window -v -c "#{pane_current_path}" \; split-window -v -b -d -l 1 'exec sleep infinity'
+bind -N "Split pane horizontally (gapped)" -n M-S-Enter split-window -h -c "#{pane_current_path}" \; split-window -h -b -d -l 1 'exec sleep infinity'
+bind -N "Split pane vertically (gapped)" h split-window -v -c "#{pane_current_path}" \; split-window -v -b -d -l 1 'exec sleep infinity'
+bind -N "Split pane horizontally (gapped)" v split-window -h -c "#{pane_current_path}" \; split-window -h -b -d -l 1 'exec sleep infinity'
+EOF
+      # ------------------------------------------------------------------
+
+      # Load user keybinds at the END of hyprland.lua (safest place, after
+      # all defaults are loaded). This allows ~/.config-omarchy4/hypr/user-keybinds.lua
+      # to override/extend Omarchy's default keybinds.
+      cat >> $out/config/hypr/hyprland.lua <<'EOF'
+
+-- Load user keybinds overlay (if it exists)
+local user_keybinds = os.getenv("XDG_CONFIG_HOME") .. "/hypr/user-keybinds.lua"
+local f = io.open(user_keybinds, "r")
+if f then f:close(); dofile(user_keybinds) end
+EOF
       # ------------------------------------------------------------------
     '';
 
@@ -200,15 +267,21 @@ EOF
     # the wallpaper never changes). Add the matching-version image-format
     # plugins; Qt merges this with its built-in plugin path.
     export QT_PLUGIN_PATH="${pkgs.qt6.qtimageformats}/lib/qt-6/plugins''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}"
-    # $OMARCHY_PATH/bin first (Omarchy's own CLI), then the Nix runtime
-    # deps, then the user + system profiles, then whatever we inherited.
-    export PATH="${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}:$HOME/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin''${PATH:+:$PATH}"
+    # /run/wrappers/bin FIRST — it holds the setuid wrappers (sudo, su,
+    # mount, …). Stock NixOS keeps it ahead of /run/current-system/sw/bin,
+    # whose `sudo` is a plain non-setuid copy; if that wins, `sudo` (and so
+    # `nixos-switch`) dies with "must be owned by uid 0 and have the setuid
+    # bit set" inside this session. Then $OMARCHY_PATH/bin (Omarchy's own
+    # CLI), the Nix runtime deps, the user + system profiles, and finally
+    # whatever we inherited.
+    export PATH="/run/wrappers/bin:${omarchyTree}/bin:${lib.makeBinPath runtimeDeps}:$HOME/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin''${PATH:+:$PATH}"
 
-    # start-hyprland (not the raw Hyprland binary) is Hyprland 0.55's
-    # supported entry point — watchdog + crash-restart + systemd/dbus
-    # session setup. Matches this box's normal "Hyprland" GDM session and
-    # silences "launched without start-hyprland".
-    exec ${pkgs.hyprland}/bin/start-hyprland
+    # start-hyprland (not the raw Hyprland binary) is Hyprland's supported
+    # entry point — watchdog + crash-restart + systemd/dbus session setup.
+    # Matches this box's normal "Hyprland" GDM session and silences
+    # "launched without start-hyprland". Same pkgsUnstable.hyprland (0.56.2)
+    # as the system compositor and hyprland.nix.
+    exec ${pkgsUnstable.hyprland}/bin/start-hyprland
   '';
 in
 {
@@ -221,6 +294,27 @@ in
   home.file.".config-omarchy4" = {
     source = "${omarchyTree}/config";
     recursive = true;
+  };
+
+  # User keybinds overlay — loaded by hyprland.lua after Omarchy's defaults,
+  # so your keybinds layer on top without modifying the upstream tree.
+  # Edit this file to customize keybindings for the Omarchy 4 session.
+  home.file.".config-omarchy4/hypr/user-keybinds.lua" = {
+    text = ''
+      -- User keybinds overlay for Omarchy 4. Loaded (via a dofile hook the
+      -- runCommand appends to config/hypr/hyprland.lua) AFTER Omarchy's
+      -- defaults, so these layer on top. `o` and `hl` are globals by this
+      -- point: use o.bind(keys, description, command) — the Omarchy helper
+      -- from default/hypr/helpers.lua — not raw hl.bind. There is no
+      -- `mainMod` variable in Omarchy's Lua config; write "SUPER" out.
+
+      -- Terminal launcher (Super+Return). Omarchy already binds this to its
+      -- configured default terminal ({ omarchy = "terminal" }); unbind first,
+      -- then point it straight at ghostty. (Or drop this and just run
+      -- `omarchy-default-terminal ghostty` once — menu: Setup > Default Terminal.)
+      hl.unbind("SUPER + RETURN")
+      o.bind("SUPER + RETURN", "Terminal", "ghostty")
+    '';
   };
 
   home.file.".local/bin/omarchy4-session" = {

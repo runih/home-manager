@@ -5,9 +5,13 @@
 #   * omarchy-nix's home-manager module is evaluated in a NESTED
 #     `homeManagerConfiguration` here (not merged into the real macnix
 #     config), purely to render omarchy's generated dotfile tree.
-#   * That tree is patched for the Hyprland that nixos-26.05 ships (0.55.4)
-#     — omarchy targets a newer Hyprland and uses a few option/keyword
-#     names this build rejects — then dropped into ~/.config-omarchy/.
+#   * That tree is patched for an older Hyprland — omarchy targets a newer
+#     one and uses a few option/keyword names older builds reject — then
+#     dropped into ~/.config-omarchy/. The launcher now runs the same
+#     pkgsUnstable.hyprland (0.56.2) as the rest of macnix; the patch below
+#     is kept because it stays harmless there (worst case a couple of
+#     cosmetic rules are dropped). Eyeball this session at login after a
+#     Hyprland bump.
 #   * A launcher script points XDG_CONFIG_HOME at ~/.config-omarchy and
 #     starts Hyprland, so its whole stack (waybar, wofi, mako, hyprlock,
 #     ghostty, gtk) reads omarchy's config while the normal Hyprland
@@ -20,7 +24,7 @@
 # every `hm`; bump omarchy-nix in the root flake to update it.
 
 { home-manager, omarchy-nix, nixpkgs }:
-{ pkgs, lib, username, homeDirectory, ... }:
+{ pkgs, pkgsUnstable, lib, username, homeDirectory, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -55,7 +59,8 @@ let
     ];
   };
 
-  # Patch omarchy's hyprland.conf for Hyprland 0.55.4 (nixos-26.05):
+  # Patch omarchy's hyprland.conf for an older Hyprland (still applied on
+  # 0.56.2 — harmless there):
   #   - `togglesplit` is a layoutmsg, not a bare dispatcher, in this build
   #   - decoration:shadow:ignore_window / dwindle:pseudotile /
   #     gestures:workspace_swipe were renamed or removed upstream
@@ -85,7 +90,7 @@ let
   omarchyLauncher = pkgs.writeShellScript "omarchy-hyprland" ''
     export XDG_CONFIG_HOME="$HOME/.config-omarchy"
     export XDG_CURRENT_DESKTOP=Hyprland
-    exec ${pkgs.hyprland}/bin/Hyprland
+    exec ${pkgsUnstable.hyprland}/bin/Hyprland
   '';
 in
 {
