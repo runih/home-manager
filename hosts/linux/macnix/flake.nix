@@ -71,12 +71,12 @@
       # isolated in ~/.config-omarchy4 as its own GDM session, NEXT TO
       # everything else (independent of `enableOmarchy` /
       # `enableOmarchySession`, which both use omarchy-nix's older
-      # Omarchy-3-era stack). Needs the GDM entry from
-      # nixos/omarchy4-session.nix registered once via `nixos-switch`.
-      # See ./omarchy4-session.nix for what works and what doesn't.
+      # Omarchy-3-era stack). Needs the GDM entry from nixos/omarchy4/
+      # registered once via `nixos-switch`.
+      # See ./omarchy4/README.md for what works and what doesn't.
       enableOmarchy4Session = true;
 
-      omarchy4SessionModule = import ./omarchy4-session.nix { inherit omarchy4; };
+      omarchy4SessionModule = import ./omarchy4 { inherit omarchy4; };
 
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [

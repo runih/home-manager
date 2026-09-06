@@ -24,7 +24,7 @@
     # flake — it's a plain dotfiles/scripts repo). Only used by macnix's
     # experimental `enableOmarchy4Session` toggle, which runs it isolated in
     # ~/.config-omarchy4 next to the normal Hyprland session. See
-    # hosts/linux/macnix/omarchy4-session.nix.
+    # hosts/linux/macnix/omarchy4/README.md.
     omarchy4 = {
       url = "github:omacom/omarchy";
       flake = false;

@@ -2,13 +2,13 @@
 # Hyprland (uwsm) / Niri / Omarchy. GDM only reads wayland-session .desktop
 # files from packages in services.displayManager.sessionPackages, so the
 # entry has to live system-side even though the config it launches is all
-# home-manager (see ../omarchy4-session.nix).
+# home-manager (see ../../omarchy4/README.md).
 #
 # The Exec is the fixed path to the home-manager-managed launcher, which
 # sets OMARCHY_PATH + XDG_CONFIG_HOME=~/.config-omarchy4 and starts Hyprland.
 #
 # This is always registered (cheap — just a .desktop file). The session only
-# does anything once `enableOmarchy4Session` in ../flake.nix has put the
+# does anything once `enableOmarchy4Session` in ../../flake.nix has put the
 # launcher + config tree in place via `hm`.
 
 { pkgs, ... }:
