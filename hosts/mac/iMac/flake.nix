@@ -19,6 +19,7 @@
         system = "aarch64-darwin";
         inherit username;
         homeDirectory = "/Users/${username}";
+        allowUnfree = true;
         modules = [
           ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
           m.basic-mac
