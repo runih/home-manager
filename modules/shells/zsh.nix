@@ -19,7 +19,7 @@
       shellAliases = {
         cd = "z";
         cdi = "zi";
-        hm = "home-manager switch --impure --flake ~/.config/home-manager#$USER@$(hostname)";
+        hm = "home-manager switch --impure --flake \"$HOME/.config/home-manager#$USER@$(hostname)\"";
       };
     };
 }
