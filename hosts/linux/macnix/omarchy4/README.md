@@ -70,6 +70,11 @@ launch (needs network, ~1–2 min). The user's real `~/.config/nvim` is untouche
   to `uwsm start` if it matters. (The terminal / editor / logout paths are
   patched around this in `tree.nix`.)
 - First-run / provisioning hooks, mise, voxtype, fingerprint, etc.
+- **Updates.** `omarchy-update` can't do anything here (no pacman, `$OMARCHY_PATH`
+  is a read-only store copy). `tree.nix` stubs `omarchy-update-available` to
+  always say "up to date" (hides the bar's SystemUpdate widget) and neuters the
+  "Click to update the system" first-run toast in `install/user/first-run/wifi.sh`.
+  Update by bumping the `omarchy4` input in the root flake + `hm`.
 
 ## Version skew (the real risk)
 

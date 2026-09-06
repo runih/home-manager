@@ -12,6 +12,19 @@ pkgs.runCommand "omarchy4-tree" { }
       cp -r ${omarchy4} $out
       chmod -R u+w $out
 
+      # macnix: NixOS can't apply Omarchy's updates — no pacman, and
+      # $OMARCHY_PATH is a read-only store copy with no git upstream. Stub
+      # omarchy-update-available to always report "up to date" so the bar's
+      # SystemUpdate widget stays hidden and omarchy-update-status clears.
+      # Done here, before the shebang pass below, so the #!/bin/bash gets
+      # rewritten with the rest.
+      cat > $out/bin/omarchy-update-available <<'EOF'
+#!/bin/bash
+# Overridden for macnix — see hosts/linux/macnix/omarchy4/README.md.
+echo "Omarchy is up to date"
+exit 1
+EOF
+
       # No /bin/bash or /usr/bin/python3 on NixOS. Rewrite the interpreter
       # line of every script in the tree (bin/, default/, shell/, themes/,
       # migrations/, test/, ...).
@@ -46,12 +59,18 @@ EOF
       # append a real block.
       cat >> $out/config/hypr/input.lua <<'EOF'
 
--- macnix: internal MacBook keyboard (see nixos/keyboard.nix).
+-- macnix: internal MacBook keyboard (see nixos/keyboard.nix) + natural
+-- scrolling on the touchpad (matches the normal Hyprland session,
+-- hosts/linux/macnix/hyprland.nix). Loaded after Omarchy's defaults, so
+-- this wins.
 hl.config({
   input = {
     kb_layout = "macnix-se",
     kb_model = "apple",
     kb_options = "lv3:lalt_switch,apple:alupckeys",
+    touchpad = {
+      natural_scroll = true,
+    },
   },
 })
 EOF
@@ -75,6 +94,16 @@ EOF
       ${pkgs.gnused}/bin/sed -i \
         's/^  local reserved = monitor\.reserved$/  local reserved = monitor.reserved or { top = 0, bottom = 0 }/' \
         $out/default/hypr/qconsole.lua
+
+      # No "Update System" nag. omarchy-provision-first-run (autostart on
+      # every login) runs install/user/first-run/wifi.sh, whose
+      # announce_network sends a critical "Click to update the system"
+      # toast once the network is up — pointless here, `omarchy-update`
+      # can't do anything on NixOS. Neuter just that call (the Wi-Fi setup
+      # prompt in the same script is left alone).
+      ${pkgs.gnused}/bin/sed -i \
+        's/^  notify_update$/  : # macnix: no omarchy-update on NixOS/' \
+        $out/install/user/first-run/wifi.sh
 
       # The power/system menu's "Log out" runs `uwsm stop`, but this
       # launcher starts Hyprland via start-hyprland, not uwsm — so logout
