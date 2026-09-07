@@ -39,22 +39,12 @@ in
     recursive = true;
   };
 
-  # Omarchy 4's LazyVim config (see ./nvim.nix). recursive so the dir stays
-  # writable — lazy.nvim drops lazy-lock.json into it and plugins bootstrap
-  # on first `nvim` launch. NVIM_APPNAME=omarchy-nvim (launcher) is what
-  # points nvim/neovide here instead of the user's ~/.config/nvim.
-  home.file.".config-omarchy4/omarchy-nvim" = {
-    source = nvimConfig;
-    recursive = true;
-  };
-
   # theme.lua → a live link to whatever `omarchy theme set` last staged, so
   # LazyVim's colorscheme follows the Omarchy theme (the omarchy-lazyvim
   # package + migrations/17850*.sh do the same). home.activation.omarchy4Theme
   # below seeds this state on first run (tokyo-night → tokyonight-night).
-  home.file.".config-omarchy4/omarchy-nvim/lua/plugins/theme.lua".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${homeDirectory}/.local/state/omarchy/current/theme/neovim.lua";
+  # The link itself is (re)made by home.activation.omarchy4Nvim, since the
+  # config tree it lives in is a plain seeded copy, not a home.file symlink.
 
   # User keybinds overlay — loaded by hyprland.lua after Omarchy's defaults,
   # so your keybinds layer on top without modifying the upstream tree.
@@ -74,6 +64,30 @@ in
   # the session); add more here if other tools misbehave.
   home.file.".config-omarchy4/nix".source =
     config.lib.file.mkOutOfStoreSymlink "${homeDirectory}/.config/nix";
+
+  # ~/.config-omarchy4/omarchy-nvim — the LazyVim ("omarchy-nvim") config.
+  # Seeded ONCE from the Nix-built tree (./nvim.nix), then it's a plain
+  # directory of real, writable files that you own and can edit/save like
+  # any normal LazyVim config. (A home.file symlink tree made every file a
+  # read-only /nix/store link — you couldn't save changes.) lazy.nvim also
+  # writes lazy-lock.json here and bootstraps plugins on first launch.
+  #
+  # Re-seed a file by deleting it (or the whole omarchy-nvim/ dir) and
+  # re-running hm. Bumps to ./nvim.nix do NOT propagate to an existing
+  # copy — that's the cost of making it writable.
+  home.activation.omarchy4Nvim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    nvimdir="${configHome}/omarchy-nvim"
+    if [ ! -e "$nvimdir/init.lua" ]; then
+      run mkdir -p "$nvimdir"
+      run cp -r --no-preserve=mode,ownership ${nvimConfig}/. "$nvimdir/"
+      run chmod -R u+w "$nvimdir"
+    fi
+    # theme.lua always follows the active Omarchy theme (see comment above).
+    run mkdir -p "$nvimdir/lua/plugins"
+    run ln -sfn \
+      "${homeDirectory}/.local/state/omarchy/current/theme/neovim.lua" \
+      "$nvimdir/lua/plugins/theme.lua"
+  '';
 
   # Seed an initial "current theme" ONLY on first run — the shell + Hyprland
   # both read ~/.local/state/omarchy/current/{theme,background,theme.name} at

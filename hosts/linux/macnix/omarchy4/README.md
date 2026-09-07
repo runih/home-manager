@@ -59,6 +59,12 @@ the session uses `~/.config-omarchy4/omarchy-nvim` + `~/.local/{share,state}/oma
 + `~/.cache/omarchy-nvim`. `lazy.nvim` bootstraps the plugins on the first
 launch (needs network, ~1–2 min). The user's real `~/.config/nvim` is untouched.
 
+`~/.config-omarchy4/omarchy-nvim` is **seeded once** from the Nix-built tree
+(`home.activation.omarchy4Nvim`), then it's plain writable files you own and
+edit like any LazyVim config. Later changes to `nvim.nix` do **not** reach an
+existing copy — delete a file (or the whole dir) and re-run `hm` to re-seed.
+`lua/plugins/theme.lua` stays a symlink that follows `omarchy theme set`.
+
 ## What does not
 
 - Every menu action that shells out to pacman / yay / snapper / limine /
