@@ -165,6 +165,7 @@
           m.java
           m.simple-tmux
           m.podman
+          m.fastfetch
           { host.hasBattery = true; }
           m.vim
           m.doom-emacs
