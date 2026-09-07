@@ -43,12 +43,17 @@ to it and is unmaintained, so this module points at upstream directly instead.
 | `nvim.nix` | the LazyVim ("omarchy-nvim") config tree, assembled from `LazyVim/starter` + `omacom/omarchy-lazyvim` |
 | `runtime-deps.nix` | nixpkgs equivalents of the tools the `omarchy-*` scripts + Hyprland/Quickshell call |
 | `launcher.nix` | `~/.local/bin/omarchy4-session` |
-| `hypr/user-keybinds.lua` | keybind overlay, loaded after Omarchy's defaults (currently: Super+Return → ghostty) |
+| `hypr/user-keybinds.lua` | keybind overlay, loaded after Omarchy's defaults (Super+Return → ghostty, vim-motion window nav, Super+Ctrl+F maximize) |
 
 ## What works (best case — expect to iterate on-device)
 
 The compositor, the Quickshell bar / menu / launcher / lock, and the theming
 that ships inside the repo (tokyo-night is the default, seeded on first run).
+
+`tree.nix` also patches the Quickshell `menu` / `clipboard` / `emojis` key
+handlers to add fzf-style vim-motion navigation (Ctrl+h/j/k/l) next to the
+arrow keys — bare h/j/k/l stay filter input. The patch asserts its anchors
+and fails the build if a Quickshell refactor moves them.
 
 ## Neovim
 

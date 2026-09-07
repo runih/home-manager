@@ -158,6 +158,83 @@ EOF
         -e 's@^rm -rf "$CURRENT_THEME_PATH"@chmod -R u+w "$CURRENT_THEME_PATH" 2>/dev/null || true; &@' \
         $out/bin/omarchy-theme-set
 
+      # macnix: vim-motion navigation in the Quickshell menu / launcher and
+      # the clipboard + emoji pickers. Their key handlers are arrow-keys
+      # only, and bare h/j/k/l just type into the filter box — so bind
+      # Ctrl+h/j/k/l (fzf-style): Ctrl+j/k = down/up, Ctrl+h = clear filter
+      # / go back, Ctrl+l = forward / activate (emoji picker: Ctrl+h/l move
+      # within the row, Ctrl+j/k by row). Injected as a new branch just
+      # ahead of the arrow-key branch in each plugin's Keys.onPressed; the
+      # build fails loudly if an anchor moves under a Quickshell refactor.
+      ${pkgs.python3}/bin/python3 - "$out" <<'PYEOF'
+import pathlib, sys
+
+tree = pathlib.Path(sys.argv[1])
+
+MENU = """          } else if ((event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_H || event.key === Qt.Key_J || event.key === Qt.Key_K || event.key === Qt.Key_L)) {
+            if (event.key === Qt.Key_J) {
+              root.select(1)
+            } else if (event.key === Qt.Key_K) {
+              root.select(-1)
+            } else if (event.key === Qt.Key_H) {
+              if (root.filterText) root.setFilter("")
+              else root.goBack()
+            } else if (root.dmenuActive) {
+              if (root.mode === "input") root.applyDmenuSelection(root.filterText)
+              else if (displayModel.count > 0) root.activateIndex(root.cursorActive ? root.selectedIndex : 0)
+            } else if (root.cursorActive) {
+              root.activateIndex(root.selectedIndex)
+            } else {
+              root.settleCursor()
+            }
+            event.accepted = true
+"""
+
+CLIP = """          } else if ((event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_H || event.key === Qt.Key_J || event.key === Qt.Key_K || event.key === Qt.Key_L)) {
+            if (event.key === Qt.Key_J) {
+              root.select(1)
+            } else if (event.key === Qt.Key_K) {
+              root.select(-1)
+            } else if (event.key === Qt.Key_H) {
+              if (root.filterText) root.setFilter("")
+              else root.close()
+            } else if (root.cursorActive) {
+              root.activateIndex(root.selectedIndex)
+            } else if (displayModel.count > 0) {
+              root.cursorActive = true
+            }
+            event.accepted = true
+"""
+
+EMOJI = """          } else if ((event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_H || event.key === Qt.Key_J || event.key === Qt.Key_K || event.key === Qt.Key_L)) {
+            if (event.key === Qt.Key_H) {
+              root.select(-1)
+            } else if (event.key === Qt.Key_L) {
+              root.select(1)
+            } else if (event.key === Qt.Key_J) {
+              root.selectRow(1)
+            } else {
+              root.selectRow(-1)
+            }
+            event.accepted = true
+"""
+
+targets = [
+    ("shell/plugins/menu/Menu.qml",          "          } else if (event.key === Qt.Key_Up) {",   MENU),
+    ("shell/plugins/clipboard/Clipboard.qml", "          } else if (event.key === Qt.Key_Up) {",   CLIP),
+    ("shell/plugins/emojis/Emojis.qml",       "          } else if (event.key === Qt.Key_Left) {", EMOJI),
+]
+
+for rel, anchor, block in targets:
+    p = tree / rel
+    text = p.read_text()
+    hits = text.count(anchor)
+    if hits != 1:
+        sys.exit("omarchy4 vim-motion patch: anchor in %s matched %d times, expected 1 (upstream Quickshell shape changed)" % (rel, hits))
+    p.write_text(text.replace(anchor, block + anchor, 1))
+    print("omarchy4 vim-motion patch: patched %s" % rel)
+PYEOF
+
       # --- macnix: EXPERIMENTAL spacer-pane "gap" hack for tmux -----------
       # tmux draws every pane border as one continuous rule the full length
       # of the shared edge (pane-border-lines) — there's no built-in option
