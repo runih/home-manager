@@ -75,6 +75,17 @@ hl.config({
 })
 EOF
 
+      # macnix: Omarchy 4 ships workspace-switch animation disabled
+      # (default/hypr/looknfeel.lua: `leaf = "workspaces", enabled = false`).
+      # Re-enable it with a slide — config/hypr/looknfeel.lua loads after the
+      # defaults, so this re-definition of the leaf wins. Tuned to match the
+      # window animation (easeOutQuint, similar speed).
+      cat >> $out/config/hypr/looknfeel.lua <<'EOF'
+
+-- macnix: bring back the workspace slide (Omarchy disables it by default).
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "easeOutQuint", style = "slide" })
+EOF
+
       # HiDPI panel — the normal session runs eDP-1 at scale 1.5
       # (hosts/.../hyprland.nix); match it, and drop Omarchy's GDK_SCALE=2
       # (its "leave XWayland unscaled" trick assumes an integer monitor
