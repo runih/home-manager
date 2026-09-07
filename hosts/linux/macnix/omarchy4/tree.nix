@@ -82,8 +82,15 @@ EOF
       ${pkgs.gnused}/bin/sed -i \
         's/^local omarchy_gdk_scale = .*/local omarchy_gdk_scale = 1/' \
         $out/config/hypr/monitors.lua
-      printf '\nhl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.5 })\n' \
-        >> $out/config/hypr/monitors.lua
+      # Explicit two-head layout: HP ENVY 34 (DP-1, 3440x1440 @ scale 1) is
+      # the primary at 0x0; the MacBook panel (eDP-1, scale 1.5 -> 1536x960
+      # logical) sits to its right, bottom-aligned (y = 1440 - 960 = 480) so
+      # the bottom edges line up the way the hardware sits on the desk.
+      cat >> $out/config/hypr/monitors.lua <<'EOF'
+
+hl.monitor({ output = "DP-1", mode = "3440x1440@60", position = "0x0", scale = 1 })
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "3440x480", scale = 1.5 })
+EOF
 
       # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle had
       # no `.reserved` field, so qconsole.lua:71 errored with "attempt to
