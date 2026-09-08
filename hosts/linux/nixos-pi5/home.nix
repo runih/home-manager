@@ -93,5 +93,12 @@
     vim = {
       enable = true;                  # Enable vim
     };
+
+    # `nixos-switch` is no longer an alias — it's a script from the system
+    # config (hosts/linux/nixos-pi5/nixos/tryboot.nix). It runs
+    # `nixos-rebuild boot` against that flake, then stages the new generation
+    # for a `sudo reboot "0 tryboot"` test; /boot/config.txt is only updated
+    # after that generation boots successfully. `nixos-boot-status` shows
+    # running / committed / staged generations.
   };
 }

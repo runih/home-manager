@@ -60,6 +60,16 @@ This means:
 
 Applied with `nixos-switch` (a `home.nix` shell alias for `sudo nixos-rebuild switch --flake ~/.config/home-manager/hosts/linux/macnix/nixos#macnix`), never a bare `sudo nixos-rebuild switch` — `/etc/nixos` intentionally has no `configuration.nix`/`flake.nix` of its own, since a shim there that just `import`s this repo's `flake.nix` fails (nix's flake front end needs a literal attribute set at the top of `flake.nix` to statically read `inputs` before evaluation, so that indirection errors with "must be an attribute set"; unlike the old classic `configuration.nix` shim, which worked fine since a plain NixOS module import has no such restriction). Edit the files here, they take effect on that machine's next `nixos-switch` without any copying step. Run `hosts/linux/macnix/nixos/clear-etc-nixos.sh` if `/etc/nixos` ever accumulates a stale `configuration.nix`/`flake.nix` (e.g. after cloning onto a fresh machine).
 
+`hosts/linux/nixos-pi5/nixos/` is the same arrangement for the Raspberry Pi 5 (`nixos-pi5`): a verbatim mirror of that machine's `/etc/nixos` (`linux-rpi` 6.12 kernel, `kea` DHCP, docker, the out-of-tree `raspberry-pi5-leds.nix` LED-monitor build, btrfs snapshot scripts in `security.nix`), never imported by `mkHome`, with its own `flake.nix`/`flake.lock` pinning `nixpkgs` to `nixos-26.05`. Its `configuration.nix` keeps `system.stateVersion = "25.11"` (a compat marker — leave it) even though the flake now tracks `nixos-26.05`; the machine was on `nixos-25.05` before this migration.
+
+Boot on this host is **not** driven by `boot.loader` — the Pi 5 firmware boots straight from `/boot/config.txt` and ignores `extlinux.conf`. `hosts/linux/nixos-pi5/nixos/tryboot.nix` owns it instead:
+- `nixos-switch` (a script from that module, **not** an alias — the `home.nix` alias was removed) runs `nixos-rebuild boot` against `…/nixos-pi5/nixos#nixos-pi5` (no live activation), copies the new generation's kernel/initrd/dtb/overlays to `/boot/gen<N>/`, and writes `/boot/tryboot.txt` with `os_prefix=gen<N>/`. It never writes `/boot/config.txt`.
+- `sudo reboot "0 tryboot"` boots `gen<N>` once; any failure/power-cycle falls back to `config.txt` (the last generation that booted OK).
+- `tryboot-commit.service` runs late in boot and copies `tryboot.txt` → `config.txt` **only** when the firmware `tryboot` flag is set, the running system is the staged one, and multi-user was reached — the sole thing that ever changes `config.txt`.
+- `nixos-boot-status` prints running / committed (`config.txt`) / staged (`tryboot.txt`) generations. `boot.loader.generic-extlinux-compatible` stays enabled only to give `nixos-rebuild` an installer and keep `/boot/nixos/` populated (`configurationLimit = 3`).
+
+`hosts/linux/nixos-pi5/nixos/clear-etc-nixos.sh` drops the now-stale classic module files from `/etc/nixos` (that copy is a git repo with no remote, like macnix's).
+
 ### Shared modules (`modules/`)
 
 Mixins picked a la carte by host flakes via the registry in `modules/default.nix` — there's no single "base" every host uses. Notable groupings:
