@@ -7,11 +7,13 @@
     bc
     btop
     btrfs-progs
+    ethtool
     fastfetch
     git
     home-manager
     htop-vim
     iptraf-ng
+    iw              # wifi diagnostics (wld0 is this host's uplink)
     nmon
     pciutils
     raspberrypi-eeprom
