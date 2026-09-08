@@ -1,6 +1,13 @@
-{ ... }:
+{ lib, ... }:
 
 {
+  # nixos-hardware's raspberry-pi-5 module sets
+  #   hardware.deviceTree.filter = "bcm2712*-rpi-*.dtb"
+  # NixOS's filterDTBs then copies only matching *.dtb and DROPS dtbs/overlays/.
+  # tryboot.nix copies "$SYS/dtbs/overlays/" and the tryboot template loads
+  # dtoverlay=vc4-kms-v3d-pi5, so keep the full dtb tree.
+  hardware.deviceTree.filter = lib.mkForce null;
+
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot = {
     # Set WiFi regulatory domain for Sweden to prevent brcmfmac chanspec errors on 5 GHz DFS channels

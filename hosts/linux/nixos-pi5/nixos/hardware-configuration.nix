@@ -10,7 +10,9 @@
 
   boot.initrd.availableKernelModules = [ "nvme" "btrfs" "xhci_pci" "ehci_pci" "ohci_pci" "usbcore" "usb_storage" "ax88179_178a" ];
   boot.initrd.kernelModules = [  "nvme" "btrfs" "xhci_pci" "ehci_pci" "ohci_pci" "usbcore" "usb_storage" "ax88179_178a" ];
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
+  # boot.kernelPackages is provided by nixos-hardware's raspberry-pi-5 module
+  # (linux-rpi vendor fork, 6.18.x) — do not pin linuxPackages_rpi4 here or it
+  # overrides the module's mkDefault and holds the kernel back at 6.12.
   boot.kernelModules = [ "nvme" "btrfs" "brcmfmac" "xhci_pci" "ehci_pci" "ohci_pci" "usbcore" "usb_storage" "ax88179_178a" ];
   boot.extraModulePackages = [ ];
 
