@@ -131,7 +131,7 @@ let
 
   commit = pkgs.writeShellApplication {
     name = "tryboot-commit";
-    runtimeInputs = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.systemd ];
+    runtimeInputs = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep ];
     text = ''
       BOOT=/boot
       DT=/proc/device-tree/chosen
@@ -170,9 +170,9 @@ let
         exit 0
       fi
 
-      # 4. we reached this unit => boot got to multi-user. Commit.
-      state=$(systemctl is-system-running 2>/dev/null || true)
-      log "reached multi-user (system state: ''${state:-unknown}); committing"
+      # 4. this unit is ordered After=multi-user.target, so reaching it means
+      #    the staged generation booted through to multi-user. Commit.
+      log "staged generation booted to multi-user; committing"
 
       if [ "$(cat "$BOOT/tryboot.txt")" = "$(cat "$BOOT/config.txt")" ]; then
         log "config.txt already matches tryboot.txt; nothing to do"
