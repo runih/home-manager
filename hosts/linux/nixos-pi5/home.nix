@@ -40,7 +40,6 @@
       gcc             # GNU Compiler Collection
       git             # Version control system
       gnumake         # Build automation tool
-      neovim
       go             # Go programming language
       htop-vim        # Interactive process viewer with vim keybindings
       lazygit         # Simple terminal UI for git commands

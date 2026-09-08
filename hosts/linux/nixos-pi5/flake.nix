@@ -25,7 +25,7 @@
           ({ pkgsUnstable, ... }: { home.packages = [ pkgsUnstable.claude-code ]; })
           ./home.nix
 
-          m.neovide
+          m.neovim
           m.postgresql-client
           m.testssl
           m.java
