@@ -12,6 +12,7 @@
       ./packages.nix
       ./programs.nix
       ./services.nix
+      ./tuning.nix
       ./users.nix
       ./security.nix
       ./raspberry-pi5-leds.nix
