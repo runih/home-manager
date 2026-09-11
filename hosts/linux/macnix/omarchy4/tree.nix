@@ -93,14 +93,25 @@ EOF
       ${pkgs.gnused}/bin/sed -i \
         's/^local omarchy_gdk_scale = .*/local omarchy_gdk_scale = 1/' \
         $out/config/hypr/monitors.lua
-      # Explicit two-head layout: HP ENVY 34 (DP-1, 3440x1440 @ scale 1) is
-      # the primary at 0x0; the MacBook panel (eDP-1, scale 1.5 -> 1536x960
-      # logical) sits to its right, bottom-aligned (y = 1440 - 960 = 480) so
-      # the bottom edges line up the way the hardware sits on the desk.
+      # Two-head layout, external monitor negotiated from its own EDID
+      # ("preferred") rather than hardcoded — the external head here has
+      # been either an HP ENVY 34 (3440x1440) or a Dell P2425DE (2560x1440),
+      # and hardcoding one resolution left the other with an unsupported
+      # mode (blank/garbled picture).
+      #
+      # Position is explicit, not "auto": Hyprland's auto-placement orders
+      # by monitor detection order (eDP-1 is always first), not by the
+      # order monitor rules appear here, so "auto" on both put the MacBook
+      # panel on the left — backwards from the desk, where the external
+      # monitor sits on the left and the MacBook on the right. DP-1 is
+      # pinned as the x=0 anchor; eDP-1's x is the external monitor's
+      # current logical width (2560 for the Dell at scale 1) and its y
+      # bottom-aligns the two panels (1440 - 960 logical = 480). Swapping
+      # back to the HP ENVY 34 (3440 wide) needs that 2560 updated to 3440.
       cat >> $out/config/hypr/monitors.lua <<'EOF'
 
-hl.monitor({ output = "DP-1", mode = "3440x1440@60", position = "0x0", scale = 1 })
-hl.monitor({ output = "eDP-1", mode = "preferred", position = "3440x480", scale = 1.5 })
+hl.monitor({ output = "DP-1", mode = "preferred", position = "0x0", scale = 1 })
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "2560x480", scale = 1.5 })
 EOF
 
       # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle had
