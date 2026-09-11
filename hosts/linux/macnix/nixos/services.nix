@@ -31,17 +31,14 @@
     # Enable the OpenSSH daemon.
     openssh.enable = true;
 
-    # Enable the X11 windowing system.
-    displayManager.gdm.enable = true;
-    # Default session offered at the GDM login screen (plain Hyprland, no UWSM).
-    displayManager.defaultSession = "hyprland";
-    # Enable the GNOME Desktop Environment.
-    desktopManager.gnome.enable = true;
-    xserver = {
-      enable = true;
-      # Keymap (console.keyMap, xserver.xkb, and the custom XKB symbol file)
-      # lives in keyboard.nix.
-    };
+    # Display/login manager + GNOME session live in ./login-manager.nix
+    # (greetd+tuigreet vs GDM toggle).
+
+    # Enable the X11 windowing system (kept for xkb extraLayouts /
+    # XKB_CONFIG_ROOT even though sessions are Wayland). Keymap config
+    # (console.keyMap, xserver.xkb, custom XKB symbol file) lives in
+    # keyboard.nix.
+    xserver.enable = true;
     # Enable CUPS to print documents.
     printing.enable = false;
 

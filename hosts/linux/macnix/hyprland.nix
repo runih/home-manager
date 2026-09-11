@@ -1,22 +1,23 @@
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 let
   themes = import ./themes.nix;
   defaultPalette = themes.themes.${themes.default};
-  # Built against stable pkgs (not pkgsUnstable) because macnix's system
-  # Hyprland (from programs.hyprland in hosts/linux/macnix/nixos, now
-  # pinned to nixos-26.05) runs 0.55.4 — the same version stable pkgs.hyprland
-  # here ships. Hyprland plugins are ABI-pinned to the exact source headers
-  # of the running compositor, so a mismatch (e.g. building against
-  # nixpkgs-unstable's 0.56.2) makes Hyprland show a version-mismatch error
-  # banner on login instead of loading the plugin.
-  hyprexpo = pkgs.hyprlandPlugins.mkHyprlandPlugin {
+  # macnix's system Hyprland (programs.hyprland in hosts/linux/macnix/nixos)
+  # is pulled from nixpkgs-unstable so it runs the latest release (0.56.2)
+  # rather than the 0.55.4 that nixos-26.05 ships. Hyprland plugins are
+  # ABI-pinned to the exact source headers of the running compositor, so
+  # hyprexpo must be built against the SAME pkgsUnstable.hyprland and its
+  # source tag bumped to match — otherwise Hyprland shows a version-mismatch
+  # banner on login and refuses to load the plugin. Keep this in step with
+  # programs.hyprland.package on the system side.
+  hyprexpo = pkgsUnstable.hyprlandPlugins.mkHyprlandPlugin {
     pluginName = "hyprexpo";
-    version = "0.55.4";
-    src = pkgs.fetchFromGitHub {
+    version = "0.56.2";
+    src = pkgsUnstable.fetchFromGitHub {
       owner = "sandwichfarm";
       repo = "hyprexpo";
-      rev = "v0.55.4";
-      hash = "sha256-sERoTu9NcGD0RA3jAdHc4GOPkRbgqMrgDT8f7+Jv9fc=";
+      rev = "v0.56.2";
+      hash = "sha256-wTCuGWvlodB0W6W3Zesth2lKIQe2QEhKMu4VEYBsxPE=";
     };
     installPhase = ''
       runHook preInstall
@@ -79,6 +80,12 @@ in {
       hyprland = {
         enable = true;
         systemd.enable = true;
+        # Match the system compositor (programs.hyprland.package in
+        # hosts/linux/macnix/nixos) — latest 0.56.2 from nixpkgs-unstable,
+        # not the 0.55.4 that home-manager's pinned nixpkgs ships. The
+        # hyprexpo plugin above is built against this same package.
+        package = pkgsUnstable.hyprland;
+        portalPackage = pkgsUnstable.xdg-desktop-portal-hyprland;
         plugins = [ hyprexpo ];
         extraConfig = ''
           local mainMod = "SUPER"
@@ -128,10 +135,9 @@ in {
             },
             plugin = {
               hyprexpo = {
-                -- drag_drop_enable was added after the v0.55.4 tag this
-                -- plugin build is pinned to (see comment above hyprexpo
-                -- definition) — the older binary rejects it as an unknown
-                -- config key.
+                -- drag_drop_enable is available on the v0.56.2 build now
+                -- pinned above; left off by choice, add `drag_drop_enable = true`
+                -- to enable dragging windows between workspaces in the overview.
                 columns = 3,
                 gaps_in = 5,
                 gaps_out = 10,

@@ -12,6 +12,23 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Opinionated Omarchy-style Hyprland desktop (DHH's Omarchy, reimplemented
+    # for NixOS). Only consumed by macnix, and only when its `enableOmarchy`
+    # toggle is flipped on — otherwise this input is never evaluated.
+    omarchy-nix = {
+      url = "github:henrysipp/omarchy-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+    # The REAL upstream Omarchy 4 ("Quattro") tree, consumed verbatim (not a
+    # flake — it's a plain dotfiles/scripts repo). Only used by macnix's
+    # experimental `enableOmarchy4Session` toggle, which runs it isolated in
+    # ~/.config-omarchy4 next to the normal Hyprland session. See
+    # hosts/linux/macnix/omarchy4/README.md.
+    omarchy4 = {
+      url = "github:omacom/omarchy";
+      flake = false;
+    };
   };
 
   outputs = inputs @ { self, nixpkgs, home-manager, zen-browser, ... }:
@@ -24,7 +41,7 @@
 
       hostArgs = { inherit nixpkgs home-manager sharedModules; };
       blackMacArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
-      macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
+      macnixArgs = hostArgs // { inherit zen-browser; "nixpkgs-unstable" = inputs.nixpkgs-unstable; "omarchy-nix" = inputs.omarchy-nix; "omarchy4" = inputs.omarchy4; };
       nasArgs = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
       pi5Args = hostArgs // { "nixpkgs-unstable" = inputs.nixpkgs-unstable; };
     in {

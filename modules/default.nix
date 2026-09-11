@@ -37,6 +37,7 @@
   java              = ./tools/java.nix;
   postgresql-client = ./tools/postgresql-client.nix;
   testssl           = ./tools/testssl.nix;
+  fastfetch         = ./tools/fastfetch.nix;
   yazi              = ./tools/yazi.nix;
   podman            = ./tools/podman.nix;
   lima              = ./tools/lima.nix;

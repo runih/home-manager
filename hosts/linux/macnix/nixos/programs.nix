@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 {
   programs = {
@@ -10,6 +10,11 @@
     hyprland = {
       enable = true;
       xwayland.enable = true;
+      # Latest Hyprland (0.56.2) from nixpkgs-unstable — nixos-26.05 only has
+      # 0.55.4. 0.56 shipped with no breaking config changes, and the
+      # hyprexpo plugin (hosts/linux/macnix/hyprland.nix) is bumped to match.
+      package = pkgs-unstable.hyprland;
+      portalPackage = pkgs-unstable.xdg-desktop-portal-hyprland;
     };
     niri = {
       enable = true;

@@ -11,6 +11,7 @@
       ./boot.nix
       ./networking.nix
       ./services.nix
+      ./login-manager.nix
       ./packages.nix
       ./programs.nix
       ./users.nix
@@ -19,6 +20,8 @@
       ./docker.nix
       ./macbook12-audio.nix
       ./intel-gpu-tools.nix
+      ./omarchy-session.nix
+      ./omarchy4
     ];
 
   # Set your time zone.
