@@ -20,7 +20,7 @@
       ./docker.nix
       ./macbook12-audio.nix
       ./intel-gpu-tools.nix
-      #./facetimehd.nix
+      ./facetimehd.nix
       ./omarchy-session.nix
       ./omarchy4
     ];
