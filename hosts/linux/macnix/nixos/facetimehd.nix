@@ -46,3 +46,4 @@ in
     mkdir -p /lib/firmware
     ln -sf ${firmwareDir} /lib/firmware
   '';
+}
