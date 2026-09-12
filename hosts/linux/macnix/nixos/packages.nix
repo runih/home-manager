@@ -18,5 +18,7 @@
     xkeyboard_config
     audit # auditctl/auditd/ausearch, for testing the kernel audit subsystem
     hdparm
+    fswebcam    # V4L2 command-line camera capture
+    v4l-utils   # v4l2-ctl for camera debugging
   ];
 }
