@@ -19,17 +19,24 @@
   # KERNEL_VERSION(7, 0, 0)` guard added after that tag was cut). Build
   # fails on this kernel with "'vb2_ops_wait_finish' undeclared". Override
   # the package to the current 0.7.2 tag, which has that guard.
-  nixpkgs.overlays = [
-    (final: prev: {
-      facetimehd = prev.facetimehd.overrideAttrs (old: {
-        version = "0.7.2";
-        src = final.fetchFromGitHub {
-          owner = "patjak";
-          repo = "facetimehd";
-          rev = "0.7.2";
-          hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
-        };
-      });
-    })
-  ];
+nixpkgs.overlays = [
+     (final: prev: {
+       linuxPackages = prev.linuxPackages // {
+         facetimehd = prev.linuxPackages.facetimehd.overrideAttrs (old: {
+           version = "0.7.2";
+           src = final.fetchFromGitHub {
+             owner = "patjak";
+             repo = "facetimehd";
+             rev = "0.7.2";
+             hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
+           };
+           postPatch = ''
+             substituteInPlace fthd_v4l2.c \
+               --subst-by-line '#include "fthd_isp.h"' \
+               '#include "fthd_isp.h"\n#include <string.h>'
+           '';
+         });
+       };
+     })
+   ];
 }
