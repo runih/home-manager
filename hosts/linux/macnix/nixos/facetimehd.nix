@@ -1,7 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 let
-  facetimehdPkg = pkgs.linuxPackages.facetimehd.overrideAttrs (old: {
+  kernelPackages = config.boot.kernelPackages;
+  facetimehdPkg = kernelPackages.facetimehd.overrideAttrs (old: {
     version = "0.7.2";
     src = pkgs.fetchFromGitHub {
       owner = "patjak";
@@ -9,9 +10,9 @@ let
       rev = "0.7.2";
       hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
     };
-postPatch = ''
-        sed -i 's/#include "fthd_isp.h"/#include "fthd_isp.h"\n#include <string.h>/' fthd_v4l2.c
-      '';
+    postPatch = ''
+      sed -i 's/#include "fthd_isp.h"/#include "fthd_isp.h"\n#include <linux\/string.h>/' fthd_v4l2.c
+    '';
   });
 in
 {
