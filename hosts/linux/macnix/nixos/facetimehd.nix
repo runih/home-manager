@@ -9,11 +9,9 @@ let
       rev = "0.7.2";
       hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
     };
-    postPatch = ''
-      substituteInPlace fthd_v4l2.c \
-        --subst-by-line '#include "fthd_isp.h"' \
-        '#include "fthd_isp.h"\n#include <string.h>'
-    '';
+postPatch = ''
+        sed -i 's/#include "fthd_isp.h"/#include "fthd_isp.h"\n#include <string.h>/' fthd_v4l2.c
+      '';
   });
 in
 {
