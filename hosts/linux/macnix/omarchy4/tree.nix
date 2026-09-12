@@ -112,6 +112,12 @@ EOF
 
 hl.monitor({ output = "DP-1", mode = "preferred", position = "0x0", scale = 1 })
 hl.monitor({ output = "eDP-1", mode = "preferred", position = "2560x480", scale = 1.5 })
+
+-- Pin workspace 1 to the external Dell/HP monitor and workspace 2 to the
+-- MacBook's internal panel, so they open on the expected head regardless
+-- of which output Hyprland happened to focus first.
+hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
+hl.workspace_rule({ workspace = "2", monitor = "eDP-1", default = true })
 EOF
 
       # Hyprland Lua API skew: 0.55.4's `hl.get_active_monitor()` handle had

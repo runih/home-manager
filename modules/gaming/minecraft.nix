@@ -8,7 +8,7 @@
     sessionPath = [
       "${homeDirectory}/.nix-profile/bin"
     ];
-    stateVersion = "25.05";
+    stateVersion = "26.05";
     packages = with pkgs; [
       bat
       bc

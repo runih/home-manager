@@ -101,6 +101,12 @@ in {
           hl.monitor({ output = "DP-1",  mode = "preferred", position = "auto", scale = "auto" })
           hl.monitor({ output = "",      mode = "preferred", position = "auto", scale = "auto" })
 
+          -- Pin workspace 1 to the external Dell/HP monitor and workspace 2
+          -- to the MacBook's internal panel, so they open on the expected
+          -- head regardless of which output Hyprland happened to focus first.
+          hl.workspace_rule({ workspace = "1", monitor = "DP-1",  default = true })
+          hl.workspace_rule({ workspace = "2", monitor = "eDP-1", default = true })
+
           hl.config({
             general = {
               gaps_in    = 3,

@@ -19,7 +19,7 @@
     ];
 
     # Specify the state version for compatibility
-    stateVersion = "25.05";
+    stateVersion = "26.05";
 
     # List of packages to be installed for the user
     packages = with pkgs; [
