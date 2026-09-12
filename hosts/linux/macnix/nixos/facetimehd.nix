@@ -1,5 +1,21 @@
 { pkgs, lib, ... }:
 
+let
+  facetimehdPkg = pkgs.linuxPackages.facetimehd.overrideAttrs (old: {
+    version = "0.7.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "patjak";
+      repo = "facetimehd";
+      rev = "0.7.2";
+      hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
+    };
+    postPatch = ''
+      substituteInPlace fthd_v4l2.c \
+        --subst-by-line '#include "fthd_isp.h"' \
+        '#include "fthd_isp.h"\n#include <string.h>'
+    '';
+  });
+in
 {
   # This MacBook's built-in camera is a Broadcom 720p FaceTime HD Camera on
   # PCIe (`lspci`: "03:00.0 Multimedia controller [0480]: Broadcom Inc. and
@@ -19,20 +35,5 @@
   # KERNEL_VERSION(7, 0, 0)` guard added after that tag was cut). Build
   # fails on this kernel with "'vb2_ops_wait_finish' undeclared". Override
   # the package to the current 0.7.2 tag, which has that guard.
-  boot.kernelPackages = lib.mkForce (pkgs.linuxPackages // {
-    facetimehd = pkgs.linuxPackages.facetimehd.overrideAttrs (old: {
-      version = "0.7.2";
-      src = pkgs.fetchFromGitHub {
-        owner = "patjak";
-        repo = "facetimehd";
-        rev = "0.7.2";
-        hash = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
-      };
-      postPatch = ''
-        substituteInPlace fthd_v4l2.c \
-          --subst-by-line '#include "fthd_isp.h"' \
-          '#include "fthd_isp.h"\n#include <string.h>'
-      '';
-    });
-  });
+  boot.extraModulePackages = lib.mkForce [ facetimehdPkg ];
 }
