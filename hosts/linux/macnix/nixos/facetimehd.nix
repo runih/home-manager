@@ -14,8 +14,11 @@ let
       sed -i 's/#include "fthd_isp.h"/#include "fthd_isp.h"\n#include <linux\/string.h>/' fthd_v4l2.c
     '';
   });
+  firmwareDir = "${pkgs.facetimehd-firmware}/lib/firmware";
 in
 {
+  nixpkgs.config.allowUnfree = true;
+
   # This MacBook's built-in camera is a Broadcom 720p FaceTime HD Camera on
   # PCIe (`lspci`: "03:00.0 Multimedia controller [0480]: Broadcom Inc. and
   # subsidiaries 720p FaceTime HD Camera [14e4:1570]"), which has no
@@ -35,4 +38,11 @@ in
   # fails on this kernel with "'vb2_ops_wait_finish' undeclared". Override
   # the package to the current 0.7.2 tag, which has that guard.
   boot.extraModulePackages = lib.mkForce [ facetimehdPkg ];
-}
+
+  # The NixOS activation script sets firmware_class.parameters.path but
+  # does not create /lib/firmware as a symlink. Without it the kernel
+  # cannot find the firmware at the standard path.
+  system.activationScripts.facetimehd-firmware.text = ''
+    mkdir -p /lib/firmware
+    ln -sf ${firmwareDir} /lib/firmware
+  '';
