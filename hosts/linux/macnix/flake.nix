@@ -80,10 +80,10 @@
 
       # Hand-rolled desktop stack — used only when the toggle is off.
       customDesktopModules = [
-        ./hyprland.nix
-        ./waybar.nix
-        ./theme-switcher.nix
-        ./desktop-local.nix
+        ./desktop/hyprland.nix
+        ./desktop/waybar.nix
+        ./theme/theme-switcher.nix
+        ./desktop/desktop-local.nix
         m.niri
       ];
 

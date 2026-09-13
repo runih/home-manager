@@ -61,7 +61,7 @@ EOF
 
 -- macnix: internal MacBook keyboard (see nixos/keyboard.nix) + natural
 -- scrolling on the touchpad (matches the normal Hyprland session,
--- hosts/linux/macnix/hyprland.nix). Loaded after Omarchy's defaults, so
+-- hosts/linux/macnix/desktop/hyprland.nix). Loaded after Omarchy's defaults, so
 -- this wins.
 hl.config({
   input = {

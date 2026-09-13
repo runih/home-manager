@@ -1,6 +1,6 @@
 { pkgs, pkgsUnstable, ... }:
 let
-  themes = import ./themes.nix;
+  themes = import ../theme/themes.nix;
   defaultPalette = themes.themes.${themes.default};
   # macnix's system Hyprland (programs.hyprland in hosts/linux/macnix/nixos)
   # is pulled from nixpkgs-unstable so it runs the latest release (0.56.2)

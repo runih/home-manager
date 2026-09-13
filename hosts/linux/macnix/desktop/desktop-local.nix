@@ -8,8 +8,8 @@
 # and these would otherwise collide on the same target files.
 { pkgs, lib, homeDirectory, ... }:
 let
-  themes = import ./themes.nix;
-  themeLib = import ./theme-lib.nix;
+  themes = import ../theme/themes.nix;
+  themeLib = import ../theme/theme-lib.nix;
   defaultPalette = themes.themes.${themes.default};
 in {
   home = {

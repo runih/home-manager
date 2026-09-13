@@ -18,7 +18,7 @@ in
   };
 
   # fzf picker over all ~460 bundled Ghostty themes (`ghostty +list-themes`),
-  # independent of the curated dark/light pair hosts/linux/macnix/theme-switcher.nix
+  # independent of the curated dark/light pair hosts/linux/macnix/theme/theme-switcher.nix
   # drives for the whole-desktop theme. Writes into the same current-theme
   # include, so it composes with (and is overwritten by) that switcher.
   home.file.".local/bin/ghostty-theme" = {
