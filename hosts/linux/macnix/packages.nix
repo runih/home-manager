@@ -13,5 +13,7 @@
     pkgsUnstable.claude-code
     pkgsUnstable.ollama
     pkgs.wdisplays
+    pkgs.discord
+    pkgs.slack
   ] ++ lib.optional (!enableOmarchy) pkgsUnstable.gh;
 }
