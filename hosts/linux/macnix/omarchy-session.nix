@@ -22,6 +22,31 @@
 # This is deliberately a vendored snapshot, not a live omarchy install:
 # omarchy-nix proper needs a full nixos-unstable system. Regenerates on
 # every `hm`; bump omarchy-nix in the root flake to update it.
+#
+# Known harmless eval warnings from this nested build, all sourced from
+# the pinned omarchy-nix input's own code, not from anything in this
+# repo:
+#   - "'system' has been renamed to/replaced by
+#     'stdenv.hostPlatform.system'" — omarchy-nix's
+#     modules/home-manager/{hyprland,packages}.nix read `pkgs.system`,
+#     which nixpkgs 26.05 deprecated. Can't be silenced from our side:
+#     home-manager's own modules/misc/nixpkgs.nix unconditionally
+#     rebuilds `pkgs` from scratch via `import pkgsPath {...}` at a
+#     higher module-system priority than whatever `pkgs` we pass into
+#     `homeManagerConfiguration`, so overriding `.system` here doesn't
+#     stick.
+#   - "The option `programs.git.userName'/... has been renamed" —
+#     omarchy-nix's modules/home-manager/git.nix sets the old-style
+#     `programs.git.userName`/`userEmail`/`extraConfig` options.
+#     `disabledModules` can't cleanly exclude just that submodule
+#     because omarchy-nix's own aggregator wraps each file in
+#     `(import ./foo.nix)` before adding it to `imports`, which loses
+#     the path identity `disabledModules` matches on. Harmless anyway:
+#     the top-level ~/.gitconfig that module would produce is never
+#     consumed here — only the `.config` subtree of
+#     `omarchyConf.config.home-files` is copied into ~/.config-omarchy
+#     below.
+# Both go away if/when omarchy-nix updates its own code upstream.
 
 { home-manager, omarchy-nix, nixpkgs }:
 { pkgs, pkgsUnstable, lib, username, homeDirectory, ... }:
