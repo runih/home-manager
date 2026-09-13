@@ -147,8 +147,8 @@
         homeDirectory = "/home/${username}";
         nixpkgsUnstable = inputs.nixpkgs-unstable;
         modules = [
-          (import ./packages.nix { inherit zen-browser lib enableOmarchy; })
-          ./home.nix
+          (import ./home/packages.nix { inherit zen-browser lib enableOmarchy; })
+          ./home
         ] ++ desktopModules ++ [
           m.wezterm
           m.foot

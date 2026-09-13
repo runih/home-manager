@@ -1,4 +1,4 @@
-{ pkgs, username, homeDirectory, ... }:
+{ username, homeDirectory, ... }:
 {
   imports = [
     ./dotfiles.nix
@@ -31,7 +31,8 @@
     # Specify the state version for compatibility
     stateVersion = "26.05";
 
-    # List of packages to be installed for the user (see ./packages-user.nix)
-    packages = import ./packages-user.nix { inherit pkgs; };
+    # home.packages lives in ./packages.nix, applied separately in
+    # flake.nix (it's curried over zen-browser/lib/enableOmarchy before
+    # home-manager module args are available).
   };
 }
