@@ -126,7 +126,10 @@ in {
               -- hardware keycode swap on this MacBook's internal
               -- keyboard; see hosts/linux/macnix/nixos/custom_mac_se.
               kb_layout  = "macnix-se",
-              kb_options = "lv3:lalt_switch,apple:alupckeys",
+              -- compose:ralt maps Right Alt as the Compose key (XCompose
+              -- sequences, e.g. RAlt+'+e -> é), on top of the existing
+              -- lv3/apple keycode fixes.
+              kb_options = "lv3:lalt_switch,apple:alupckeys,compose:ralt",
               kb_model   = "apple",
               follow_mouse = 1,
               touchpad = {

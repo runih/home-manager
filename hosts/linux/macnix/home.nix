@@ -88,6 +88,22 @@
       user_pref("media.av1.enabled", false);
     '';
 
+    # Custom Compose sequences (Right Alt is the compose key, set via
+    # kb_options = "...,compose:ralt" in hyprland.nix). "%L" pulls in the
+    # locale's stock Compose table; the previous copy of this file (dropped
+    # by some prior omarchy-* tool run, not managed by this repo) instead
+    # included "/usr/share/omarchy/default/xcompose", a path that doesn't
+    # exist on this machine — that dangling include made xkbcommon fail to
+    # parse the file entirely, which crashed wezterm on startup as soon as
+    # the compose key was wired up.
+    file.".XCompose".text = ''
+      include "%L"
+
+      # Identification
+      <Multi_key> <space> <n> : ""
+      <Multi_key> <space> <e> : ""
+    '';
+
     file.".config/wireplumber/wireplumber.conf.d/51-macbook-cs4208-softvol.conf".text = ''
       monitor.alsa.rules = [
         {
