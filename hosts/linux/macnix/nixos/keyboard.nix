@@ -19,4 +19,19 @@
       symbolsFile = ./custom_mac_se;
     };
   };
+
+  # This external USB keyboard (a Vortex Pok3r, vendor:product 04d9:0207)
+  # reports its physical Right Shift key with the raw HID scan code that
+  # Linux's default hid-generic keycode table maps to KEY_UP, not
+  # KEY_RIGHTSHIFT — confirmed with `evtest`: pressing that key emits
+  # `MSC_SCAN value 70052` (hex 111a4) followed by `KEY_UP`. This is a
+  # kernel-level miskeying, upstream of XKB entirely (no kb_layout/
+  # kb_options change can fix it — those only remap already-correct
+  # evdev keycodes). Fix it at the source with a udev hwdb keycode
+  # override; syntax and match-string format per
+  # nixpkgs' systemd's own lib/udev/hwdb.d/60-keyboard.hwdb.
+  services.udev.extraHwdb = ''
+    evdev:input:b0003v04D9p0207*
+     KEYBOARD_KEY_111a4=rightshift
+  '';
 }

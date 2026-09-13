@@ -118,7 +118,7 @@ in
 
     settings = {
       background = {
-        path = ../hyprlock/key7.png;
+        path = ../desktop/hyprlock/key7.png;
         fit = "Cover";
       };
       GTK = {
