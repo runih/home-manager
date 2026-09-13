@@ -39,11 +39,18 @@ in
   # the package to the current 0.7.2 tag, which has that guard.
   boot.extraModulePackages = lib.mkForce [ facetimehdPkg ];
 
-  # The NixOS activation script sets firmware_class.parameters.path but
-  # does not create /lib/firmware as a symlink. Without it the kernel
-  # cannot find the firmware at the standard path.
-  system.activationScripts.facetimehd-firmware.text = ''
-    mkdir -p /lib/firmware
-    ln -sf ${firmwareDir} /lib/firmware
-  '';
+   # The NixOS activation script sets firmware_class.parameters.path but
+   # does not create /lib/firmware as a symlink. Without it the kernel
+   # cannot find the firmware at the standard path.
+   system.activationScripts.facetimehd-firmware.text = ''
+     mkdir -p /lib/firmware
+     ln -sf ${firmwareDir} /lib/firmware
+   '';
+
+   # The kernel's firmware_class module parameter is baked into the
+   # initramfs/boot config and points to the old firmware store path
+   # (which no longer exists after nixos-switch). We override it here
+   # so the kernel looks at the correct facetimehd-firmware directory
+   # on the next boot.
+   boot.kernelParams = [ "firmware_class.path=${firmwareDir}" ];
 }
