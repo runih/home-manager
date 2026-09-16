@@ -10,7 +10,7 @@
       # Plymouth (hexagon_hud) / hyprlock / omarchy. Flip these two back to
       # revert; only one bootloader may be enabled at a time.
       systemd-boot = {
-        enable = false;
+        enable = true;
         consoleMode = "max";
       };
       efi.canTouchEfiVariables = true;
@@ -26,7 +26,7 @@
       #   nix-shell -p librsvg --run \
       #     "rsvg-convert -w 1920 -h 1080 -o boot-wallpaper.png boot-wallpaper.svg"
       limine = {
-        enable = true;
+        enable = false;
         maxGenerations = 10;
         # Hide Limine's post-selection "Loading kernel…/module…" lines.
         # (`terse`, not `quiet` — `quiet` also hides the menu until a key

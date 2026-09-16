@@ -5,7 +5,6 @@
     nix-ld = {
       enable = true;
     };
-    firefox.enable = true;
     zsh.enable = true;
     hyprland = {
       enable = true;
