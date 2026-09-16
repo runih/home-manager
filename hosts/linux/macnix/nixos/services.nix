@@ -1,6 +1,32 @@
 { pkgs, ... }:
 
 {
+  # zram: compressed RAM swap, tried before the on-disk swap partition
+  # from hardware-configuration.nix (NixOS gives zram swap priority 5;
+  # the disk swapDevices entry keeps its default lower priority and only
+  # takes overflow once zram is full). Same pattern as nixos-pi5's
+  # tuning.nix — cuts down on disk swap I/O/battery/SSD wear under memory
+  # pressure on this 8/16GB laptop.
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
+  # One-shot runtime power-management tuning (USB autosuspend, PCIe ASPM,
+  # audio codec power saving, etc.) equivalent to `powertop --auto-tune`.
+  # power-profiles-daemon only manages CPU governor/EPP; it doesn't touch
+  # any of this, so this is genuinely additive rather than overlapping.
+  systemd.services.powertop-auto-tune = {
+    description = "powertop --auto-tune";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.powertop}/bin/powertop --auto-tune";
+    };
+  };
+
   services = {
     # Let members of the "video" group control screen and keyboard
     # backlight brightness without root (needed for brightnessctl /
@@ -61,5 +87,11 @@
     power-profiles-daemon.enable = true;
     upower.enable = true;
     thermald.enable = true;
+
+    # Periodic TRIM for the SSD-backed root/boot filesystems. NixOS does
+    # not enable this by default and no `discard` mount option is set in
+    # hardware-configuration.nix, so without this the drive was never
+    # being TRIMmed.
+    fstrim.enable = true;
   };
 }
