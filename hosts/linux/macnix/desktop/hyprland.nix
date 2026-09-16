@@ -142,6 +142,40 @@ in {
               force_default_wallpaper = -1,
               disable_hyprland_logo   = false,
             },
+          })
+
+          -- The Vortex Pok3r (Holtek 04d9:0207, external USB, ISO layout)
+          -- shows up as these four "usb-hid-keyboard*" input nodes (see
+          -- `hyprctl devices` / /proc/bus/input/devices). It's a plain PC
+          -- ISO keyboard, not an internal MacBook one, so the global
+          -- macnix-se layout's LSGT<->TLDE swap (which undoes a hardware
+          -- keycode swap specific to this MacBook's *internal* keyboard —
+          -- see hosts/linux/macnix/nixos/custom_mac_se) wrongly lands
+          -- section/degree on the key beside left Shift instead of
+          -- less/greater/bar. Pin these devices back to the stock se(mac)
+          -- layout and drop the Apple-specific kb_model/options, which
+          -- don't apply to this keyboard's physical layout either.
+          -- kb_options intentionally omits compose:ralt (it stole the
+          -- physical AltGr key needed for $, #, etc. on se(mac)).
+          -- lv3:alt_switch makes either physical Alt key act as
+          -- AltGr/level3, not just the right one, so $ etc. work from
+          -- Left Alt too. No altwin swap — keep physical Super as Super.
+          for _, name in ipairs({
+            "usb-hid-keyboard",
+            "usb-hid-keyboard-1",
+            "usb-hid-keyboard-system-control",
+            "usb-hid-keyboard-consumer-control",
+          }) do
+            hl.device({
+              name       = name,
+              kb_layout  = "se",
+              kb_variant = "mac",
+              kb_model   = "pc105",
+              kb_options = "lv3:alt_switch",
+            })
+          end
+
+          hl.config({
             plugin = {
               hyprexpo = {
                 -- drag_drop_enable is available on the v0.56.2 build now

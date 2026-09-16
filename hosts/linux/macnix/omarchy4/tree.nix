@@ -60,9 +60,9 @@ EOF
       cat >> $out/config/hypr/input.lua <<'EOF'
 
 -- macnix: internal MacBook keyboard (see nixos/keyboard.nix) + natural
--- scrolling on the touchpad (matches the normal Hyprland session,
--- hosts/linux/macnix/desktop/hyprland.nix). Loaded after Omarchy's defaults, so
--- this wins.
+-- scrolling and disable-while-typing on the touchpad (matches the normal
+-- Hyprland session, hosts/linux/macnix/desktop/hyprland.nix). Loaded after
+-- Omarchy's defaults, so this wins.
 hl.config({
   input = {
     kb_layout = "macnix-se",
@@ -70,9 +70,39 @@ hl.config({
     kb_options = "lv3:lalt_switch,apple:alupckeys",
     touchpad = {
       natural_scroll = true,
+      disable_while_typing = true,
     },
   },
 })
+
+-- The Vortex Pok3r (Holtek 04d9:0207, external USB ISO keyboard) shows up
+-- as these four "usb-hid-keyboard*" input nodes (see `hyprctl devices` /
+-- /proc/bus/input/devices). It's a plain PC ISO keyboard, not the internal
+-- MacBook one, so the global macnix-se layout's LSGT<->TLDE swap (which
+-- undoes a hardware keycode swap specific to this MacBook's *internal*
+-- keyboard — see hosts/linux/macnix/nixos/custom_mac_se) wrongly lands
+-- section/degree on the key beside left Shift instead of less/greater/bar.
+-- Pin these devices back to the stock se(mac) layout and drop the
+-- Apple-specific kb_model/options, which don't apply to this keyboard's
+-- physical layout either. kb_options intentionally omits compose:ralt
+-- (it stole the physical AltGr key needed for $, #, etc. on se(mac)).
+-- lv3:alt_switch makes either physical Alt key act as AltGr/level3, not
+-- just the right one, so $ etc. work from Left Alt too. No altwin swap —
+-- keep physical Super as Super.
+for _, name in ipairs({
+  "usb-hid-keyboard",
+  "usb-hid-keyboard-1",
+  "usb-hid-keyboard-system-control",
+  "usb-hid-keyboard-consumer-control",
+}) do
+  hl.device({
+    name = name,
+    kb_layout = "se",
+    kb_variant = "mac",
+    kb_model = "pc105",
+    kb_options = "lv3:alt_switch",
+  })
+end
 EOF
 
       # macnix: Omarchy 4 ships workspace-switch animation disabled
