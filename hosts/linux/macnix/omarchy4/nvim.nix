@@ -36,7 +36,13 @@ pkgs.runCommand "omarchy4-nvim-config" { } ''
     install -Dm644 \
       ${omarchyLazyvim}/lua/plugins/snacks-animated-scrolling-off.lua \
       $out/lua/plugins/snacks-animated-scrolling-off.lua
-    printf '\nvim.opt.relativenumber = false\n' >> $out/lua/config/options.lua
+    # macnix extra plugin: oil.nvim — edit ./nvim/oil.lua directly to
+    # change its spec, no need to touch this Nix expression.
+    install -Dm644 ${./nvim/oil.lua} $out/lua/plugins/oil.lua
+    # macnix personal options overlay — edit ./nvim/overrides.lua directly
+    # to change these, no need to touch this Nix expression.
+    printf '\n' >> $out/lua/config/options.lua
+    cat ${./nvim/overrides.lua} >> $out/lua/config/options.lua
 
     # NOT copying omarchy-lazyvim's static lua/plugins/theme.lua — that slot
     # is a live symlink to Omarchy's current-theme state (home.file below),
