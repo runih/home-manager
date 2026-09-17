@@ -86,9 +86,28 @@ hl.config({
 -- Apple-specific kb_model/options, which don't apply to this keyboard's
 -- physical layout either. kb_options intentionally omits compose:ralt
 -- (it stole the physical AltGr key needed for $, #, etc. on se(mac)).
--- lv3:alt_switch makes either physical Alt key act as AltGr/level3, not
--- just the right one, so $ etc. work from Left Alt too. No altwin swap —
--- keep physical Super as Super.
+--
+-- Final physical layout on this board:
+--   old Alt key  -> Super_L               (altwin:swap_lalt_lwin)
+--   old Win key  -> AltGr / ISO_Level3_Shift (lv3:lwin_switch)
+--   Right Alt    -> plain Alt_R           (lv3:ralt_alt undoes se(mac)'s
+--                                           default level3(ralt_switch))
+-- Fn+RightAlt was tried as an alternate way to reach plain Alt (to leave
+-- AltGr on the right side), but this keyboard's firmware sends the exact
+-- same keycode for RightAlt whether Fn is held or not — confirmed with
+-- wev, both presses produced identical `key: 108` events. There is no
+-- way to distinguish that combo at the XKB/software level, hence moving
+-- AltGr to the Windows key instead and giving Right Alt back as plain Alt.
+--
+-- Option order matters here: XKB options merge in "augment" mode, so the
+-- FIRST option to define a given key wins and later options are ignored
+-- for that key. lv3:lwin_switch and lv3:ralt_alt each redefine a
+-- different key (<LWIN> and <RALT> respectively) so they don't conflict
+-- with each other or with altwin's <LALT> mapping. (confirmed via
+-- `xkbcli compile-keymap --layout se --variant mac --model pc105
+-- --options lv3:lwin_switch,lv3:ralt_alt,altwin:swap_lalt_lwin` — do NOT
+-- use lv3:alt_switch/lalt_switch here: those also redefine <LALT>, which
+-- would swallow the Super mapping altwin sets on that same key).
 for _, name in ipairs({
   "usb-hid-keyboard",
   "usb-hid-keyboard-1",
@@ -100,7 +119,7 @@ for _, name in ipairs({
     kb_layout = "se",
     kb_variant = "mac",
     kb_model = "pc105",
-    kb_options = "lv3:alt_switch",
+    kb_options = "lv3:lwin_switch,lv3:ralt_alt,altwin:swap_lalt_lwin",
   })
 end
 EOF
