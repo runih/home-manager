@@ -476,7 +476,18 @@
       "Bash(timeout 4 pw-play --target 54 /tmp/claude-1000/-home-runih--config-home-manager/dddbef98-ec4f-44ee-a5d3-f5a6ce73f161/scratchpad/tone.wav 2>&1)",
       "Bash(timeout 3 pw-play --target 54 /tmp/claude-1000/-home-runih--config-home-manager/dddbef98-ec4f-44ee-a5d3-f5a6ce73f161/scratchpad/tone.wav)",
       "Bash(journalctl -k --since \"1 minute ago\")",
-      "Bash(journalctl -k --since \"2 minutes ago\")"
+      "Bash(journalctl -k --since \"2 minutes ago\")",
+      "Read(//Users/runih/Applications/**)",
+      "Bash(mdfind \"kMDItemFSName == 'WezTerm.app'\" -onlyin /nix)",
+      "Bash(mdutil -s /)",
+      "Bash(mdutil -s /nix)",
+      "Bash(gh repo *)",
+      "Bash(nix log *)",
+      "Bash(ulimit -a)",
+      "Bash(sysctl kern.sysv.shmmax vm.malloc_ranges)",
+      "Bash(sw_vers)",
+      "WebFetch(domain:amreis.github.io)",
+      "Bash(nix path-info *)"
     ]
   }
 }
