@@ -121,7 +121,13 @@
 
   targets = {
     darwin = {
-      copyApps.enable = false;  # Disable automatic copying of applications
+      # Copies real .app bundles (not symlinks into /nix/store) into
+      # ~/Applications/Home Manager Apps so Spotlight/Launch Services can
+      # find them — /nix is mounted `nobrowse` on macOS, so anything only
+      # reachable via a symlink into the store is otherwise invisible to
+      # Spotlight. First activation after enabling this prompts for macOS's
+      # "App Management" permission for whatever runs `home-manager switch`.
+      copyApps.enable = true;
     };
   };
 }
