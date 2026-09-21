@@ -21,6 +21,7 @@
         homeDirectory = "/Users/${username}";
         allowUnfree = true;
         modules = [
+          ./home.nix
           ({ pkgs, ... }: { home.packages = [ pkgs.claude-code ]; })
           m.basic-mac
           m.nerd-fonts
@@ -32,7 +33,6 @@
           m.neovide
           m.pass
           m.postgresql-client
-          m.imac
           m.java
           m.claude-code
           m.copilot-cli

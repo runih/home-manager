@@ -4,7 +4,6 @@
   # Platform
   basic-linux = ./platform/basic-linux.nix;
   basic-mac   = ./platform/basic-mac.nix;
-  imac        = ./platform/imac.nix;
   allowUnfree = ./platform/allowUnfree.nix;
 
   # Shells
