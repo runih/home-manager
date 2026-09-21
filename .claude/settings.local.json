@@ -487,7 +487,9 @@
       "Bash(sysctl kern.sysv.shmmax vm.malloc_ranges)",
       "Bash(sw_vers)",
       "WebFetch(domain:amreis.github.io)",
-      "Bash(nix path-info *)"
+      "Bash(nix path-info *)",
+      "Bash(nix-prefetch-url --unpack \"https://github.com/runih/my-tmux-config/archive/296a42fbf3eac551f0cd3fab166a2b013b036c6a.tar.gz\")",
+      "Bash(nix hash *)"
     ]
   }
 }
