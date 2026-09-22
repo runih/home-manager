@@ -3,8 +3,8 @@ let
   my-tmux-config = pkgs.fetchFromGitHub {
     owner = "runih";
     repo = "my-tmux-config";
-    rev = "296a42fbf3eac551f0cd3fab166a2b013b036c6a";
-    hash = "sha256-kDLfjxmUPXsL2Au8vVbB5MF1fB0rU/gUMJhsQShtbbc=";
+    rev = "f712acbc5287800e62b6907f049054372cc47f8e";
+    hash = "sha256-eGUaDvAUZrN8sm9+384+Wpdjfa5WhUwDEM2y5a6ZaMA=";
   };
   my-tmux-config-with-titles = pkgs.runCommand "my-tmux-config-with-titles" {} ''
     mkdir -p $out
