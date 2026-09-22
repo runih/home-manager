@@ -46,10 +46,18 @@ set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pa
 
 # Toggle active pane between max height and its previous size (not full
 # zoom) - other panes stay visible side-by-side at their width. Unlike
-# my-tmux.nix's version, this has no external script: 'if -F' tests the
+# my-tmux.nix's version, this has no external script file, but it isn't
+# pure tmux format-substitution either: 'if -F' tests the
 # @pane_height_saved_layout window option directly via tmux's format
-# engine (no shell involved), then runs plain select-layout/resize-pane.
-bind-key m if -F '#{@pane_height_saved_layout}' 'select-layout "#{@pane_height_saved_layout}"; set-option -wu @pane_height_saved_layout' 'set-option -w @pane_height_saved_layout "#{window_layout}"; resize-pane -y 9999'
+# engine, but select-layout does NOT expand #{...} in its own argument
+# (confirmed empirically - it errors with "invalid layout: #{...}"), so
+# the restore branch fetches the saved value via a live
+# '\$(tmux show-option ...)' shell substitution inside run-shell instead
+# of interpolating it as a format. The maximize branch needs
+# 'set-option -F' (added tmux 2.6) since plain set-option does NOT
+# expand formats in its value either - without -F it stores the literal
+# text "#{window_layout}" rather than the current layout string.
+bind-key m if -F '#{@pane_height_saved_layout}' 'run-shell -b "tmux select-layout \"\$(tmux show-option -wv @pane_height_saved_layout)\"; tmux set-option -wu @pane_height_saved_layout"' 'set-option -F -w @pane_height_saved_layout "#{window_layout}"; resize-pane -y 9999'
 ${lib.optionalString pkgs.stdenv.isDarwin darwinTmuxConf}
 ${lib.optionalString config.host.hasBattery batteryTmuxConf}
 EOF
