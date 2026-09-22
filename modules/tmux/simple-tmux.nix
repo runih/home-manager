@@ -57,7 +57,7 @@ set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pa
 # 'set-option -F' (added tmux 2.6) since plain set-option does NOT
 # expand formats in its value either - without -F it stores the literal
 # text "#{window_layout}" rather than the current layout string.
-bind-key m if -F '#{@pane_height_saved_layout}' 'run-shell -b "tmux select-layout \"\$(tmux show-option -wv @pane_height_saved_layout)\"; tmux set-option -wu @pane_height_saved_layout"' 'set-option -F -w @pane_height_saved_layout "#{window_layout}"; resize-pane -y 9999'
+bind-key _ if -F '#{@pane_height_saved_layout}' 'run-shell -b "tmux select-layout \"\$(tmux show-option -wv @pane_height_saved_layout)\"; tmux set-option -wu @pane_height_saved_layout"' 'set-option -F -w @pane_height_saved_layout "#{window_layout}"; resize-pane -y 9999'
 ${lib.optionalString pkgs.stdenv.isDarwin darwinTmuxConf}
 ${lib.optionalString config.host.hasBattery batteryTmuxConf}
 EOF
