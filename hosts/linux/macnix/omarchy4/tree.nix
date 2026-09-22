@@ -60,7 +60,8 @@ EOF
       cat >> $out/config/hypr/input.lua <<'EOF'
 
 -- macnix: internal MacBook keyboard (see nixos/keyboard.nix) + natural
--- scrolling and disable-while-typing on the touchpad (matches the normal
+-- scrolling on mice (input.natural_scroll) and on the touchpad, plus
+-- disable-while-typing on the touchpad (matches the normal
 -- Hyprland session, hosts/linux/macnix/desktop/hyprland.nix). Loaded after
 -- Omarchy's defaults, so this wins.
 hl.config({
@@ -68,6 +69,7 @@ hl.config({
     kb_layout = "macnix-se",
     kb_model = "apple",
     kb_options = "lv3:lalt_switch,apple:alupckeys",
+    natural_scroll = true,
     touchpad = {
       natural_scroll = true,
       disable_while_typing = true,
