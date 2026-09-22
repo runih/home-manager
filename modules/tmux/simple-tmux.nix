@@ -3,8 +3,8 @@ let
 my-tmux-config = pkgs.fetchFromGitHub {
   owner = "runih";
   repo = "simple-tmux";
-  rev = "b147fd92b51790ecce6449a2cc383914ce05ce4c";
-  hash = "sha256-bvFp55lRggphfkPuXkRPOEsi83pm8h71wNNFQvWSbdw=";
+  rev = "2f83b672a577b220eb88fc9c84665101f5cdbdc2";
+  hash = "sha256-fxbA/2vcEw0Why981d2ZE6xg3jKRopxzpFwsiaqozPU=";
 };
 darwinTmuxConf = ''
 
@@ -43,6 +43,13 @@ set-option -g set-titles on
 set-option -g set-titles-string "#{session_name}: #{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
 set-option -g automatic-rename on
 set-option -g automatic-rename-format "#{?#{==:#{pane_title},#{host_short}},#{pane_current_command},#{pane_title}}"
+
+# Toggle active pane between max height and its previous size (not full
+# zoom) - other panes stay visible side-by-side at their width. Unlike
+# my-tmux.nix's version, this has no external script: 'if -F' tests the
+# @pane_height_saved_layout window option directly via tmux's format
+# engine (no shell involved), then runs plain select-layout/resize-pane.
+bind-key m if -F '#{@pane_height_saved_layout}' 'select-layout "#{@pane_height_saved_layout}"; set-option -wu @pane_height_saved_layout' 'set-option -w @pane_height_saved_layout "#{window_layout}"; resize-pane -y 9999'
 ${lib.optionalString pkgs.stdenv.isDarwin darwinTmuxConf}
 ${lib.optionalString config.host.hasBattery batteryTmuxConf}
 EOF
