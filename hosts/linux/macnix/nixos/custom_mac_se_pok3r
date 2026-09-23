@@ -1,0 +1,29 @@
+// Swedish (Macintosh, external ISO keyboard dead-key fix)
+//
+// For external ISO boards (e.g. the Vortex Pok3r, see
+// hosts/linux/macnix/desktop/hyprland.nix) that are pinned to se(mac)
+// instead of macnix-se's "basic" variant, because they don't have the
+// internal MacBook keyboard's LSGT/TLDE hardware-swap bug and would get
+// that swap wrongly applied to the correct physical key otherwise.
+//
+// This is a SEPARATE layout (not a variant of macnix-se) because a custom
+// variant added on top of a stock layout (macnix-se(pok3r)) silently
+// failed to apply through Hyprland's Lua kb_layout/kb_variant device
+// config — kb_layout stayed on the old value even across a full Hyprland
+// restart, though the exact same RMLVO tuple compiled fine standalone via
+// `xkbcli compile-keymap`. The Hyprland wiki's own custom-layout
+// convention is a dedicated `kb_layout = "<custom>"` with the other kb_*
+// fields left empty/default, not a custom variant name — this file follows
+// that pattern instead.
+default partial alphanumeric_keys
+xkb_symbols "basic" {
+    include "se(mac)"
+
+    name[Group1] = "Swedish (Macintosh, external keyboard dead-key fix)";
+
+    // se(mac) maps this key to plain, non-combining acute/grave instead of
+    // dead_acute/dead_grave, which silently breaks composed accents (e.g.
+    // ´ + u -> ú comes out as literal "´u"). Restore the dead keys; keep
+    // se(mac)'s AltGr-level dead_cedilla/dead_ogonek.
+    key <AE12> { [ dead_acute, dead_grave, dead_cedilla, dead_ogonek ] };
+};

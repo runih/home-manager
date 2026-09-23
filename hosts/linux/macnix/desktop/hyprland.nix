@@ -152,11 +152,28 @@ in {
           -- keycode swap specific to this MacBook's *internal* keyboard —
           -- see hosts/linux/macnix/nixos/custom_mac_se) wrongly lands
           -- section/degree on the key beside left Shift instead of
-          -- less/greater/bar. Pin these devices back to the stock se(mac)
-          -- layout and drop the Apple-specific kb_model/options, which
-          -- don't apply to this keyboard's physical layout either.
-          -- kb_options intentionally omits compose:ralt (it stole the
-          -- physical AltGr key needed for $, #, etc. on se(mac)).
+          -- less/greater/bar. Pin these devices back to se(mac)-equivalent
+          -- and drop the Apple-specific kb_model/options, which don't
+          -- apply to this keyboard's physical layout either. kb_options
+          -- intentionally omits compose:ralt (it stole the physical AltGr
+          -- key needed for $, #, etc. on se(mac)).
+          --
+          -- Uses the dedicated macnix-se-pok3r layout (hosts/linux/macnix/
+          -- nixos/custom_mac_se_pok3r) rather than stock se(mac) directly:
+          -- plain se(mac) maps the ´/` key to non-combining acute/grave
+          -- instead of dead_acute/dead_grave, silently breaking composed
+          -- accents (´ + u -> ú comes out as literal "´u"). That file
+          -- restores just the dead keys, without the internal-keyboard-
+          -- only LSGT/TLDE swap that macnix-se's "basic" variant carries.
+          --
+          -- This is its own top-level layout, NOT a macnix-se variant
+          -- (e.g. macnix-se(pok3r)) — a custom variant added on top of a
+          -- stock layout silently failed to apply via kb_layout/kb_variant
+          -- here (stuck on the old value even across a full Hyprland
+          -- restart, despite the exact RMLVO tuple compiling fine
+          -- standalone via `xkbcli compile-keymap`). Follow the Hyprland
+          -- wiki's own custom-layout convention instead: a dedicated
+          -- kb_layout with kb_variant left unset.
           --
           -- Final physical layout on this board:
           --   old Alt key  -> Super_L               (altwin:swap_lalt_lwin)
@@ -192,8 +209,7 @@ in {
           }) do
             hl.device({
               name       = name,
-              kb_layout  = "se",
-              kb_variant = "mac",
+              kb_layout  = "macnix-se-pok3r",
               kb_model   = "pc105",
               kb_options = "lv3:lwin_switch,lv3:ralt_alt,altwin:swap_lalt_lwin",
             })

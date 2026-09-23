@@ -13,10 +13,20 @@
 
   services.xserver.xkb = {
     layout = "macnix-se";
-    extraLayouts.macnix-se = {
-      description = "Swedish (Macintosh, internal keyboard fix)";
-      languages = [ "swe" ];
-      symbolsFile = ./custom_mac_se;
+    extraLayouts = {
+      macnix-se = {
+        description = "Swedish (Macintosh, internal keyboard fix)";
+        languages = [ "swe" ];
+        symbolsFile = ./custom_mac_se;
+      };
+      # Separate layout (not a macnix-se variant) for the Pok3r's dead-key
+      # fix — see ./custom_mac_se_pok3r for why a custom variant on top of
+      # a stock layout didn't work via Hyprland's Lua device config.
+      macnix-se-pok3r = {
+        description = "Swedish (Macintosh, external keyboard dead-key fix)";
+        languages = [ "swe" ];
+        symbolsFile = ./custom_mac_se_pok3r;
+      };
     };
   };
 
