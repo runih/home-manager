@@ -121,10 +121,10 @@ in
     background-opacity = 0.75
     macos-titlebar-style = hidden
     gtk-titlebar = false
-    cursor-color = #ffff00
+    cursor-color = #e68e0d
     cursor-style-blink = true
     cursor-style = block
-    adjust-cursor-height = 30%
+    adjust-cursor-height = 50%
     font-family = "Iosevka Nerd Font Propo"
     font-size = 14
     keybind = global:shift+cmd+space=toggle_quick_terminal
