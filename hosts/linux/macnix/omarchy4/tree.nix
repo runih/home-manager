@@ -215,9 +215,15 @@ EOF
       # the `hl.dsp.exit()` call form. Matches Hyprland 0.56's own default
       # Super+M bind. start-hyprland sees the clean exit and ends the
       # session. (reboot/shutdown use systemctl and already work.)
+      #
+      # Upstream merged the standalone bin/omarchy-system-logout into
+      # bin/omarchy-system (now `omarchy-system logout|reboot|...`,
+      # omacom/omarchy@51bfd1d) — `logout) command=(uwsm stop) ;;` is the
+      # one remaining "uwsm stop" in that file, so the same substitution
+      # still lands on the right spot.
       ${pkgs.gnused}/bin/sed -i \
         "s/uwsm stop/hyprctl dispatch 'hl.dsp.exit()'/" \
-        $out/bin/omarchy-system-logout
+        $out/bin/omarchy-system
 
       # Default editor → neovide. omarchy-launch-editor is what every "open
       # this in an editor" path funnels through (the SUPER+SHIFT+N bind, the
@@ -316,7 +322,7 @@ EMOJI = """          } else if ((event.modifiers & Qt.ControlModifier) && (event
 targets = [
     ("shell/plugins/menu/Menu.qml",          "          } else if (event.key === Qt.Key_Up) {",   MENU),
     ("shell/plugins/clipboard/Clipboard.qml", "          } else if (event.key === Qt.Key_Up) {",   CLIP),
-    ("shell/plugins/emojis/Emojis.qml",       "          } else if (event.key === Qt.Key_Left) {", EMOJI),
+    ("shell/plugins/emojis/Emojis.qml",       "          } else if (Util.readingKey(event) === Qt.Key_Left) {", EMOJI),
 ]
 
 for rel, anchor, block in targets:
