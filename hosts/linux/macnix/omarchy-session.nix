@@ -27,26 +27,85 @@
 # the pinned omarchy-nix input's own code, not from anything in this
 # repo:
 #   - "'system' has been renamed to/replaced by
-#     'stdenv.hostPlatform.system'" — omarchy-nix's
-#     modules/home-manager/{hyprland,packages}.nix read `pkgs.system`,
-#     which nixpkgs 26.05 deprecated. Can't be silenced from our side:
-#     home-manager's own modules/misc/nixpkgs.nix unconditionally
-#     rebuilds `pkgs` from scratch via `import pkgsPath {...}` at a
-#     higher module-system priority than whatever `pkgs` we pass into
-#     `homeManagerConfiguration`, so overriding `.system` here doesn't
-#     stick.
+#     'stdenv.hostPlatform.system'" — fixed below by overriding
+#     `wayland.windowManager.hyprland.package` AND `.portalPackage`.
+#     nixpkgs 26.05 turned `pkgs.system` into a `warnAlias` for
+#     `pkgs.stdenv.hostPlatform.system` (pkgs/top-level/aliases.nix), so
+#     merely forcing `pkgs.system` anywhere fires the trace. Two
+#     independent things force it here, and both had to be overridden
+#     before the warning actually went away (confirmed by bisecting with
+#     `nix eval .#homeConfigurations."runih@macnix".activationPackage
+#     .drvPath`, which evaluates fast enough to iterate on without a full
+#     `hm` run each time):
+#       1. omarchy-nix's modules/home-manager/hyprland.nix sets
+#          `wayland.windowManager.hyprland.package =
+#          inputs.hyprland.packages.${pkgs.system}.hyprland;` directly —
+#          this is the obvious one.
+#       2. Less obviously, home-manager's own hyprland.nix declares
+#          `portalPackage = lib.mkPackageOption pkgs
+#          "xdg-desktop-portal-hyprland" { nullable = true; };` — omarchy
+#          doesn't touch this option at all, so it's left at home-manager's
+#          *default*, and `mkPackageOption`'s nullable-availability check
+#          forces `pkgs.system` internally to decide if the package exists
+#          on this platform. `cfg.finalPortalPackage` (read by
+#          `xdg.portal.enable`/`extraPortals`/`configPackages`, all inside
+#          hyprland.nix's `config = mkIf cfg.enable {...}`) is what forces
+#          it — which is also why temporarily disabling
+#          `wayland.windowManager.hyprland.enable` entirely (an earlier,
+#          reverted attempt) made the warning go away too: it stopped that
+#          whole `mkIf` block, portalPackage included, from running at
+#          all. Don't reuse that approach — it would also skip the
+#          `config = mkIf cfg.enable {...}` block's `xdg.configFile."hypr/
+#          hyprland.conf"` generation, which is the one thing this nested
+#          build exists to produce.
+#     `lib.mkForce` on both options means the option merge picks our
+#     definition outright and never forces the discarded lower-priority
+#     one, so `pkgs.system` is never read from either path. (Overriding
+#     `pkgs.system` itself, e.g. via the `pkgs` passed into
+#     `homeManagerConfiguration` below, does NOT work: home-manager's own
+#     modules/misc/nixpkgs.nix unconditionally rebuilds `pkgs` from
+#     scratch via `import pkgsPath {...}` at a higher module-system
+#     priority, so that override doesn't stick — this is why the fix
+#     targets the *consumers* of `pkgs.system` instead.) Neither override
+#     changes anything we actually use this nested build for: setting
+#     `package` to `pkgsUnstable.hyprland` matches the real session (which
+#     already runs that same derivation) and only affects config-
+#     generation logic gated on `cfg.package`, if any; `portalPackage`
+#     being `null` only disables `xdg.portal.*` wiring, which isn't part
+#     of `config.home-files` either.
+#     (modules/packages.nix also has a `pkgs.system == "x86_64-linux"`
+#     check, but it feeds `packages.systemPackages`, which only the NixOS
+#     side of omarchy-nix consumes — modules/home-manager/default.nix
+#     only reads `packages.homePackages` (hardcoded to `[ ]` upstream), so
+#     that branch is unreachable from this nested home-manager-only build
+#     and needs no override.)
 #   - "The option `programs.git.userName'/... has been renamed" —
-#     omarchy-nix's modules/home-manager/git.nix sets the old-style
-#     `programs.git.userName`/`userEmail`/`extraConfig` options.
-#     `disabledModules` can't cleanly exclude just that submodule
-#     because omarchy-nix's own aggregator wraps each file in
-#     `(import ./foo.nix)` before adding it to `imports`, which loses
-#     the path identity `disabledModules` matches on. Harmless anyway:
+#     silenced below with `warnings = lib.mkForce [ ];`. omarchy-nix's
+#     modules/home-manager/git.nix sets the old-style
+#     `programs.git.userName`/`userEmail`/`extraConfig` options
+#     unconditionally (not inside any `mkIf cfg.enable`), so
+#     `mkRenamedOptionModule`'s renamed-option submodule sees those
+#     options as *defined* and appends the warning string to
+#     `config.warnings` regardless of `cfg.enable` — tried forcing
+#     `programs.git.enable = false` first; didn't help, because
+#     `isDefined` is a structural fact about whether any module sets the
+#     option, not about whether something reads the value afterwards.
+#     Forcing `config.warnings` itself to `[ ]` is the one override that
+#     actually reaches it: home-manager prints every entry in that list
+#     the moment `config.home-files` (or any other config.* leaf we pull
+#     from this nested build) gets forced, with no way to scope it to
+#     just the git-related entries. Safe here because this whole nested
+#     `omarchyConf` only exists to render a dotfile tree we copy
+#     ourselves — any real misconfiguration in it would show up as a
+#     build failure, not a warning, so there is nothing this would hide.
+#     `disabledModules` can't be used instead to exclude the git.nix
+#     submodule outright: omarchy-nix's own aggregator wraps each file in
+#     `(import ./foo.nix)` before adding it to `imports`, which loses the
+#     path identity `disabledModules` matches on. Harmless either way:
 #     the top-level ~/.gitconfig that module would produce is never
 #     consumed here — only the `.config` subtree of
 #     `omarchyConf.config.home-files` is copied into ~/.config-omarchy
 #     below.
-# Both go away if/when omarchy-nix updates its own code upstream.
 
 { home-manager, omarchy-nix, nixpkgs }:
 { pkgs, pkgsUnstable, lib, username, homeDirectory, ... }:
@@ -70,6 +129,15 @@ let
         # hyprlang writer (see the note in ../flake.nix).
         wayland.windowManager.hyprland.configType = lib.mkForce "hyprlang";
         programs.neovim.enable = lib.mkForce false;
+
+        # Silences the "programs.git.userName'/... has been renamed"
+        # warnings from omarchy-nix's git.nix — see the note up top.
+        warnings = lib.mkForce [ ];
+
+        # Silences the "'system' has been renamed..." warning — see the
+        # note up top. Matches the real session's Hyprland version.
+        wayland.windowManager.hyprland.package = lib.mkForce pkgsUnstable.hyprland;
+        wayland.windowManager.hyprland.portalPackage = lib.mkForce null;
 
         _module.args.osConfig = {
           services.xserver.videoDrivers = [ ];
