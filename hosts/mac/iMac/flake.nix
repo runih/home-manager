@@ -29,6 +29,7 @@
           m.zoxide
           m.my-tmux
           m.vim
+          m.neovim
           m.wezterm
           m.neovide
           m.pass

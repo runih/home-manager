@@ -1,6 +1,8 @@
-{ pkgs, homeDirectory, ... }:
+{ pkgs, homeDirectory, config, lib, ... }:
 {
-  home.packages = [ pkgs.neovim ];
+  # Hosts that also pull in m.neovim already get a configured nvim via
+  # programs.neovim; only fall back to a bare package when they don't.
+  home.packages = lib.optional (!config.programs.neovim.enable) pkgs.neovim;
 
   programs.neovide = {
     enable = true;
